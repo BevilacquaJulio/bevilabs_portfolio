@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Bevilacqua Labs — Laboratório de inovação e tecnologia" />
+    <title>Bevilacqua Labs®</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/styles/variables.css" />
+    <link rel="stylesheet" href="src/styles/base.css" />
+    <link rel="stylesheet" href="src/styles/welcome.css" />
+    <link rel="stylesheet" href="src/styles/projects.css" />
+    <link rel="stylesheet" href="src/styles/sections.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+    <canvas id="grid-canvas" aria-hidden="true"></canvas>
+
+    <header class="header">
+      <div class="header__inner layout">
+      <nav class="header__nav header__nav--start">
+        <a href="#inicio" class="nav-link nav-link--active">Início</a>
+        <a href="#sobre" class="nav-link">Sobre</a>
+      </nav>
+
+      <a href="#inicio" class="header__brand">
+        <span class="header__logo">B</span>
+        <span class="header__name">Bevilacqua Labs<sup class="reg">®</sup></span>
+      </a>
+
+      <nav class="header__nav header__nav--end">
+        <a href="#projetos" class="nav-link">Projetos</a>
+        <a href="#contato" class="nav-link">Contato</a>
+        <a href="admin.html" class="nav-link nav-link--lock" aria-label="Área administrativa">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+            <rect x="5" y="11" width="14" height="10" rx="2" />
+            <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+          </svg>
+        </a>
+      </nav>
+      </div>
+    </header>
+
+    <main class="welcome" id="inicio">
+      <div class="welcome__glow welcome__glow--left" aria-hidden="true"></div>
+      <div class="welcome__glow welcome__glow--right" aria-hidden="true"></div>
+
+      <div class="layout welcome__content">
+      <section class="hero">
+        <div class="hero__badge">
+          <span class="hero__badge-dot"></span>
+          Sistema online
+        </div>
+
+        <h1 class="hero__title">
+          <span class="hero__title-line">Bem-vindo ao</span>
+          <span class="hero__title-brand">
+            Bevilacqua Labs<sup class="reg reg--large">®</sup>
+          </span>
+        </h1>
+
+        <p class="hero__subtitle">
+          Onde ideias ganham forma. Tecnologia, design e inovação em um só lugar.
+        </p>
+
+        <div class="hero__actions">
+          <a href="#projetos" class="btn btn--ghost">Meus projetos</a>
+        </div>
+
+        <div class="hero__stats">
+          <div class="stat">
+            <span class="stat__value" data-stat="projects" data-count="0">0</span>
+            <span class="stat__label">Projetos</span>
+          </div>
+          <div class="stat__divider" aria-hidden="true"></div>
+          <div class="stat">
+            <span class="stat__value" data-count="100">0</span>
+            <span class="stat__label">% Dedicação</span>
+          </div>
+          <div class="stat__divider" aria-hidden="true"></div>
+          <div class="stat">
+            <span class="stat__value stat__value--text">∞</span>
+            <span class="stat__label">Possibilidades</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="features">
+        <article class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M12 2L2 7l10 5 10-5-10-5z" />
+              <path d="M2 17l10 5 10-5" />
+              <path d="M2 12l10 5 10-5" />
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Arquitetura</h3>
+          <p class="feature-card__text">Sistemas robustos, escaláveis e bem estruturados.</p>
+        </article>
+
+        <article class="feature-card feature-card--highlight">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Inovação</h3>
+          <p class="feature-card__text">Soluções criativas para desafios reais do dia a dia.</p>
+        </article>
+
+        <article class="feature-card">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M20 7h-9M14 17H5" />
+              <circle cx="17" cy="17" r="3" />
+              <circle cx="7" cy="7" r="3" />
+            </svg>
+          </div>
+          <h3 class="feature-card__title">Precisão</h3>
+          <p class="feature-card__text">Cada detalhe pensado com cuidado e excelência.</p>
+        </article>
+      </section>
+      </div>
+    </main>
+
+    <section class="page-section page-section--about" id="sobre">
+      <div class="layout">
+        <div class="page-section__header">
+          <h2 class="page-section__title" id="sobre-title">Sobre</h2>
+          <p class="page-section__subtitle">Conheça um pouco mais sobre o laboratório.</p>
+        </div>
+        <div class="page-section__panel">
+          <p class="page-section__text" id="sobre-content">
+            O Bevilacqua Labs® é um laboratório de inovação dedicado a transformar ideias em soluções digitais.
+            Combinamos arquitetura sólida, design cuidadoso e tecnologia de ponta para construir projetos que fazem diferença.
+
+            Este conteúdo será personalizado em breve.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="projects" id="projetos">
+      <div class="layout">
+      <div class="projects__header">
+        <h2 class="projects__title">Meus projetos</h2>
+        <p class="projects__subtitle">
+          Conheça as soluções que estou construindo. Clique em um projeto para acessá-lo.
+        </p>
+      </div>
+
+      <div class="projects__empty" id="projects-empty">
+        <div class="projects__empty-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-6l-2-2H5a2 2 0 0 0-2 2z" />
+          </svg>
+        </div>
+        <p class="projects__empty-text">
+          Nenhum projeto publicado ainda.<br />
+          Em breve novidades por aqui.
+        </p>
+      </div>
+
+      <div class="projects__grid" id="projects-grid" hidden></div>
+      </div>
+    </section>
+
+    <section class="page-section page-section--contact" id="contato">
+      <div class="layout">
+        <div class="page-section__header">
+          <h2 class="page-section__title" id="contato-title">Contato</h2>
+          <p class="page-section__subtitle">Fale comigo — estou à disposição para novos projetos.</p>
+        </div>
+        <div class="page-section__panel">
+          <p class="page-section__text" id="contato-content">
+            Quer conversar sobre um projeto ou parceria? Entre em contato — respondo o mais breve possível.
+
+            Informações de contato serão atualizadas em breve.
+          </p>
+          <div class="page-section__contact">
+            <a class="page-section__email" id="contato-email" href="mailto:contato@bevilabs.com.br">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                <path d="M4 6h16v12H4V6z" />
+                <path d="m4 7 8 6 8-6" />
+              </svg>
+              <span data-email-text>contato@bevilabs.com.br</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="layout">
+      <p class="footer__text">
+        © 2026 Bevilacqua Labs<sup class="reg">®</sup>. Todos os direitos reservados.
+      </p>
+      <div class="footer__line" aria-hidden="true"></div>
+      </div>
+    </footer>
+
+    <script src="src/scripts/grid.js" type="module"></script>
+    <script src="src/scripts/main.js" type="module"></script>
+    <script src="src/scripts/projects.js" type="module"></script>
+    <script src="src/scripts/site-content.js" type="module"></script>
+  </body>
+</html>

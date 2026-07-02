@@ -1,0 +1,25 @@
+services:
+  bevilabs:
+    image: bevilabs_portfolio-app
+    build: .
+    container_name: bevilabs_portfolio
+    restart: always
+    env_file:
+      - .env
+    networks:
+      - mysql_shared
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - "traefik.http.routers.bevilabs_portfolio.rule=Host(`${DOMAIN}`)"
+      - traefik.http.routers.bevilabs_portfolio.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.bevilabs_portfolio.tls=true
+      - traefik.http.routers.bevilabs_portfolio.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
+      - traefik.http.services.bevilabs_portfolio.loadbalancer.server.port=8000
+
+networks:
+  mysql_shared:
+    external: true
+  traefik:
+    external: true

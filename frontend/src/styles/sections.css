@@ -1,0 +1,108 @@
+.page-section {
+  position: relative;
+  z-index: 2;
+  padding-block: var(--space-section) 4rem;
+}
+
+.page-section__header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+  animation: fadeUp 1s ease-out both;
+}
+
+.page-section__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-sm);
+  text-shadow: var(--neon-glow-strong);
+}
+
+.page-section__subtitle {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--color-text-muted);
+  max-width: 520px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.page-section__panel {
+  padding: var(--space-2xl) var(--space-xl);
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--neon-border);
+  animation: fadeUp 1s ease-out 0.15s both;
+}
+
+.page-section__text {
+  font-size: 1rem;
+  font-weight: 300;
+  color: var(--color-text-muted);
+  line-height: 1.8;
+  white-space: pre-line;
+  max-width: 640px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.page-section__contact {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-lg);
+  margin-top: var(--space-xl);
+}
+
+.page-section__email {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: 0.75rem 1.25rem;
+  background: var(--color-bg-subtle);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-text);
+  box-shadow: var(--neon-border);
+  transition: all var(--transition-fast);
+}
+
+.page-section__email svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.page-section__email:hover {
+  border-color: var(--color-border-strong);
+  box-shadow: var(--neon-glow);
+}
+
+.page-section--about {
+  padding-top: var(--space-3xl);
+}
+
+@media (max-width: 768px) {
+  .page-section {
+    padding-block: var(--space-3xl) 3rem;
+  }
+
+  .page-section__panel {
+    padding: var(--space-xl) var(--space-lg);
+  }
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
