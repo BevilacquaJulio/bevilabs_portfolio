@@ -3,7 +3,8 @@ const ctx = canvas.getContext("2d");
 
 let width, height, mouseX, mouseY;
 const spacing = 50;
-const maxDistance = 150;
+const maxDistance = 220;
+const NEON_RGB = "0, 240, 255";
 
 function resize() {
   width = canvas.width = window.innerWidth;
@@ -18,25 +19,26 @@ function draw() {
       const dx = x - mouseX;
       const dy = y - mouseY;
       const dist = Math.sqrt(dx * dx + dy * dy);
-      const influence = Math.max(0, 1 - dist / maxDistance);
-      const alpha = 0.04 + influence * 0.12;
-      const size = 1.5 + influence * 2;
+      const influence = Math.max(0, 1 - dist / maxDistance) ** 1.5;
+      const size = 1.3 + influence * 3.5;
 
       ctx.beginPath();
       ctx.arc(x, y, size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${alpha})`;
-      ctx.fill();
 
-      if (influence > 0.1) {
-        ctx.beginPath();
-        ctx.arc(x, y, size + 4 * influence, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(0, 0, 0, ${influence * 0.15})`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
+      if (influence > 0.03) {
+        ctx.shadowBlur = 22 * influence;
+        ctx.shadowColor = `rgba(${NEON_RGB}, ${Math.min(influence * 1.3, 1)})`;
+        ctx.fillStyle = `rgba(${NEON_RGB}, ${0.08 + influence * 0.92})`;
+      } else {
+        ctx.shadowBlur = 0;
+        ctx.fillStyle = "rgba(255, 255, 255, 0.05)";
       }
+
+      ctx.fill();
     }
   }
 
+  ctx.shadowBlur = 0;
   requestAnimationFrame(draw);
 }
 

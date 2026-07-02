@@ -33,6 +33,16 @@
   --neon-border: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 0 15px rgba(0, 0, 0, 0.4);
   --neon-ring: 0 0 0 2px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.5);
 
+  /* Neon de destaque (ciano elétrico) */
+  --color-neon: #00f0ff;
+  --color-neon-rgb: 0, 240, 255;
+  --color-neon-soft: rgba(0, 240, 255, 0.12);
+  --neon-accent-border: 0 0 0 1px rgba(0, 240, 255, 0.4), 0 0 18px rgba(0, 240, 255, 0.25);
+  --neon-accent-glow: 0 0 16px rgba(0, 240, 255, 0.55), 0 0 40px rgba(0, 240, 255, 0.3);
+  --neon-accent-glow-strong: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 35px rgba(0, 240, 255, 0.55),
+    0 0 70px rgba(0, 240, 255, 0.3);
+  --neon-accent-text: 0 0 12px rgba(0, 240, 255, 0.7), 0 0 28px rgba(0, 240, 255, 0.4);
+
   /* Tipografia */
   --font-display: "Syne", sans-serif;
   --font-body: "Outfit", sans-serif;
