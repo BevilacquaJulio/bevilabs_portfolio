@@ -10,8 +10,7 @@ from sqlalchemy.exc import OperationalError, ProgrammingError
 from app.config import get_settings
 from app.database import SessionLocal
 from app.routers.auth import router as auth_router
-from app.routers.sections import router as sections_router
-from app.seed import seed_admin_user, seed_site_sections
+from app.seed import seed_admin_user
 
 
 def get_frontend_dir() -> Path:
@@ -30,7 +29,6 @@ async def lifespan(app: FastAPI):
     settings = get_settings()
     db = SessionLocal()
     try:
-        seed_site_sections(db)
         seed_admin_user(db, settings)
     except (OperationalError, ProgrammingError) as exc:
         raise RuntimeError(
@@ -55,7 +53,6 @@ app.add_middleware(
 
 settings = get_settings()
 
-app.include_router(sections_router)
 app.include_router(auth_router)
 
 
