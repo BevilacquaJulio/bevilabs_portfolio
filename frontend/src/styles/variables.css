@@ -12,7 +12,7 @@
 
   /* Acentos */
   --color-accent: #0a0a0a;
-  --color-accent-text: #ffffff;
+  --color-accent-text: var(--color-neon);
   --color-border: rgba(255, 255, 255, 0.08);
   --color-border-strong: rgba(255, 255, 255, 0.15);
 
@@ -38,6 +38,7 @@
   --color-neon-rgb: 0, 240, 255;
   --color-neon-soft: rgba(0, 240, 255, 0.12);
   --neon-accent-border: 0 0 0 1px rgba(0, 240, 255, 0.4), 0 0 18px rgba(0, 240, 255, 0.25);
+  --neon-accent-border-soft: 0 0 0 1px rgba(0, 240, 255, 0.22), 0 0 10px rgba(0, 240, 255, 0.12);
   --neon-accent-glow: 0 0 16px rgba(0, 240, 255, 0.55), 0 0 40px rgba(0, 240, 255, 0.3);
   --neon-accent-glow-strong: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 35px rgba(0, 240, 255, 0.55),
     0 0 70px rgba(0, 240, 255, 0.3);

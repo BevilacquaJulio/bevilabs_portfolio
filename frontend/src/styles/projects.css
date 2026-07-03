@@ -71,10 +71,10 @@
 .project-card {
   position: relative;
   background: var(--color-bg-elevated);
-  border: 1px solid var(--color-border);
+  border: 1px solid rgba(0, 240, 255, 0.18);
   border-radius: var(--radius-md);
   transition: all var(--transition-smooth);
-  box-shadow: var(--neon-border);
+  box-shadow: var(--neon-accent-border-soft);
   overflow: hidden;
 }
 
@@ -138,8 +138,8 @@
   margin-bottom: 1.25rem;
   background: var(--color-bg-subtle);
   border-radius: var(--radius-sm);
-  color: var(--color-text);
-  box-shadow: var(--neon-border);
+  color: var(--color-neon);
+  box-shadow: var(--neon-accent-border-soft);
   transition: all var(--transition-smooth);
 }
 
@@ -160,12 +160,13 @@
   font-weight: 700;
   margin-bottom: 0.5rem;
   letter-spacing: -0.01em;
-  transition: color var(--transition-smooth), text-shadow var(--transition-smooth);
+  color: var(--color-neon);
+  text-shadow: var(--neon-accent-text);
+  transition: text-shadow var(--transition-smooth);
 }
 
 .project-card:hover .project-card__title {
-  color: var(--color-neon);
-  text-shadow: var(--neon-accent-text);
+  text-shadow: 0 0 16px rgba(0, 240, 255, 0.85), 0 0 36px rgba(0, 240, 255, 0.5);
 }
 
 .project-card__text {

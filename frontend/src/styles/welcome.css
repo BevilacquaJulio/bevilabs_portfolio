@@ -42,7 +42,7 @@
   font-weight: 800;
   font-size: 1.1rem;
   border-radius: var(--radius-sm);
-  box-shadow: var(--neon-glow-strong);
+  box-shadow: var(--neon-accent-glow-strong);
 }
 
 .header__name {
@@ -111,8 +111,8 @@
   left: 0;
   width: 0;
   height: 2px;
-  background: var(--color-text);
-  box-shadow: var(--neon-glow);
+  background: var(--color-neon);
+  box-shadow: var(--neon-accent-glow);
   transition: width var(--transition-smooth);
 }
 
@@ -213,9 +213,9 @@
 .hero__badge-dot {
   width: 6px;
   height: 6px;
-  background: var(--color-accent);
+  background: var(--color-neon);
   border-radius: 50%;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.9);
   animation: pulse 2s ease-in-out infinite;
 }
 
@@ -223,11 +223,11 @@
   0%,
   100% {
     opacity: 1;
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 0 8px rgba(0, 240, 255, 0.9);
   }
   50% {
     opacity: 0.5;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 4px rgba(0, 240, 255, 0.5);
   }
 }
 
@@ -252,8 +252,8 @@
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.05;
-  color: var(--color-text);
-  text-shadow: var(--neon-glow-strong);
+  color: var(--color-neon);
+  text-shadow: var(--neon-accent-text);
 }
 
 .hero__subtitle {
@@ -291,13 +291,13 @@
 .btn--primary {
   background: var(--color-accent);
   color: var(--color-accent-text);
-  box-shadow: var(--neon-glow-strong);
+  box-shadow: var(--neon-accent-glow-strong);
 }
 
 .btn--primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.5),
-    0 8px 25px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 15px rgba(0, 240, 255, 0.9), 0 0 40px rgba(0, 240, 255, 0.55),
+    0 8px 25px rgba(0, 240, 255, 0.3);
 }
 
 .btn--primary:active {
@@ -369,6 +369,8 @@
   font-size: 1.75rem;
   font-weight: 800;
   letter-spacing: -0.02em;
+  color: var(--color-neon);
+  text-shadow: var(--neon-accent-text);
 }
 
 .stat__value--text {
@@ -418,7 +420,7 @@
   background: #000000;
   color: var(--color-text);
   border-color: transparent;
-  box-shadow: var(--neon-glow-strong);
+  box-shadow: var(--neon-accent-glow-strong);
 }
 
 .feature-card--highlight .feature-card__text {
@@ -479,9 +481,9 @@
 .footer__line {
   width: 60px;
   height: 2px;
-  background: var(--color-text);
+  background: var(--color-neon);
   margin: 1rem auto 0;
-  box-shadow: var(--neon-glow);
+  box-shadow: var(--neon-accent-glow);
   border-radius: var(--radius-full);
 }
 

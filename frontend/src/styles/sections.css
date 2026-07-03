@@ -16,7 +16,8 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   margin-bottom: var(--space-sm);
-  text-shadow: var(--neon-glow-strong);
+  color: var(--color-neon);
+  text-shadow: var(--neon-accent-text);
 }
 
 .page-section__subtitle {
@@ -94,7 +95,7 @@
   font-family: var(--font-display);
   font-weight: 800;
   font-size: 2rem;
-  box-shadow: var(--neon-glow-strong);
+  box-shadow: var(--neon-accent-glow-strong);
 }
 
 @keyframes spin {
@@ -182,6 +183,8 @@
   font-size: 1.6rem;
   font-weight: 800;
   letter-spacing: -0.02em;
+  color: var(--color-neon);
+  text-shadow: var(--neon-accent-text);
 }
 
 .about-stat__label {

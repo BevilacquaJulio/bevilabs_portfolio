@@ -71,7 +71,8 @@
   font-weight: 700;
   letter-spacing: -0.02em;
   margin-bottom: var(--space-sm);
-  text-shadow: var(--neon-glow-strong);
+  color: var(--color-neon);
+  text-shadow: var(--neon-accent-text);
 }
 
 .admin__subtitle {
