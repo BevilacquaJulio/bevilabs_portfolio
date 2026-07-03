@@ -1,4 +1,4 @@
-import { getProjects } from "./storage.js";
+import { fetchProjects } from "./storage.js";
 
 function animateCounter(element, target, duration = 1500) {
   const isPercent = element.parentElement.querySelector(".stat__label")?.textContent.includes("%");
@@ -20,15 +20,20 @@ function animateCounter(element, target, duration = 1500) {
   requestAnimationFrame(update);
 }
 
-function syncProjectCount() {
+async function syncProjectCount() {
   const el = document.querySelector("[data-stat='projects']");
   if (!el) return;
 
-  const count = getProjects().length;
-  el.dataset.count = count;
+  try {
+    const projects = await fetchProjects();
+    const count = projects.length;
+    el.dataset.count = count;
 
-  if (el.dataset.animated === "true") {
-    el.textContent = count;
+    if (el.dataset.animated === "true") {
+      el.textContent = count;
+    }
+  } catch {
+    el.dataset.count = "0";
   }
 }
 
@@ -55,10 +60,6 @@ const observer = new IntersectionObserver(
 );
 
 document.querySelectorAll("[data-count]").forEach((el) => observer.observe(el));
-
-window.addEventListener("storage", (e) => {
-  if (e.key === "bevilabs_projects") syncProjectCount();
-});
 
 document.querySelectorAll(".btn--ghost").forEach((btn) => {
   btn.addEventListener("click", () => {

@@ -1,8 +1,14 @@
-import { getProjects } from "./storage.js";
+import { fetchProjects } from "./storage.js";
 import { renderIcon } from "./icons.js";
 
 const grid = document.getElementById("projects-grid");
 const empty = document.getElementById("projects-empty");
+
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
 
 function renderProjectCard(project) {
   const article = document.createElement("article");
@@ -30,34 +36,29 @@ function renderProjectCard(project) {
   return article;
 }
 
-function escapeHtml(str) {
-  const div = document.createElement("div");
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-function renderProjects() {
+async function renderProjects() {
   if (!grid || !empty) return;
 
-  const projects = getProjects();
-  grid.innerHTML = "";
+  try {
+    const projects = await fetchProjects();
+    grid.innerHTML = "";
 
-  if (projects.length === 0) {
+    if (projects.length === 0) {
+      empty.hidden = false;
+      grid.hidden = true;
+      return;
+    }
+
+    empty.hidden = true;
+    grid.hidden = false;
+
+    projects.forEach((project) => {
+      grid.appendChild(renderProjectCard(project));
+    });
+  } catch {
     empty.hidden = false;
     grid.hidden = true;
-    return;
   }
-
-  empty.hidden = true;
-  grid.hidden = false;
-
-  projects.forEach((project) => {
-    grid.appendChild(renderProjectCard(project));
-  });
 }
 
 renderProjects();
-
-window.addEventListener("storage", (e) => {
-  if (e.key === "bevilabs_projects") renderProjects();
-});

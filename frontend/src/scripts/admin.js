@@ -1,4 +1,4 @@
-import { getProjects, saveProjects, createProject } from "./storage.js";
+import { fetchProjects, createProject, updateProject, deleteProject } from "./storage.js";
 import { getIconOptions, renderIcon, normalizeIconId } from "./icons.js";
 
 const form = document.getElementById("project-form");
@@ -12,6 +12,7 @@ const iconPicker = document.getElementById("icon-picker");
 const iconInput = document.getElementById("icon");
 
 let editingId = null;
+let projects = [];
 
 function selectIcon(iconId) {
   const normalized = normalizeIconId(iconId);
@@ -60,7 +61,6 @@ function escapeHtml(str) {
 }
 
 function renderList() {
-  const projects = getProjects();
   list.innerHTML = "";
 
   if (projects.length === 0) {
@@ -110,14 +110,23 @@ function fillForm(project) {
   form.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-form.addEventListener("submit", (e) => {
+async function loadProjects() {
+  try {
+    projects = await fetchProjects();
+    renderList();
+  } catch {
+    showToast("Erro ao carregar projetos.");
+  }
+}
+
+form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const data = {
-    title: form.elements.title.value,
-    icon: form.elements.icon.value,
-    description: form.elements.description.value,
-    link: form.elements.link.value,
+    title: form.elements.title.value.trim(),
+    icon: normalizeIconId(form.elements.icon.value.trim()),
+    description: form.elements.description.value.trim(),
+    link: form.elements.link.value.trim(),
   };
 
   if (!data.title || !data.icon || !data.description || !data.link) {
@@ -132,53 +141,51 @@ form.addEventListener("submit", (e) => {
     return;
   }
 
-  const projects = getProjects();
+  submitBtn.disabled = true;
 
-  if (editingId) {
-    const index = projects.findIndex((p) => p.id === editingId);
-    if (index !== -1) {
-      projects[index] = {
-        ...projects[index],
-        ...data,
-        title: data.title.trim(),
-        icon: normalizeIconId(data.icon.trim()),
-        description: data.description.trim(),
-        link: data.link.trim(),
-      };
+  try {
+    if (editingId) {
+      await updateProject(editingId, data);
+      showToast("Projeto atualizado.");
+    } else {
+      await createProject(data);
+      showToast("Projeto adicionado.");
     }
-    saveProjects(projects);
-    showToast("Projeto atualizado.");
-  } else {
-    projects.unshift(createProject(data));
-    saveProjects(projects);
-    showToast("Projeto adicionado.");
-  }
 
-  resetForm();
-  renderList();
+    resetForm();
+    await loadProjects();
+  } catch {
+    showToast("Não foi possível salvar o projeto.");
+  } finally {
+    submitBtn.disabled = false;
+  }
 });
 
 cancelBtn.addEventListener("click", resetForm);
 
-list.addEventListener("click", (e) => {
+list.addEventListener("click", async (e) => {
   const editBtn = e.target.closest("[data-edit]");
   const deleteBtn = e.target.closest("[data-delete]");
 
   if (editBtn) {
-    const project = getProjects().find((p) => p.id === editBtn.dataset.edit);
+    const project = projects.find((p) => p.id === editBtn.dataset.edit);
     if (project) fillForm(project);
   }
 
   if (deleteBtn) {
     const id = deleteBtn.dataset.delete;
-    if (confirm("Deseja excluir este projeto?")) {
-      saveProjects(getProjects().filter((p) => p.id !== id));
+    if (!confirm("Deseja excluir este projeto?")) return;
+
+    try {
+      await deleteProject(id);
       if (editingId === id) resetForm();
-      renderList();
+      await loadProjects();
       showToast("Projeto excluído.");
+    } catch {
+      showToast("Não foi possível excluir o projeto.");
     }
   }
 });
 
 initIconPicker();
-renderList();
+loadProjects();

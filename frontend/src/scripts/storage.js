@@ -1,31 +1,54 @@
-import { normalizeIconId } from "./icons.js";
+import { authHeaders } from "./auth.js";
 
-const STORAGE_KEY = "bevilabs_projects";
-
-export function getProjects() {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (Array.isArray(parsed)) return parsed;
-    }
-  } catch {
-    /* fallback abaixo */
+export async function fetchProjects() {
+  const response = await fetch("/api/projects");
+  if (!response.ok) {
+    throw new Error("Não foi possível carregar os projetos.");
   }
-  return [];
+  return response.json();
 }
 
-export function saveProjects(projects) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(projects));
+export async function createProject(data) {
+  const response = await fetch("/api/projects", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders(),
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Não foi possível criar o projeto.");
+  }
+
+  return response.json();
 }
 
-export function createProject({ title, icon, description, link }) {
-  return {
-    id: crypto.randomUUID(),
-    title: title.trim(),
-    icon: normalizeIconId(icon.trim()),
-    description: description.trim(),
-    link: link.trim(),
-    createdAt: new Date().toISOString(),
-  };
+export async function updateProject(id, data) {
+  const response = await fetch(`/api/projects/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ...authHeaders(),
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Não foi possível atualizar o projeto.");
+  }
+
+  return response.json();
+}
+
+export async function deleteProject(id) {
+  const response = await fetch(`/api/projects/${id}`, {
+    method: "DELETE",
+    headers: authHeaders(),
+  });
+
+  if (!response.ok) {
+    throw new Error("Não foi possível excluir o projeto.");
+  }
 }

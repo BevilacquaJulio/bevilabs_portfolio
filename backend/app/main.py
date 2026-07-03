@@ -10,6 +10,7 @@ from sqlalchemy.exc import OperationalError, ProgrammingError
 from app.config import get_settings
 from app.database import SessionLocal
 from app.routers.auth import router as auth_router
+from app.routers.projects import router as projects_router
 from app.seed import seed_admin_user
 
 
@@ -54,6 +55,7 @@ app.add_middleware(
 settings = get_settings()
 
 app.include_router(auth_router)
+app.include_router(projects_router)
 
 
 @app.get("/api/health")
