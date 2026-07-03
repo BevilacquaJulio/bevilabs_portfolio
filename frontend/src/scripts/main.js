@@ -48,16 +48,11 @@ function initMobileMenu() {
   const menu = document.getElementById("mobile-menu");
   if (!toggle || !menu) return;
 
-  const openIcon = toggle.querySelector(".header__menu-icon--open");
-  const closeIcon = toggle.querySelector(".header__menu-icon--close");
-
   function setOpen(isOpen) {
     toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
     toggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
     menu.hidden = !isOpen;
     document.body.classList.toggle("menu-open", isOpen);
-    if (openIcon) openIcon.hidden = isOpen;
-    if (closeIcon) closeIcon.hidden = !isOpen;
   }
 
   toggle.addEventListener("click", () => {
