@@ -74,6 +74,7 @@
   --layout-max-width-narrow: 720px;
   --layout-padding-x: 1.5rem;
   --layout-header-offset: 8rem;
+  --layout-header-height: 4.5rem;
 }
 
 @media (min-width: 769px) {
@@ -86,6 +87,7 @@
   :root {
     --layout-padding-x: 1.25rem;
     --layout-header-offset: 6.5rem;
+    --layout-header-height: 4.25rem;
     --space-section: 3.5rem;
   }
 }
