@@ -2,7 +2,7 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content="Bevilacqua Labs — Laboratório de inovação e tecnologia" />
     <title>Bevilacqua Labs®</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,7 +24,7 @@
 
     <header class="header">
       <div class="header__inner layout">
-      <nav class="header__nav header__nav--start">
+      <nav class="header__nav header__nav--start header__nav--desktop">
         <a href="#inicio" class="nav-link nav-link--active">Início</a>
         <a href="#sobre" class="nav-link">Sobre</a>
         <a href="#stack" class="nav-link">Stack</a>
@@ -35,7 +35,7 @@
         <span class="header__name">Bevilacqua Labs<sup class="reg">®</sup></span>
       </a>
 
-      <nav class="header__nav header__nav--end">
+      <nav class="header__nav header__nav--end header__nav--desktop">
         <a href="#projetos" class="nav-link">Projetos</a>
         <a href="#contato" class="nav-link">Contato</a>
         <a href="admin.html" class="nav-link nav-link--lock" aria-label="Área administrativa">
@@ -45,7 +45,32 @@
           </svg>
         </a>
       </nav>
+
+      <button
+        type="button"
+        class="header__menu-toggle"
+        id="menu-toggle"
+        aria-label="Abrir menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <svg class="header__menu-icon header__menu-icon--open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16" />
+        </svg>
+        <svg class="header__menu-icon header__menu-icon--close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true" hidden>
+          <path d="M6 6l12 12M18 6 6 18" />
+        </svg>
+      </button>
       </div>
+
+      <nav class="mobile-menu" id="mobile-menu" hidden>
+        <a href="#inicio" class="mobile-menu__link mobile-menu__link--active">Início</a>
+        <a href="#sobre" class="mobile-menu__link">Sobre</a>
+        <a href="#stack" class="mobile-menu__link">Stack</a>
+        <a href="#projetos" class="mobile-menu__link">Projetos</a>
+        <a href="#contato" class="mobile-menu__link">Contato</a>
+        <a href="admin.html" class="mobile-menu__link mobile-menu__link--admin">Admin</a>
+      </nav>
     </header>
 
     <main class="welcome" id="inicio">

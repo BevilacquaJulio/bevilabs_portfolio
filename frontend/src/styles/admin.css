@@ -320,6 +320,29 @@
 @media (max-width: 768px) {
   .admin {
     padding-block: 6rem 3rem;
+    padding-top: calc(6rem + env(safe-area-inset-top));
+  }
+
+  .admin__header {
+    text-align: center;
+  }
+
+  .admin__title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
+  .admin__panel {
+    padding: var(--space-lg);
+  }
+
+  .field__input,
+  .field__select,
+  .field__textarea {
+    font-size: 16px;
+  }
+
+  .form__actions .btn {
+    width: 100%;
   }
 
   .admin-item {
@@ -329,6 +352,18 @@
   .admin-item__actions {
     flex-direction: row;
     width: 100%;
+  }
+
+  .admin-item__actions .btn {
+    flex: 1;
+  }
+
+  .header .nav-link--back {
+    font-size: 0.8rem;
+  }
+
+  .header .header__name {
+    font-size: 0.85rem;
   }
 }
 

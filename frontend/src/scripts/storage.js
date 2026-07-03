@@ -1,11 +1,46 @@
 import { authHeaders } from "./auth.js";
 
+let projectsCache = null;
+let projectsPromise = null;
+
+function dispatchProjectsUpdated(projects) {
+  window.dispatchEvent(
+    new CustomEvent("projects:updated", {
+      detail: { count: projects.length, projects },
+    })
+  );
+}
+
+export function invalidateProjectsCache() {
+  projectsCache = null;
+  projectsPromise = null;
+}
+
 export async function fetchProjects() {
-  const response = await fetch("/api/projects");
-  if (!response.ok) {
-    throw new Error("Não foi possível carregar os projetos.");
+  if (projectsCache) {
+    return projectsCache;
   }
-  return response.json();
+
+  if (!projectsPromise) {
+    projectsPromise = fetch("/api/projects")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Não foi possível carregar os projetos.");
+        }
+        return response.json();
+      })
+      .then((projects) => {
+        projectsCache = projects;
+        dispatchProjectsUpdated(projects);
+        return projects;
+      })
+      .catch((error) => {
+        projectsPromise = null;
+        throw error;
+      });
+  }
+
+  return projectsPromise;
 }
 
 export async function createProject(data) {
@@ -22,6 +57,7 @@ export async function createProject(data) {
     throw new Error("Não foi possível criar o projeto.");
   }
 
+  invalidateProjectsCache();
   return response.json();
 }
 
@@ -39,6 +75,7 @@ export async function updateProject(id, data) {
     throw new Error("Não foi possível atualizar o projeto.");
   }
 
+  invalidateProjectsCache();
   return response.json();
 }
 
@@ -51,4 +88,6 @@ export async function deleteProject(id) {
   if (!response.ok) {
     throw new Error("Não foi possível excluir o projeto.");
   }
+
+  invalidateProjectsCache();
 }

@@ -81,3 +81,11 @@
     --layout-padding-x: 2.5rem;
   }
 }
+
+@media (max-width: 768px) {
+  :root {
+    --layout-padding-x: 1.25rem;
+    --layout-header-offset: 6.5rem;
+    --space-section: 3.5rem;
+  }
+}

@@ -299,6 +299,10 @@
     padding-block: var(--space-3xl) 3rem;
   }
 
+  .page-section__title {
+    font-size: clamp(1.5rem, 6vw, 2rem);
+  }
+
   .page-section__panel {
     padding: var(--space-xl) var(--space-lg);
   }
@@ -319,10 +323,19 @@
 
   .about-stats {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .about-stat {
+    padding: 1rem 0.75rem;
   }
 
   .contact-grid {
     grid-template-columns: 1fr;
+  }
+
+  .contact-card {
+    padding: 1.25rem;
   }
 }
 

@@ -20,46 +20,93 @@ function animateCounter(element, target, duration = 1500) {
   requestAnimationFrame(update);
 }
 
-async function syncProjectCount() {
+function updateProjectCountElement(count, animate = false) {
   const el = document.querySelector("[data-stat='projects']");
   if (!el) return;
 
-  try {
-    const projects = await fetchProjects();
-    const count = projects.length;
-    el.dataset.count = count;
+  el.dataset.count = count;
 
-    if (el.dataset.animated === "true") {
-      el.textContent = count;
-    }
-  } catch {
-    el.dataset.count = "0";
+  if (animate && el.dataset.animated !== "true") {
+    animateCounter(el, count);
+    el.dataset.animated = "true";
+  } else if (el.dataset.animated === "true") {
+    el.textContent = count;
   }
 }
 
-syncProjectCount();
+async function loadProjectCount() {
+  try {
+    const projects = await fetchProjects();
+    return projects.length;
+  } catch {
+    return 0;
+  }
+}
 
-const observer = new IntersectionObserver(
-  (entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
+function initMobileMenu() {
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  if (!toggle || !menu) return;
+
+  const openIcon = toggle.querySelector(".header__menu-icon--open");
+  const closeIcon = toggle.querySelector(".header__menu-icon--close");
+
+  function setOpen(isOpen) {
+    toggle.setAttribute("aria-expanded", isOpen ? "true" : "false");
+    toggle.setAttribute("aria-label", isOpen ? "Fechar menu" : "Abrir menu");
+    menu.hidden = !isOpen;
+    document.body.classList.toggle("menu-open", isOpen);
+    if (openIcon) openIcon.hidden = isOpen;
+    if (closeIcon) closeIcon.hidden = !isOpen;
+  }
+
+  toggle.addEventListener("click", () => {
+    setOpen(menu.hidden);
+  });
+
+  menu.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => setOpen(false));
+  });
+
+  window.addEventListener("resize", () => {
+    if (window.innerWidth > 768) setOpen(false);
+  });
+}
+
+async function initStats() {
+  const count = await loadProjectCount();
+  updateProjectCountElement(count, false);
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+
+        const value = parseInt(entry.target.dataset.count, 10);
+        if (Number.isNaN(value)) return;
+
         if (entry.target.dataset.stat === "projects") {
-          syncProjectCount();
+          animateCounter(entry.target, value);
+        } else {
+          animateCounter(entry.target, value);
         }
 
-        const value = entry.target.dataset.count;
-        if (value !== undefined) {
-          animateCounter(entry.target, parseInt(value, 10));
-          entry.target.dataset.animated = "true";
-          observer.unobserve(entry.target);
-        }
-      }
-    });
-  },
-  { threshold: 0.5 }
-);
+        entry.target.dataset.animated = "true";
+        observer.unobserve(entry.target);
+      });
+    },
+    { threshold: 0.5 }
+  );
 
-document.querySelectorAll("[data-count]").forEach((el) => observer.observe(el));
+  document.querySelectorAll("[data-count]").forEach((el) => observer.observe(el));
+}
+
+window.addEventListener("projects:updated", (e) => {
+  updateProjectCountElement(e.detail.count, false);
+});
+
+initStats();
+initMobileMenu();
 
 document.querySelectorAll(".btn--ghost").forEach((btn) => {
   btn.addEventListener("click", () => {
@@ -90,6 +137,9 @@ if (sections.length > 0) {
           const id = entry.target.id;
           navLinks.forEach((link) => {
             link.classList.toggle("nav-link--active", link.getAttribute("href") === `#${id}`);
+          });
+          document.querySelectorAll(".mobile-menu__link").forEach((link) => {
+            link.classList.toggle("mobile-menu__link--active", link.getAttribute("href") === `#${id}`);
           });
         }
       });
