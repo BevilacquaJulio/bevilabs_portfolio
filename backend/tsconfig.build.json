@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    // rootDir na raiz do backend: inclui src/ e generated/prisma/ no mesmo bundle.
+    "rootDir": "."
+  },
+  "include": ["src/**/*", "generated/**/*"],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "prisma",
+    "prisma.config.ts",
+    "**/*.spec.ts",
+    "test/**/*"
+  ]
+}

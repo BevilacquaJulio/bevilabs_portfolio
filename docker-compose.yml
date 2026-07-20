@@ -1,8 +1,9 @@
 services:
-  bevilabs:
-    image: bevilabs_portfolio-app
-    build: .
-    container_name: bevilabs_portfolio
+  api:
+    image: bevilabs-api
+    build:
+      context: ./backend
+    container_name: bevilabs_api
     restart: always
     env_file:
       - .env
@@ -12,11 +13,33 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - "traefik.http.routers.bevilabs_portfolio.rule=Host(`${DOMAIN}`)"
-      - traefik.http.routers.bevilabs_portfolio.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
-      - traefik.http.routers.bevilabs_portfolio.tls=true
-      - traefik.http.routers.bevilabs_portfolio.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
-      - traefik.http.services.bevilabs_portfolio.loadbalancer.server.port=8000
+      - "traefik.http.routers.bevilabs_api.rule=Host(`api.${DOMAIN}`)"
+      - traefik.http.routers.bevilabs_api.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.bevilabs_api.tls=true
+      - traefik.http.routers.bevilabs_api.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
+      - traefik.http.services.bevilabs_api.loadbalancer.server.port=3000
+
+  web:
+    image: bevilabs-web
+    build:
+      context: ./frontend
+      args:
+        # VITE_* precisa ser build arg: o valor e gravado no bundle.
+        VITE_API_URL: https://api.${DOMAIN}/api
+    container_name: bevilabs_web
+    restart: always
+    depends_on:
+      - api
+    networks:
+      - traefik
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=traefik
+      - "traefik.http.routers.bevilabs_web.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
+      - traefik.http.routers.bevilabs_web.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
+      - traefik.http.routers.bevilabs_web.tls=true
+      - traefik.http.routers.bevilabs_web.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
+      - traefik.http.services.bevilabs_web.loadbalancer.server.port=80
 
 networks:
   mysql_shared:

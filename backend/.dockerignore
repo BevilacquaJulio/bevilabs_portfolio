@@ -1,15 +1,9 @@
 node_modules
-**/node_modules
 dist
-**/dist
 generated
-**/generated
 .env
 .env.*
 !.env.example
 .git
-.github
-_legacy_python
 *.log
 coverage
-**/coverage
