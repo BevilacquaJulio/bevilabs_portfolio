@@ -1,6 +1,6 @@
 services:
   api:
-    image: bls_porfolio-api
+    image: bl_porfolio-api
     build:
       context: ./backend
     container_name: bl_portfolio-api
@@ -13,7 +13,8 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - "traefik.http.routers.bevilabs_api.rule=Host(`api.${DOMAIN}`)"
+      - "traefik.http.routers.bevilabs_api.rule=Host(`${DOMAIN}`) && PathPrefix(`/api`)"
+      - traefik.http.routers.bevilabs_api.priority=10
       - traefik.http.routers.bevilabs_api.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
       - traefik.http.routers.bevilabs_api.tls=true
       - traefik.http.routers.bevilabs_api.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
@@ -25,7 +26,7 @@ services:
       context: ./frontend
       args:
         # VITE_* precisa ser build arg: o valor e gravado no bundle.
-        VITE_API_URL: https://api.${DOMAIN}/api
+        VITE_API_URL: https://${DOMAIN}/api
     container_name: bl_portfolio-app
     restart: always
     depends_on:
