@@ -1,9 +1,9 @@
 services:
   api:
-    image: bevilabs-api
+    image: bls_porfolio-api
     build:
       context: ./backend
-    container_name: bevilabs_api
+    container_name: bl_portfolio-api
     restart: always
     env_file:
       - .env
@@ -20,13 +20,13 @@ services:
       - traefik.http.services.bevilabs_api.loadbalancer.server.port=3000
 
   web:
-    image: bevilabs-web
+    image: bl_portfolio
     build:
       context: ./frontend
       args:
         # VITE_* precisa ser build arg: o valor e gravado no bundle.
         VITE_API_URL: https://api.${DOMAIN}/api
-    container_name: bevilabs_web
+    container_name: bl_portfolio-app
     restart: always
     depends_on:
       - api
@@ -35,7 +35,7 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - "traefik.http.routers.bevilabs_web.rule=Host(`${DOMAIN}`) || Host(`www.${DOMAIN}`)"
+      - "traefik.http.routers.bevilabs_web.rule=Host(`${DOMAIN}`)"
       - traefik.http.routers.bevilabs_web.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
       - traefik.http.routers.bevilabs_web.tls=true
       - traefik.http.routers.bevilabs_web.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
