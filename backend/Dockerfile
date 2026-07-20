@@ -26,6 +26,9 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/generated ./generated
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/prisma.config.ts ./prisma.config.ts
+# prisma.config.ts importa direto de ./src/config (TS fonte, nao o dist/) —
+# precisa existir no runtime pra "prisma migrate deploy" rodar dentro do container.
+COPY --from=build /app/src/config ./src/config
 COPY --from=build /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
 
 USER node
