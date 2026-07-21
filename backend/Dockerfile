@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # Stage 1 — build (prisma generate + nest build)
-FROM node:20-alpine AS build
+FROM node:24-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
@@ -13,7 +13,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2 — runtime de producao
-FROM node:20-alpine AS runtime
+FROM node:24-alpine AS runtime
 WORKDIR /app
 ENV NODE_ENV=production
 
@@ -23,17 +23,14 @@ COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=build /app/dist ./dist
-# prisma CLI (migrate deploy) usa ./generated; a API usa dist/generated/ (compilado pelo Nest).
+# A API usa dist/generated/ (compilado pelo Nest). O "prisma migrate deploy"
+# roda num servico dedicado (profile "tools", stage "build") — o runtime
+# nao precisa mais da CLI do Prisma nem de ./src/config.
 COPY --from=build /app/generated ./generated
 COPY --from=build /app/prisma ./prisma
-COPY --from=build /app/prisma.config.ts ./prisma.config.ts
 # Falha o build cedo se o client Prisma nao foi compilado para dist/.
 # prisma generate cria generated/prisma/*.ts; nest build gera dist/generated/prisma/*.js.
 RUN test -f dist/generated/prisma/client.js
-# prisma.config.ts importa direto de ./src/config (TS fonte, nao o dist/) —
-# precisa existir no runtime pra "prisma migrate deploy" rodar dentro do container.
-COPY --from=build /app/src/config ./src/config
-COPY --from=build /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
 
 USER node
 EXPOSE 3000

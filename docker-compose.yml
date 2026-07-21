@@ -1,15 +1,20 @@
 services:
   api:
-    image: bl_porfolio-api
+    image: bl_portfolio-api
     build:
       context: ./backend
     container_name: bl_portfolio-api
-    restart: always
+    restart: unless-stopped
     env_file:
       - .env
     networks:
       - mysql_shared
       - traefik
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
@@ -18,20 +23,28 @@ services:
       - traefik.http.routers.bevilabs_api.tls=true
       - traefik.http.routers.bevilabs_api.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
       - traefik.http.services.bevilabs_api.loadbalancer.server.port=3000
+    mem_limit: 512m
+    cpus: 0.75
 
   web:
-    image: bl_portfolio
+    image: bl_portfolio-app
     build:
       context: ./frontend
       args:
         # VITE_* precisa ser build arg: o valor e gravado no bundle.
         VITE_API_URL: https://api.${DOMAIN}/api
     container_name: bl_portfolio-app
-    restart: always
+    restart: unless-stopped
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     networks:
       - traefik
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
@@ -40,6 +53,28 @@ services:
       - traefik.http.routers.bevilabs_web.tls=true
       - traefik.http.routers.bevilabs_web.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
       - traefik.http.services.bevilabs_web.loadbalancer.server.port=80
+    mem_limit: 128m
+    cpus: 0.25
+
+  # ─────────────── Migrator one-off (Prisma migrate deploy) ────────────
+  # Nao sobe com `up` (profile "tools"). Usa o stage de build do backend,
+  # que tem a CLI do Prisma + schema + migrations. Roda manualmente:
+  #   docker compose run --rm migrate
+  migrate:
+    image: bl_portfolio-migrate
+    container_name: bl_portfolio-migrate
+    build:
+      context: ./backend
+      target: build
+    profiles:
+      - tools
+    env_file:
+      - .env
+    networks:
+      - mysql_shared
+    command: ["npx", "prisma", "migrate", "deploy"]
+    mem_limit: 512m
+    cpus: 0.5
 
 networks:
   mysql_shared:
