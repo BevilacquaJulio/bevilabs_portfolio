@@ -82,7 +82,7 @@ cd backend
 npm ci
 npx prisma generate
 npx prisma migrate deploy       # banco novo
-npm run db:seed                 # cria o usuário admin
+npm run build && npm run db:seed  # compila o seed e cria o usuário admin
 npm run start:dev               # http://localhost:3000/api
                                 # Swagger em /api/docs (fora de produção)
 

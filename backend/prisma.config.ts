@@ -6,6 +6,6 @@ loadEnv();
 
 export default defineConfig({
   schema: 'prisma/schema.prisma',
-  migrations: { seed: 'tsx prisma/seed.ts' },
+  migrations: { seed: 'node dist/prisma/seed.js' },
   datasource: { url: buildDatabaseUrl() },
 });

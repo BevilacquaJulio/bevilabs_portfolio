@@ -4,11 +4,12 @@
     // rootDir na raiz do backend: inclui src/ e generated/prisma/ no mesmo bundle.
     "rootDir": "."
   },
-  "include": ["src/**/*", "generated/**/*"],
+  "include": ["src/**/*", "generated/**/*", "prisma/seed.ts"],
   "exclude": [
     "node_modules",
     "dist",
-    "prisma",
+    "prisma/migrations",
+    "prisma/schema.prisma",
     "prisma.config.ts",
     "**/*.spec.ts",
     "test/**/*"
