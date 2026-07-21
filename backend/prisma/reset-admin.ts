@@ -8,8 +8,8 @@ import { loadEnv } from '../src/config/load-env';
 loadEnv();
 
 /**
- * Cria o usuario admin no primeiro deploy. Idempotente: se ja existir, nao faz nada.
- * Para sincronizar a senha com o .env, use `npm run db:reset-admin`.
+ * Recria ou atualiza a senha do admin a partir do .env.
+ * Use quando o seed ja rodou mas a senha no banco nao bate (deploy antigo, .env alterado, etc.).
  */
 async function main(): Promise<void> {
   const prisma = new PrismaClient({ adapter: new PrismaMariaDb(buildDatabaseUrl()) });
@@ -17,24 +17,22 @@ async function main(): Promise<void> {
   const username = readAdminUsername();
   const password = readAdminPassword();
 
-  if (!password.trim()) {
-    console.error('ADMIN_PASSWORD nao definido. Seed abortado.');
+  if (!password) {
+    console.error('ADMIN_PASSWORD nao definido. Reset abortado.');
     process.exitCode = 1;
     await prisma.$disconnect();
     return;
   }
 
-  const existing = await prisma.adminUser.findUnique({ where: { username } });
+  const passwordHash = await hash(password, 12);
 
-  if (existing) {
-    console.log(`Usuario "${username}" ja existe. Nada a fazer.`);
-  } else {
-    await prisma.adminUser.create({
-      data: { username, passwordHash: await hash(password, 12) },
-    });
-    console.log(`Usuario "${username}" criado.`);
-  }
+  await prisma.adminUser.upsert({
+    where: { username },
+    update: { passwordHash },
+    create: { username, passwordHash },
+  });
 
+  console.log(`Senha do usuario "${username}" sincronizada com o .env (${password.length} caracteres).`);
   await prisma.$disconnect();
 }
 

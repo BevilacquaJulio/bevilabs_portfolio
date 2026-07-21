@@ -122,6 +122,9 @@ docker compose exec api npx prisma migrate deploy
 # 4. Usuário admin (primeira vez)
 docker compose exec api npm run db:seed
 
+#    Se a senha do .env nao bater com o login (deploy antigo ou .env alterado):
+#    docker compose exec api npm run db:reset-admin
+
 # 5. Verificação
 docker logs bevilabs_api
 curl https://api.${DOMAIN}/api/health         # {"status":"ok"}
