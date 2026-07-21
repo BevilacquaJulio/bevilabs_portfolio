@@ -10,12 +10,10 @@ services:
     networks:
       - mysql_shared
       - traefik
-      - bevilabs_app
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      - "traefik.http.routers.bevilabs_api.rule=Host(`${DOMAIN}`) && PathPrefix(`/api`)"
-      - traefik.http.routers.bevilabs_api.priority=100
+      - "traefik.http.routers.bevilabs_api.rule=Host(`api.${DOMAIN}`)"
       - traefik.http.routers.bevilabs_api.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
       - traefik.http.routers.bevilabs_api.tls=true
       - traefik.http.routers.bevilabs_api.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
@@ -27,20 +25,17 @@ services:
       context: ./frontend
       args:
         # VITE_* precisa ser build arg: o valor e gravado no bundle.
-        VITE_API_URL: https://${DOMAIN}/api
+        VITE_API_URL: https://api.${DOMAIN}/api
     container_name: bl_portfolio-app
     restart: always
     depends_on:
       - api
     networks:
       - traefik
-      - bevilabs_app
     labels:
       - traefik.enable=true
       - traefik.docker.network=traefik
-      # !PathPrefix evita que POST /api/* caia no nginx estatico (405 Not Allowed).
-      - "traefik.http.routers.bevilabs_web.rule=Host(`${DOMAIN}`) && !PathPrefix(`/api`)"
-      - traefik.http.routers.bevilabs_web.priority=1
+      - "traefik.http.routers.bevilabs_web.rule=Host(`${DOMAIN}`)"
       - traefik.http.routers.bevilabs_web.entrypoints=${TRAEFIK_ENTRYPOINT:-websecure}
       - traefik.http.routers.bevilabs_web.tls=true
       - traefik.http.routers.bevilabs_web.tls.certresolver=${TRAEFIK_CERT_RESOLVER:-letsencrypt}
@@ -51,5 +46,3 @@ networks:
     external: true
   traefik:
     external: true
-  bevilabs_app:
-    driver: bridge

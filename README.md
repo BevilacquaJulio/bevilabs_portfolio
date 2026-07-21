@@ -100,9 +100,12 @@ Em dev o Vite faz proxy de `/api` para `localhost:3000` — não há CORS a reso
 
 Assume que Traefik, a rede `mysql_shared` e o container MySQL já existem no host.
 
+**DNS:** crie um registro `A` (ou `AAAA`) para `api.${DOMAIN}` apontando para a mesma VPS do site.
+
 ```bash
 cp .env.example .env
 # Edite: DOMAIN, MYSQL_*, JWT_ACCESS_SECRET, JWT_REFRESH_SECRET, CORS_ORIGIN, ADMIN_PASSWORD
+# CORS_ORIGIN = URL do site (ex.: https://bevilabs.com.br), nao da API.
 
 # 1. Criar banco e usuário no MySQL compartilhado (uma única vez, manualmente)
 #    A aplicação nunca cria o database.
@@ -130,11 +133,11 @@ docker compose exec api npm run db:seed
 
 # 5. Verificação
 docker logs bl_portfolio-api
-curl https://${DOMAIN}/api/health         # {"status":"ok"}
-curl https://${DOMAIN}/api/health/ready   # {"status":"ok","database":"up"}
-curl -s -X POST https://${DOMAIN}/api/auth/login \
+curl https://api.${DOMAIN}/api/health         # {"status":"ok"}
+curl https://api.${DOMAIN}/api/health/ready   # {"status":"ok","database":"up"}
+curl -s -X POST https://api.${DOMAIN}/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"password":"SUA_SENHA"}'           # JSON com accessToken — nao HTML 405
+  -d '{"password":"SUA_SENHA"}'                 # JSON com accessToken
 ```
 
 ### Gerando os segredos JWT
