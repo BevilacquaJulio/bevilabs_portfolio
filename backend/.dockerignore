@@ -1,5 +1,6 @@
 node_modules
 dist
+# Ignora generated do HOST — recriado por `prisma generate` durante o build da imagem.
 generated
 .env
 .env.*

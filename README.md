@@ -114,6 +114,9 @@ docker compose up -d
 # 3. Migrations — manualmente, nunca no build da imagem
 docker compose exec api npx prisma migrate deploy
 
+#    Cliente Prisma: gerado no build da imagem em dist/generated/ (API) e generated/ (CLI).
+#    Conferir: docker compose exec api ls dist/generated/prisma/client.js
+
 #    Se o banco JÁ tem as tabelas admin_users e projects (deploy antigo),
 #    marque a baseline como aplicada em vez de rodá-la:
 #    docker compose exec api npx prisma migrate resolve --applied 00000000000000_init

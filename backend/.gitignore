@@ -1,6 +1,9 @@
 node_modules
 dist
-generated
+# Conteudo gerado pelo Prisma — recriado via `npx prisma generate`
+generated/*
+!generated/.gitkeep
+!generated/README.md
 .env
 *.log
 coverage

@@ -21,9 +21,10 @@ build/
 backend/dist/
 frontend/dist/
 
-# Cliente Prisma gerado (recriado via `prisma generate`)
-generated/
-backend/generated/
+# Cliente Prisma gerado (recriado via `prisma generate`; ver backend/generated/README.md)
+backend/generated/*
+!backend/generated/.gitkeep
+!backend/generated/README.md
 
 *.tsbuildinfo
 

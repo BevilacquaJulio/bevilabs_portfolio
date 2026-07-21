@@ -23,9 +23,12 @@ COPY package*.json ./
 RUN npm ci --omit=dev && npm cache clean --force
 
 COPY --from=build /app/dist ./dist
+# prisma CLI (migrate deploy) usa ./generated; a API usa dist/generated/ (compilado pelo Nest).
 COPY --from=build /app/generated ./generated
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/prisma.config.ts ./prisma.config.ts
+# Falha o build cedo se o client Prisma nao foi gerado/compilado.
+RUN test -f dist/generated/prisma/client.js && test -f generated/prisma/client.js
 # prisma.config.ts importa direto de ./src/config (TS fonte, nao o dist/) —
 # precisa existir no runtime pra "prisma migrate deploy" rodar dentro do container.
 COPY --from=build /app/src/config ./src/config
