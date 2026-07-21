@@ -27,8 +27,9 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/generated ./generated
 COPY --from=build /app/prisma ./prisma
 COPY --from=build /app/prisma.config.ts ./prisma.config.ts
-# Falha o build cedo se o client Prisma nao foi gerado/compilado.
-RUN test -f dist/generated/prisma/client.js && test -f generated/prisma/client.js
+# Falha o build cedo se o client Prisma nao foi compilado para dist/.
+# prisma generate cria generated/prisma/*.ts; nest build gera dist/generated/prisma/*.js.
+RUN test -f dist/generated/prisma/client.js
 # prisma.config.ts importa direto de ./src/config (TS fonte, nao o dist/) —
 # precisa existir no runtime pra "prisma migrate deploy" rodar dentro do container.
 COPY --from=build /app/src/config ./src/config
