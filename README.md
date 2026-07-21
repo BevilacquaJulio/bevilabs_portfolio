@@ -129,9 +129,12 @@ docker compose exec api npm run db:seed
 #    docker compose exec api npm run db:reset-admin
 
 # 5. Verificação
-docker logs bevilabs_api
-curl https://api.${DOMAIN}/api/health         # {"status":"ok"}
-curl https://api.${DOMAIN}/api/health/ready   # {"status":"ok","database":"up"}
+docker logs bl_portfolio-api
+curl https://${DOMAIN}/api/health         # {"status":"ok"}
+curl https://${DOMAIN}/api/health/ready   # {"status":"ok","database":"up"}
+curl -s -X POST https://${DOMAIN}/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"password":"SUA_SENHA"}'           # JSON com accessToken — nao HTML 405
 ```
 
 ### Gerando os segredos JWT
