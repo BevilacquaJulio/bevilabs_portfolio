@@ -19,8 +19,8 @@ export const envSchema = z.object({
   JWT_ACCESS_EXPIRES_IN: z.string().default('15m'),
   JWT_REFRESH_EXPIRES_IN: z.string().default('7d'),
 
-  ADMIN_USERNAME: z.string().default('admin'),
-  ADMIN_PASSWORD: z.string().optional().default(''),
+  ADMIN_USERNAME: z.string().trim().default('admin'),
+  ADMIN_PASSWORD: z.string().trim().optional().default(''),
 
   THROTTLE_TTL: z.coerce.number().int().positive().default(60000),
   THROTTLE_LIMIT: z.coerce.number().int().positive().default(120),

@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { compare, hash } from 'bcryptjs';
 import { randomUUID } from 'node:crypto';
+import { readAdminUsername } from '../../config/admin-credentials';
 import { AuthRepository } from './auth.repository';
 
 /**
@@ -34,7 +35,7 @@ export class AuthService {
    * a existencia da conta por diferenca de tempo.
    */
   async login(password: string): Promise<TokenPair> {
-    const username = this.configService.getOrThrow<string>('ADMIN_USERNAME');
+    const username = readAdminUsername();
     const user = await this.repository.findByUsername(username);
 
     const hashToCompare =

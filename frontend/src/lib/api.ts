@@ -49,8 +49,11 @@ api.interceptors.response.use(
 export function getApiErrorMessage(error: unknown, fallback = 'Algo deu errado.'): string {
   if (axios.isAxiosError<ApiErrorEnvelope>(error)) {
     if (error.code === 'ECONNABORTED') return 'A requisicao demorou demais. Tente novamente.';
+    const status = error.response?.status;
     const message = error.response?.data?.error?.message;
     if (message) return message;
+    if (status === 404) return 'Endpoint da API nao encontrado (404). Verifique o deploy.';
+    if (status === 502 || status === 503) return 'API indisponivel no momento.';
     if (!error.response) return 'Nao foi possivel falar com o servidor.';
   }
   return fallback;

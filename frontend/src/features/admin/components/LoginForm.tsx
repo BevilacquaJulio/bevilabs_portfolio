@@ -28,7 +28,7 @@ export function LoginForm() {
     try {
       await login(values.password);
     } catch (error) {
-      setServerError(getApiErrorMessage(error, 'Senha incorreta.'));
+      setServerError(getApiErrorMessage(error, 'Nao foi possivel entrar.'));
     }
   });
 
