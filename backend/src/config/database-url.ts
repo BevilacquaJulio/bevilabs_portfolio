@@ -9,8 +9,13 @@ export function buildMariaDbPoolConfig(env: NodeJS.ProcessEnv = process.env): Po
     user: stripEnvQuotes(env.MYSQL_USER ?? ''),
     password: stripEnvQuotes(env.MYSQL_PASSWORD ?? ''),
     database: stripEnvQuotes(env.MYSQL_DATABASE ?? ''),
-    connectionLimit: 5,
-    connectTimeout: 15_000,
+    connectionLimit: 10,
+    minimumIdle: 1,
+    connectTimeout: 10_000,
+    acquireTimeout: 10_000,
+    idleTimeout: 60,
+    // Limpa estado da conexao (ex.: transacao abortada) antes de devolver ao pool.
+    resetAfterUse: true,
     charset: 'utf8mb4',
   };
 }

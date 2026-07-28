@@ -47,8 +47,13 @@ export class AllExceptionsFilter implements ExceptionFilter {
     };
 
     if (status >= 500) {
+      const prismaCode =
+        exception && typeof exception === 'object' && 'code' in exception
+          ? String((exception as { code: unknown }).code)
+          : undefined;
+
       this.logger.error(
-        `${request.method} ${request.url} -> ${status}`,
+        `${request.method} ${request.url} -> ${status}${prismaCode ? ` (Prisma ${prismaCode})` : ''}`,
         exception instanceof Error ? exception.stack : String(exception),
       );
     }
