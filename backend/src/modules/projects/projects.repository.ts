@@ -17,14 +17,13 @@ export class ProjectsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findManyPaginated(page: number, limit: number): Promise<[ProjectRecord[], number]> {
-    const [data, total] = await Promise.all([
-      this.prisma.project.findMany({
-        orderBy: { createdAt: 'desc' },
-        skip: (page - 1) * limit,
-        take: limit,
-      }),
-      this.prisma.project.count(),
-    ]);
+    // Sequencial: evita $transaction (timeout no adapter MariaDB) e nao esgota o pool.
+    const data = await this.prisma.project.findMany({
+      orderBy: { createdAt: 'desc' },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+    const total = await this.prisma.project.count();
     return [data, total];
   }
 

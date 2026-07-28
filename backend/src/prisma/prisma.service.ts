@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
 import { PrismaClient } from '../../generated/prisma/client';
-import { buildDatabaseUrl } from '../config/database-url';
+import { buildMariaDbPoolConfig } from '../config/database-url';
 
 /**
  * Prisma 7 exige um driver adapter. `new PrismaClient()` sem adapter lanca no boot.
@@ -11,7 +11,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
   private readonly logger = new Logger(PrismaService.name);
 
   constructor() {
-    super({ adapter: new PrismaMariaDb(buildDatabaseUrl()) });
+    super({ adapter: new PrismaMariaDb(buildMariaDbPoolConfig()) });
   }
 
   async onModuleInit(): Promise<void> {
