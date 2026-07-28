@@ -37,45 +37,62 @@ export function LoginForm() {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="mx-auto w-full max-w-sm"
+      className="mx-auto w-full max-w-[23rem]"
     >
-      <div className="panel p-8">
-        <span className="mx-auto mb-5 flex size-12 items-center justify-center rounded-xl bg-bg-subtle text-neon [box-shadow:var(--shadow-neon-border)]">
-          <Icon name="lock" className="size-6" />
-        </span>
+      <div className="panel edge-top overflow-hidden p-8">
+        <div className="mb-7 flex flex-col items-center text-center">
+          {/* Sem glow em elemento com z-index negativo: ele ficaria atras do
+              fundo do .panel, que nao cria stacking context proprio. O brilho
+              vem do proprio box-shadow. */}
+          <span className="mb-5 flex size-14 items-center justify-center rounded-2xl border border-neon/20 bg-bg-subtle text-neon [box-shadow:0_0_0_1px_rgba(0,240,255,0.18),0_0_24px_rgba(0,240,255,0.22)]">
+            <Icon name="lock" className="size-6" />
+          </span>
 
-        <h1 className="text-center font-display text-xl font-extrabold">Area administrativa</h1>
-        <p className="mt-2 mb-6 text-center text-sm font-light text-fg-muted">
-          Informe a senha para gerenciar os projetos.
-        </p>
+          <h1 className="font-display text-xl font-extrabold tracking-[-0.02em]">
+            Area administrativa
+          </h1>
+          <p className="mt-2 text-sm font-light text-fg-muted">
+            Informe a senha para gerenciar os projetos.
+          </p>
+        </div>
 
-        <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+        <form onSubmit={onSubmit} noValidate className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
-            <label htmlFor="password" className="text-[0.8rem] font-medium text-fg-muted">
+            <label
+              htmlFor="password"
+              className="text-[0.7rem] font-semibold tracking-[0.12em] text-fg-subtle uppercase"
+            >
               Senha
             </label>
+
             <input
               id="password"
               type="password"
               autoComplete="current-password"
               aria-invalid={Boolean(errors.password)}
               aria-describedby={errors.password ? 'password-error' : undefined}
-              className="rounded-lg border border-line bg-bg-subtle px-4 py-3 text-sm text-fg transition-colors outline-none placeholder:text-fg-subtle focus:border-neon/50 focus:[box-shadow:var(--shadow-accent-border-soft)]"
+              className="field"
               placeholder="Senha do administrador"
               {...register('password')}
             />
+
             {errors.password && (
-              <p id="password-error" role="alert" className="text-[0.8rem] text-danger">
+              <p id="password-error" role="alert" className="text-[0.78rem] text-danger">
                 {errors.password.message}
               </p>
             )}
           </div>
 
           {serverError && (
-            <p role="alert" className="flex items-center gap-2 text-[0.8rem] text-danger">
-              <Icon name="alert" className="size-4 shrink-0" />
+            <motion.p
+              role="alert"
+              initial={{ opacity: 0, y: -4 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex items-start gap-2 rounded-[var(--radius-sm)] border border-danger/25 bg-danger/8 px-3 py-2.5 text-[0.78rem] leading-snug text-danger"
+            >
+              <Icon name="alert" className="mt-px size-4 shrink-0" />
               {serverError}
-            </p>
+            </motion.p>
           )}
 
           <Button type="submit" variant="primary" isLoading={isSubmitting} className="group w-full">

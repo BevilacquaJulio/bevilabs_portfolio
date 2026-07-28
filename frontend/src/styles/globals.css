@@ -84,6 +84,80 @@ button {
   box-shadow: var(--shadow-neon-border);
 }
 
+/* Superficie recuada, para blocos dentro de um painel (sem sombra dupla). */
+@utility panel-inset {
+  background: var(--color-bg-muted);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-sm);
+}
+
+/*
+ * Input padrao do admin. Antes o mesmo bloco de classes estava duplicado
+ * em LoginForm e ProjectForm — qualquer ajuste de foco saia dos dois lugares.
+ */
+@utility field {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-line);
+  background: var(--color-bg-subtle);
+  padding: 0.7rem 0.9rem;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  color: var(--color-fg);
+  outline: none;
+  transition:
+    border-color 0.2s var(--ease-smooth),
+    box-shadow 0.2s var(--ease-smooth),
+    background-color 0.2s var(--ease-smooth);
+
+  &::placeholder {
+    color: var(--color-fg-subtle);
+  }
+
+  &:hover:not(:focus) {
+    border-color: var(--color-line-strong);
+  }
+
+  &:focus {
+    border-color: rgba(var(--neon-rgb), 0.5);
+    background: var(--color-bg-muted);
+    box-shadow: var(--shadow-accent-border-soft);
+  }
+
+  &[aria-invalid='true'] {
+    border-color: rgba(248, 113, 113, 0.45);
+  }
+
+  &[aria-invalid='true']:focus {
+    box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.35);
+  }
+}
+
+/* Faixa fina de destaque no topo de um painel. */
+@utility edge-top {
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset-inline: 12%;
+    top: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(var(--neon-rgb), 0.55), transparent);
+  }
+}
+
+/* Barra fixa do painel administrativo. */
+.admin-bar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid var(--color-line);
+  background: color-mix(in srgb, var(--color-bg) 82%, transparent);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
 /* Grao de filme, herdado do design original */
 .noise {
   position: fixed;

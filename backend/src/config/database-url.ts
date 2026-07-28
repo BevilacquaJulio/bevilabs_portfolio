@@ -30,6 +30,11 @@ export function buildMariaDbPoolConfig(env: NodeJS.ProcessEnv = process.env): Po
 /**
  * Monta a URL mysql:// a partir das variaveis MYSQL_*.
  * Usuario e senha sao percent-encoded para que @ # : / ? & = nao corrompam a URL.
+ *
+ * IMPORTANTE: a URL precisa repetir `allowPublicKeyRetrieval`. Ela e usada por
+ * prisma.config.ts (migrate), seed, reset-admin e verify-admin — caminhos que
+ * NAO passam por buildMariaDbPoolConfig(). Sem isso, esses comandos falham com
+ * "RSA public key is not available client side" mesmo com a API no ar.
  */
 export function buildDatabaseUrl(env: NodeJS.ProcessEnv = process.env): string {
   const cfg = buildMariaDbPoolConfig(env);
@@ -37,5 +42,5 @@ export function buildDatabaseUrl(env: NodeJS.ProcessEnv = process.env): string {
   const password = encodeURIComponent(String(cfg.password ?? ''));
   const database = encodeURIComponent(String(cfg.database ?? ''));
 
-  return `mysql://${user}:${password}@${cfg.host}:${cfg.port}/${database}?charset=utf8mb4`;
+  return `mysql://${user}:${password}@${cfg.host}:${cfg.port}/${database}?charset=utf8mb4&allowPublicKeyRetrieval=true`;
 }
