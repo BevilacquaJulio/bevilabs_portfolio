@@ -12,7 +12,8 @@ export const envSchema = z.object({
   MYSQL_PORT: z.coerce.number().int().positive().default(3306),
   MYSQL_DATABASE: z.string().min(1),
   MYSQL_USER: z.string().min(1),
-  MYSQL_PASSWORD: z.string().min(1),
+  /** Vazio e valido — comum em MySQL local (root sem senha). */
+  MYSQL_PASSWORD: z.string().default(''),
 
   JWT_ACCESS_SECRET: z.string().min(32, 'JWT_ACCESS_SECRET precisa de ao menos 32 caracteres'),
   JWT_REFRESH_SECRET: z.string().min(32, 'JWT_REFRESH_SECRET precisa de ao menos 32 caracteres'),
