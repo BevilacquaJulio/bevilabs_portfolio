@@ -35,7 +35,12 @@ RUN test -f dist/generated/prisma/client.js
 USER node
 EXPOSE 3000
 
-HEALTHCHECK --interval=30s --timeout=15s --start-period=40s --retries=3 \
-  CMD wget -qO- http://127.0.0.1:3000/api/health/ready || exit 1
+# Liveness, NAO readiness. O Traefik remove do roteamento todo container
+# unhealthy — se o healthcheck consultasse o banco, uma oscilacao do MySQL
+# faria o dominio inteiro responder 404 do Traefik (sem CORS), escondendo o
+# erro real do frontend. Com liveness, a API continua roteada e devolve
+# 500/503 proprios, com headers CORS, e o browser mostra a causa.
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
+  CMD wget -qO- http://127.0.0.1:3000/api/health || exit 1
 
 CMD ["node", "dist/src/main.js"]

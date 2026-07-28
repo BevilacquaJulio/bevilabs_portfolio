@@ -35,9 +35,12 @@ services:
         VITE_API_URL: https://api.${DOMAIN}/api
     container_name: bl_portfolio-app
     restart: unless-stopped
+    # service_started, nao service_healthy: o site e estatico e deve subir
+    # mesmo com a API fora. Com service_healthy, um erro no backend derrubava
+    # tambem o portfolio inteiro no `docker compose up -d`.
     depends_on:
       api:
-        condition: service_healthy
+        condition: service_started
     networks:
       - traefik
     logging:

@@ -54,7 +54,17 @@ export function getApiErrorMessage(error: unknown, fallback = 'Algo deu errado.'
     if (message) return message;
     if (status === 404) return 'Endpoint da API nao encontrado (404). Verifique o deploy.';
     if (status === 502 || status === 503) return 'API indisponivel no momento.';
-    if (!error.response) return 'Nao foi possivel falar com o servidor.';
+
+    // Sem response: ou nao ha rede, ou o proxy (Traefik) respondeu 404/503 sem
+    // headers CORS — o Nest e quem os emite, entao ele estava fora do ar. O
+    // browser bloqueia a resposta e o axios entrega response === undefined.
+    // Distinguir os dois casos evita diagnosticar "rede" quando e a API caida.
+    if (!error.response) {
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+        return 'Voce parece estar sem conexao com a internet.';
+      }
+      return 'API fora do ar ou bloqueada por CORS. Verifique o container da API.';
+    }
   }
   return fallback;
 }

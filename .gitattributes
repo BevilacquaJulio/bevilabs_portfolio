@@ -1,0 +1,14 @@
+# Normaliza fim de linha: evita diffs fantasma CRLF->LF ao editar no Windows
+# e fazer deploy no Linux (ex.: load-env.ts aparecendo modificado sem mudanca real).
+* text=auto eol=lf
+
+# Binarios: nunca normalizar.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.webp binary
+*.woff binary
+*.woff2 binary
+*.pdf binary

@@ -17,6 +17,13 @@ export function buildMariaDbPoolConfig(env: NodeJS.ProcessEnv = process.env): Po
     // Limpa estado da conexao (ex.: transacao abortada) antes de devolver ao pool.
     resetAfterUse: true,
     charset: 'utf8mb4',
+    // MySQL 8 usa caching_sha2_password. Sem TLS, o driver precisa buscar a
+    // chave publica RSA do servidor para cifrar a senha — caso contrario o
+    // handshake falha com "RSA public key is not available client side"
+    // (SQLState 08S01) e o pool nunca entrega conexao.
+    // Seguro aqui: o trafego nao sai da rede Docker interna (mysql_shared).
+    // Alternativas: TLS no MySQL, ou ALTER USER ... WITH mysql_native_password.
+    allowPublicKeyRetrieval: true,
   };
 }
 

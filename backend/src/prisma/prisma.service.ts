@@ -16,7 +16,20 @@ export class PrismaService extends PrismaClient implements OnModuleInit, OnModul
 
   async onModuleInit(): Promise<void> {
     await this.$connect();
-    this.logger.log('Conexao com o MySQL estabelecida.');
+
+    // $connect() com driver adapter e lazy: nao abre socket. Sem este SELECT 1
+    // o boot logava "conexao estabelecida" mesmo com credencial/handshake
+    // quebrado, e a falha so aparecia 10s depois no acquireTimeout do pool.
+    try {
+      await this.$queryRaw`SELECT 1`;
+      this.logger.log('Conexao com o MySQL estabelecida.');
+    } catch (error) {
+      this.logger.error(
+        `Falha ao abrir conexao real com o MySQL: ${(error as Error).message}`,
+        (error as Error).stack,
+      );
+      throw error;
+    }
   }
 
   async onModuleDestroy(): Promise<void> {
