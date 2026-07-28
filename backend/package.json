@@ -19,6 +19,8 @@
     "db:reset-admin:dev": "tsx prisma/reset-admin.ts",
     "db:verify-admin": "node dist/prisma/verify-admin.js",
     "db:verify-admin:dev": "tsx prisma/verify-admin.ts",
+    "db:verify-projects": "node dist/prisma/verify-projects.js",
+    "db:verify-projects:dev": "tsx prisma/verify-projects.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint \"{src,prisma}/**/*.ts\" --max-warnings 0",

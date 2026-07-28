@@ -17,7 +17,7 @@ export class ProjectsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findManyPaginated(page: number, limit: number): Promise<[ProjectRecord[], number]> {
-    return this.prisma.$transaction([
+    const [data, total] = await Promise.all([
       this.prisma.project.findMany({
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * limit,
@@ -25,6 +25,7 @@ export class ProjectsRepository {
       }),
       this.prisma.project.count(),
     ]);
+    return [data, total];
   }
 
   findById(id: string): Promise<ProjectRecord | null> {
