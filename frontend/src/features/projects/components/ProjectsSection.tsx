@@ -1,49 +1,14 @@
-import { motion } from 'framer-motion';
 import { Icon } from '@/components/Icon';
 import { SectionHeading } from '@/components/SectionHeading';
-import { defaultViewport, staggerContainer } from '@/lib/motion';
 import { getApiErrorMessage } from '@/lib/api';
 import { useProjectsQuery } from '../hooks/useProjectsQuery';
-import { ProjectCard, type ProjectArtifactVariant, type ProjectCardFormat } from './ProjectCard';
+import { ProjectCard } from './ProjectCard';
 
-type ProjectLayout = {
-  className: string;
-  format: ProjectCardFormat;
-  artifact: ProjectArtifactVariant;
-};
-
-const PROJECT_LAYOUTS: readonly ProjectLayout[] = [
-  {
-    className: 'lg:col-span-8 lg:min-h-[26rem]',
-    format: 'lead',
-    artifact: 'index',
-  },
-  {
-    className: 'lg:col-span-4 lg:min-h-[26rem]',
-    format: 'compact',
-    artifact: 'ledger',
-  },
-  {
-    className: 'lg:col-span-5 lg:min-h-[23rem]',
-    format: 'compact',
-    artifact: 'route',
-  },
-  {
-    className: 'lg:col-span-7 lg:min-h-[23rem]',
-    format: 'wide',
-    artifact: 'ledger',
-  },
-  {
-    className: 'lg:col-span-7 lg:min-h-[24rem]',
-    format: 'wide',
-    artifact: 'route',
-  },
-  {
-    className: 'lg:col-span-5 lg:min-h-[24rem]',
-    format: 'compact',
-    artifact: 'index',
-  },
-] as const;
+/**
+ * Grade unica: uma coluna no celular, duas no tablet, tres no desktop.
+ * Todas as celulas tem o mesmo peso — nenhum projeto ganha destaque de layout.
+ */
+const PROJECTS_GRID = 'grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3 lg:gap-5';
 
 export function ProjectsSection() {
   const { data, isLoading, isError, error, refetch } = useProjectsQuery();
@@ -59,7 +24,7 @@ export function ProjectsSection() {
         <SectionHeading
           eyebrow="Projetos"
           title="Sistemas que eu já construí"
-          subtitle="Conheça alguns projetos que tirei do papel, os problemas que eles resolvem e as tecnologias que usei."
+          subtitle="Conheça alguns projetos que tirei do papel e as tecnologias que usei."
           align="left"
           id="projects-title"
         />
@@ -93,27 +58,12 @@ export function ProjectsSection() {
           )}
 
           {!isLoading && !isError && projects.length > 0 && (
-            <motion.div
-              variants={staggerContainer}
-              initial="hidden"
-              whileInView="visible"
-              viewport={defaultViewport}
-              className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-12 lg:gap-5"
-            >
-              {projects.map((project, index) => {
-                const layout = PROJECT_LAYOUTS[index % PROJECT_LAYOUTS.length];
-
-                return (
-                  <ProjectCard
-                    key={project.id}
-                    project={project}
-                    format={layout.format}
-                    artifact={layout.artifact}
-                    className={layout.className}
-                  />
-                );
-              })}
-            </motion.div>
+            /* Sem orquestracao na grade: cada ficha dispara pela propria posicao. */
+            <div className={PROJECTS_GRID}>
+              {projects.map((project, index) => (
+                <ProjectCard key={project.id} project={project} index={index} />
+              ))}
+            </div>
           )}
         </div>
       </div>
@@ -121,66 +71,33 @@ export function ProjectsSection() {
   );
 }
 
+/** Espelha a ficha real: mesma moldura, mesmos blocos, mesmas reguas. */
 function ProjectsSkeleton() {
   return (
-    <div
-      className="grid grid-cols-1 gap-3 sm:gap-4 lg:grid-cols-12 lg:gap-5"
-      role="status"
-      aria-label="Carregando projetos"
-    >
-      {Array.from({ length: 3 }).map((_, index) => {
-        const layout = PROJECT_LAYOUTS[index];
-        const featured = layout.format === 'lead';
-
-        return (
-          <div
-            key={index}
-            aria-hidden="true"
-            className={[
-              'grid min-h-[20rem] overflow-hidden rounded-[var(--radius-md)] border sm:min-h-[22rem]',
-              'motion-safe:animate-pulse',
-              layout.className,
-              layout.format !== 'compact' && 'md:grid-cols-[minmax(0,1.08fr)_minmax(16rem,0.92fr)]',
-              featured ? 'border-ink bg-ink' : 'border-line bg-bg-elevated',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-          >
-            <div
-              className={[
-                'min-h-[9rem] border-b p-4 sm:min-h-[11rem] sm:p-5',
-                layout.format !== 'compact' && 'md:order-2 md:min-h-full md:border-b-0 md:border-l',
-                featured ? 'border-ink/15 bg-paper' : 'border-white/15 bg-ink',
-              ]
-                .filter(Boolean)
-                .join(' ')}
-            >
-              <span
-                className={`block h-3 w-24 rounded ${featured ? 'bg-ink/12' : 'bg-white/15'}`}
-              />
-              <span
-                className={`mt-8 block h-14 w-2/3 rounded sm:mt-10 sm:h-16 ${featured ? 'bg-ink/12' : 'bg-white/15'}`}
-              />
-            </div>
-            <div
-              className={['flex flex-col p-4 sm:p-6', layout.format !== 'compact' && 'md:p-7']
-                .filter(Boolean)
-                .join(' ')}
-            >
-              <span className={`h-3 w-24 rounded ${featured ? 'bg-white/15' : 'bg-bg-muted'}`} />
-              <span
-                className={`mt-6 h-8 w-4/5 rounded sm:mt-8 sm:h-9 ${featured ? 'bg-white/15' : 'bg-bg-muted'}`}
-              />
-              <span
-                className={`mt-4 h-3.5 w-full rounded ${featured ? 'bg-white/15' : 'bg-bg-muted'}`}
-              />
-              <span
-                className={`mt-2 h-3.5 w-3/4 rounded ${featured ? 'bg-white/15' : 'bg-bg-muted'}`}
-              />
-            </div>
+    <div className={PROJECTS_GRID} role="status" aria-label="Carregando projetos">
+      {Array.from({ length: 3 }).map((_, index) => (
+        <div
+          key={index}
+          aria-hidden="true"
+          className="flex min-h-[19rem] flex-col rounded-[var(--radius-md)] border border-line bg-bg-elevated p-5 motion-safe:animate-pulse sm:p-6"
+        >
+          <div className="flex items-start justify-between gap-4">
+            <span className="size-10 rounded-[var(--radius-sm)] bg-bg-muted" />
+            <span className="h-3 w-6 rounded bg-bg-muted" />
           </div>
-        );
-      })}
+          <span className="mt-5 h-2.5 w-20 rounded bg-bg-muted sm:mt-6" />
+          <span className="mt-3 h-6 w-3/4 rounded bg-bg-muted" />
+          <span className="mt-4 h-3 w-full rounded bg-bg-muted" />
+          <span className="mt-2 h-3 w-11/12 rounded bg-bg-muted" />
+          <span className="mt-2 h-3 w-2/3 rounded bg-bg-muted" />
+          <div className="mt-5 border-t border-line pt-3.5 sm:mt-6">
+            <span className="block h-3 w-2/5 rounded bg-bg-muted" />
+          </div>
+          <div className="mt-auto border-t border-line pt-3.5">
+            <span className="block h-3 w-1/2 rounded bg-bg-muted" />
+          </div>
+        </div>
+      ))}
     </div>
   );
 }
