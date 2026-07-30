@@ -1,10 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import {
-  createProject,
-  deleteProject,
-  listProjects,
-  updateProject,
-} from '../projects.api';
+import { createProject, deleteProject, listProjects, updateProject } from '../projects.api';
 import type { PaginatedProjects, ProjectInput } from '../projects.types';
 
 export const projectsKeys = {

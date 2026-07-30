@@ -17,8 +17,8 @@ describe('ProjectForm', () => {
     renderWithProviders(<ProjectForm editing={null} onDone={vi.fn()} />);
     await user.click(screen.getByRole('button', { name: /Adicionar projeto/i }));
 
-    expect(await screen.findByText('Informe o titulo.')).toBeInTheDocument();
-    expect(screen.getByText('Informe a descricao.')).toBeInTheDocument();
+    expect(await screen.findByText('Informe o título.')).toBeInTheDocument();
+    expect(screen.getByText('Informe a descrição.')).toBeInTheDocument();
     expect(createSpy).not.toHaveBeenCalled();
   });
 
@@ -26,12 +26,26 @@ describe('ProjectForm', () => {
     const user = userEvent.setup();
     renderWithProviders(<ProjectForm editing={null} onDone={vi.fn()} />);
 
-    await user.type(screen.getByLabelText('Titulo'), 'Meu projeto');
-    await user.type(screen.getByLabelText('Descricao'), 'Uma descricao');
+    await user.type(screen.getByLabelText('Título'), 'Meu projeto');
+    await user.type(screen.getByLabelText('Descrição'), 'Uma descricao');
     await user.type(screen.getByLabelText('Link'), 'nao-e-url');
     await user.click(screen.getByRole('button', { name: /Adicionar projeto/i }));
 
-    expect(await screen.findByText(/Informe uma URL valida/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Informe uma URL válida/i)).toBeInTheDocument();
+  });
+
+  it('rejeita links com protocolos inseguros', async () => {
+    const createSpy = vi.spyOn(api, 'createProject');
+    const user = userEvent.setup();
+    renderWithProviders(<ProjectForm editing={null} onDone={vi.fn()} />);
+
+    await user.type(screen.getByLabelText('Título'), 'Meu projeto');
+    await user.type(screen.getByLabelText('Descrição'), 'Uma descrição');
+    await user.type(screen.getByLabelText('Link'), 'javascript:alert(1)');
+    await user.click(screen.getByRole('button', { name: /Adicionar projeto/i }));
+
+    expect(await screen.findByText(/Use um link seguro com https/i)).toBeInTheDocument();
+    expect(createSpy).not.toHaveBeenCalled();
   });
 
   it('envia os dados validos e limpa o formulario', async () => {
@@ -49,8 +63,8 @@ describe('ProjectForm', () => {
 
     renderWithProviders(<ProjectForm editing={null} onDone={onDone} />);
 
-    await user.type(screen.getByLabelText('Titulo'), 'Meu projeto');
-    await user.type(screen.getByLabelText('Descricao'), 'Uma descricao');
+    await user.type(screen.getByLabelText('Título'), 'Meu projeto');
+    await user.type(screen.getByLabelText('Descrição'), 'Uma descricao');
     await user.type(screen.getByLabelText('Link'), 'https://example.com');
     await user.click(screen.getByRole('button', { name: /Adicionar projeto/i }));
 

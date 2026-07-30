@@ -1,120 +1,109 @@
-import { motion } from 'framer-motion';
-import { Icon, type IconName } from '@/components/Icon';
-import { StatusBadge } from '@/components/Badge';
+import { Icon } from '@/components/Icon';
 import { Reveal } from '@/components/Reveal';
-import { defaultViewport, staggerContainer, staggerItem } from '@/lib/motion';
 import { CONTACT, PROFILE } from '../data/content';
-
-type ContactEntry = {
-  icon: IconName;
-  label: string;
-  value: string;
-  href?: string;
-  external?: boolean;
-};
-
-const ENTRIES: readonly ContactEntry[] = [
-  { icon: 'pin', label: 'Localizacao', value: PROFILE.location },
-  { icon: 'mail', label: 'E-mail', value: PROFILE.email, href: `mailto:${PROFILE.email}` },
-  { icon: 'phone', label: 'Telefone', value: PROFILE.phone, href: `tel:${PROFILE.phoneHref}` },
-  {
-    icon: 'linkedin',
-    label: 'LinkedIn',
-    value: PROFILE.linkedinLabel,
-    href: PROFILE.linkedin,
-    external: true,
-  },
-  {
-    icon: 'github',
-    label: 'GitHub',
-    value: PROFILE.githubLabel,
-    href: PROFILE.github,
-    external: true,
-  },
-];
 
 export function Contact() {
   return (
-    <section id="contato" className="relative z-2 scroll-mt-24 py-20 md:py-28">
+    <section
+      id="contato"
+      aria-labelledby="contato-title"
+      className="relative z-2 scroll-mt-24 py-12 md:py-18"
+    >
       <div className="layout">
-        <Reveal className="mb-10 text-center">
-          <StatusBadge className="mb-5">Disponivel para novos projetos</StatusBadge>
-          <h2
-            id="contato-title"
-            className="font-display text-[clamp(1.75rem,4.5vw,2.75rem)] leading-[1.1] font-extrabold tracking-[-0.03em]"
-          >
-            {CONTACT.title}
-          </h2>
-          <p className="mx-auto mt-4 max-w-2xl text-[clamp(0.9rem,2vw,1.05rem)] font-light text-fg-muted">
-            {CONTACT.subtitle}
-          </p>
-        </Reveal>
+        <Reveal>
+          <div className="blueprint overflow-hidden rounded-[var(--radius-md)] bg-ink text-paper [box-shadow:var(--shadow-float)] sm:rounded-[var(--radius-lg)]">
+            <div className="grid gap-5 px-5 py-6 sm:gap-7 sm:px-7 sm:py-7 md:px-9 md:py-9 lg:grid-cols-12 lg:gap-x-10">
+              <div className="lg:col-span-8">
+                <h2
+                  id="contato-title"
+                  className="max-w-[13ch] font-display text-[1.6rem] leading-[1.04] font-semibold tracking-[-0.042em] text-balance sm:text-[1.78rem] md:text-[clamp(1.8rem,3.8vw,3.1rem)] md:leading-[0.99] md:tracking-[-0.05em]"
+                >
+                  {CONTACT.title}
+                </h2>
+              </div>
 
-        <Reveal className="panel p-6 md:p-10">
-          <div className="mx-auto max-w-2xl text-center text-[0.95rem] leading-[1.75] font-light text-fg-muted">
-            {CONTACT.paragraphs.map((paragraph) => (
-              <p key={paragraph.slice(0, 30)} className="mb-3 last:mb-0">
-                {paragraph}
+              <p className="max-w-[38ch] self-end text-[0.92rem] leading-[1.6] text-paper/68 sm:text-[0.96rem] lg:col-span-4">
+                {CONTACT.lead}
               </p>
-            ))}
-          </div>
+            </div>
 
-          <motion.ul
-            variants={staggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={defaultViewport}
-            className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-2"
-          >
-            {ENTRIES.map((entry) => (
-              <motion.li key={entry.label} variants={staggerItem}>
-                <ContactCard {...entry} />
-              </motion.li>
-            ))}
-          </motion.ul>
+            <a
+              href={`mailto:${PROFILE.email}`}
+              className="group focus-on-dark flex min-h-20 items-center gap-3 border-y border-white/18 px-5 py-4 transition-colors duration-200 ease-[var(--ease-out)] hover:bg-white/8 active:bg-white/12 sm:gap-4 sm:px-7 sm:py-5 md:min-h-24 md:px-9"
+              aria-label={`Enviar e-mail para ${PROFILE.email}`}
+            >
+              <Icon name="mail" className="size-5 shrink-0 md:size-7" weight="light" />
+              <span className="min-w-0 flex-1 break-words font-display text-[0.88rem] leading-[1.14] font-semibold tracking-[-0.028em] min-[360px]:text-[0.96rem] min-[390px]:text-[1.02rem] md:text-[clamp(1.1rem,2.9vw,2.15rem)] md:leading-none md:tracking-[-0.04em]">
+                {PROFILE.email}
+              </span>
+              <Icon
+                name="arrowUpRight"
+                className="size-5 shrink-0 transition-transform duration-200 ease-[var(--ease-out)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 md:size-7"
+                weight="light"
+              />
+            </a>
+
+            <div className="grid gap-px bg-white/14 min-[390px]:grid-cols-2 lg:grid-cols-4">
+              <ContactItem
+                icon="phone"
+                label="Telefone"
+                value={PROFILE.phone}
+                href={`tel:${PROFILE.phoneHref}`}
+              />
+              <ContactItem
+                icon="linkedin"
+                label="LinkedIn"
+                value="Abrir perfil"
+                href={PROFILE.linkedin}
+                external
+              />
+              <ContactItem
+                icon="github"
+                label="GitHub"
+                value="Ver código"
+                href={PROFILE.github}
+                external
+              />
+              <ContactItem icon="pin" label="Base" value={PROFILE.location} />
+            </div>
+          </div>
         </Reveal>
       </div>
     </section>
   );
 }
 
-function ContactCard({ icon, label, value, href, external }: ContactEntry) {
+type ContactItemProps = {
+  icon: 'phone' | 'linkedin' | 'github' | 'pin';
+  label: string;
+  value: string;
+  href?: string;
+  external?: boolean;
+};
+
+function ContactItem({ icon, label, value, href, external }: ContactItemProps) {
   const content = (
     <>
-      <span className="inline-flex size-10 shrink-0 items-center justify-center rounded-lg bg-bg-subtle text-neon [box-shadow:var(--shadow-neon-border)] transition-transform duration-300 group-hover:scale-110">
-        <Icon name={icon} className="size-5" />
+      <Icon name={icon} className="size-5 shrink-0 text-paper/58" weight="light" />
+      <span>
+        <span className="block text-[0.72rem] font-medium text-paper/52">{label}</span>
+        <span className="mt-1 block text-sm font-semibold text-paper">{value}</span>
       </span>
-
-      <span className="flex min-w-0 flex-col">
-        <span className="text-[0.7rem] font-medium tracking-[0.1em] text-fg-subtle uppercase">
-          {label}
-        </span>
-        <span className="truncate text-[0.9rem] font-medium text-fg">{value}</span>
-      </span>
-
-      {href && (
-        <span
-          aria-hidden="true"
-          className="ml-auto shrink-0 text-fg-subtle transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-neon"
-        >
-          <Icon name="arrowUpRight" className="size-4" />
-        </span>
-      )}
+      {href && <Icon name="arrowUpRight" className="ml-auto size-4 shrink-0 text-paper/58" />}
     </>
   );
 
   const className =
-    'group flex h-full items-center gap-4 rounded-xl border border-line bg-bg-subtle/60 p-4 ' +
-    'transition-all duration-300 hover:border-neon/35 hover:bg-bg-subtle hover:[box-shadow:var(--shadow-accent-border-soft)]';
+    'flex min-h-16 items-center gap-3 bg-ink px-5 py-3.5 transition-colors duration-200 ease-[var(--ease-out)] sm:min-h-18 sm:px-7 lg:px-5';
 
   if (!href) {
-    return <span className={className}>{content}</span>;
+    return <div className={className}>{content}</div>;
   }
 
   return (
     <a
       href={href}
-      className={className}
+      className={`focus-on-dark ${className} hover:bg-white/8 active:bg-white/12`}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
     >
       {content}

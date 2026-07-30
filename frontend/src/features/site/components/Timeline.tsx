@@ -1,92 +1,144 @@
-import { motion, useScroll, useSpring } from 'framer-motion';
-import { useRef } from 'react';
-import { TechBadge } from '@/components/Badge';
-import { SectionHeading } from '@/components/SectionHeading';
-import { defaultViewport, staggerItem } from '@/lib/motion';
+import { motion, useReducedMotion } from 'framer-motion';
+import { Icon } from '@/components/Icon';
+import { Reveal } from '@/components/Reveal';
+import { defaultViewport, staggerContainer, staggerItem } from '@/lib/motion';
 import { TIMELINE, TIMELINE_LINKS } from '../data/content';
 
+const IMPACT_METRICS = [
+  { value: 'R$ 200 mil+', label: 'processados em um evento presencial' },
+  { value: '3', label: 'desenvolvedores sob liderança técnica' },
+  { value: 'Ponta a ponta', label: 'do requisito ao deploy' },
+] as const;
+
 export function Timeline() {
-  const containerRef = useRef<HTMLOListElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start 65%', 'end 55%'],
-  });
-  // A linha vertical "cresce" conforme a secao e percorrida.
-  const scaleY = useSpring(scrollYProgress, { stiffness: 120, damping: 28, restDelta: 0.001 });
+  const shouldReduceMotion = useReducedMotion();
+  const featured = TIMELINE[0];
+  const entries = TIMELINE.slice(1);
 
   return (
-    <section id="experiencia" className="relative z-2 scroll-mt-24 py-20 md:py-28">
+    <section
+      id="experiencia"
+      aria-labelledby="experiencia-title"
+      className="relative z-2 scroll-mt-24 overflow-hidden border-y border-line bg-bg-elevated py-12 sm:py-14 md:py-20"
+    >
       <div className="layout">
-        <SectionHeading
-          eyebrow="Trajetoria"
-          title="Onde ja construi"
-          subtitle="Projetos e desafios que me trouxeram ate aqui."
-        />
+        <Reveal className="border-b border-ink pb-6 md:pb-8">
+          <h2
+            id="experiencia-title"
+            className="max-w-[15ch] font-display text-[1.58rem] leading-[1.06] font-extrabold tracking-[-0.042em] text-balance md:text-[clamp(1.72rem,3.2vw,2.55rem)] md:leading-[1.04] md:tracking-[-0.046em]"
+          >
+            Minha experiência profissional
+          </h2>
+          <p className="mt-4 max-w-[48ch] text-[0.92rem] leading-[1.6] text-fg-muted sm:text-[0.96rem] md:mt-5 md:text-[1.02rem]">
+            Produtos em produção, projetos freelance e o laboratório onde testo novas soluções.
+          </p>
+        </Reveal>
 
-        <ol
-          ref={containerRef}
-          className="relative mx-auto flex max-w-[720px] flex-col gap-8 pl-8 md:gap-10 md:pl-10"
+        <motion.article
+          initial={shouldReduceMotion ? false : { opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={defaultViewport}
+          transition={{ duration: shouldReduceMotion ? 0 : 0.5, ease: [0.23, 1, 0.32, 1] }}
+          className="blueprint mt-6 overflow-hidden rounded-[var(--radius-md)] bg-ink text-paper [box-shadow:var(--shadow-float)] sm:rounded-[var(--radius-lg)] md:mt-10"
         >
-          <span
-            aria-hidden="true"
-            className="absolute inset-y-0 left-0 w-px bg-line"
-          />
-          <motion.span
-            aria-hidden="true"
-            style={{ scaleY }}
-            className="absolute inset-y-0 left-0 w-px origin-top bg-neon [box-shadow:var(--shadow-accent-glow)]"
-          />
+          <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)]">
+            <div className="min-w-0 p-5 sm:p-6 md:p-8 lg:p-9">
+              <p className="font-mono text-[0.66rem] text-white/58">{featured.period}</p>
 
-          {TIMELINE.map((item) => {
-            const link = TIMELINE_LINKS[item.title];
+              <h3 className="mt-6 max-w-full break-words font-display text-[1.14rem] leading-[1.14] font-extrabold tracking-[-0.036em] min-[360px]:text-[1.3rem] sm:mt-8 sm:max-w-[18ch] sm:text-[1.45rem] sm:text-balance md:mt-10 md:text-[clamp(1.48rem,2.7vw,2.2rem)] md:leading-[1.08] md:tracking-[-0.045em]">
+                {featured.title}
+              </h3>
+              <p className="mt-4 max-w-[58ch] text-[0.92rem] leading-[1.65] text-white/70 sm:text-[0.96rem]">
+                {featured.text}
+              </p>
 
-            return (
-              <motion.li
-                key={item.title}
-                variants={staggerItem}
-                initial="hidden"
-                whileInView="visible"
-                viewport={defaultViewport}
-                className="group relative"
-              >
-                <span
-                  aria-hidden="true"
-                  className="absolute top-2 -left-8 size-2.5 rounded-full border-2 border-bg bg-fg-subtle transition-all duration-300 group-hover:scale-125 group-hover:bg-neon group-hover:[box-shadow:var(--shadow-accent-glow)] md:-left-10"
-                />
+              <p className="mt-6 border-t border-white/18 pt-4 font-mono text-[0.63rem] leading-relaxed text-white/58 sm:mt-8">
+                {featured.tags.join(', ')}
+              </p>
+            </div>
 
-                <span className="text-[0.75rem] font-medium tracking-[0.1em] text-fg-subtle uppercase">
-                  {item.period}
-                </span>
+            <dl className="grid min-w-0 grid-cols-2 gap-px border-t border-white/18 bg-white/18 p-px lg:border-t-0 lg:border-l">
+              {IMPACT_METRICS.map((metric, index) => (
+                <div
+                  key={metric.value}
+                  className={[
+                    'flex min-h-28 flex-col justify-end bg-ink/94 p-4 sm:min-h-36 sm:p-5 md:p-6',
+                    index === 0 ? 'col-span-2' : '',
+                  ].join(' ')}
+                >
+                  <dt className="order-2 mt-3 max-w-[24ch] text-[0.78rem] leading-snug text-white/58">
+                    {metric.label}
+                  </dt>
+                  <dd
+                    className={[
+                      'order-1 font-display leading-none font-extrabold tracking-[-0.055em]',
+                      index === 0
+                        ? 'text-[1.68rem] sm:text-[clamp(1.95rem,4vw,3rem)]'
+                        : 'text-[1.2rem] sm:text-[clamp(1.45rem,2.1vw,1.85rem)]',
+                    ].join(' ')}
+                  >
+                    {metric.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </motion.article>
 
-                <h3 className="mt-1 font-display text-[1.05rem] leading-snug font-bold md:text-[1.15rem]">
-                  {item.title}
-                </h3>
+        <div className="mt-10 grid gap-6 md:mt-12 md:gap-8 lg:grid-cols-[10rem_minmax(0,1fr)] lg:gap-10">
+          <Reveal>
+            <div className="lg:sticky lg:top-32">
+              <p className="font-display text-lg font-bold tracking-[-0.03em]">Outros trabalhos</p>
+              <p className="mt-2 font-mono text-[0.62rem] leading-relaxed tracking-[0.07em] text-fg-subtle uppercase">
+                {entries.length} sistemas e projetos
+              </p>
+            </div>
+          </Reveal>
 
-                <p className="mt-2 max-w-2xl text-[0.9rem] leading-relaxed font-light text-fg-muted">
-                  {item.text}{' '}
+          <motion.ol
+            variants={staggerContainer}
+            initial={shouldReduceMotion ? false : 'hidden'}
+            whileInView="visible"
+            viewport={defaultViewport}
+            className="grid gap-x-8 gap-y-8 md:grid-cols-2 md:gap-y-10"
+          >
+            {entries.map((item) => {
+              const link = TIMELINE_LINKS[item.title];
+
+              return (
+                <motion.li
+                  key={item.title}
+                  variants={staggerItem}
+                  className="flex min-h-full flex-col border-t-2 border-ink pt-5"
+                >
+                  <p className="font-mono text-[0.64rem] font-medium tracking-[0.05em] text-fg-subtle">
+                    {item.period}
+                  </p>
+                  <h3 className="mt-4 max-w-[25ch] font-display text-[1.15rem] leading-[1.22] font-bold tracking-[-0.03em] text-balance">
+                    {item.title}
+                  </h3>
+                  <p className="mt-3 text-[0.88rem] leading-[1.65] text-fg-muted">{item.text}</p>
+
+                  <p className="mt-auto pt-5 font-mono text-[0.62rem] leading-relaxed text-fg-subtle">
+                    {item.tags.join(', ')}
+                  </p>
+
                   {link && (
                     <a
                       href={link.href}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-neon underline decoration-neon/40 underline-offset-4 transition-colors hover:decoration-neon"
+                      className="mt-5 inline-flex min-h-11 w-fit items-center gap-2 rounded-full border border-line-strong px-4 py-2 text-[0.82rem] font-semibold transition-[transform,background-color,border-color] duration-200 ease-[var(--ease-out)] hover:border-ink hover:bg-bg-subtle active:scale-[0.97]"
                     >
                       {link.label}
+                      <Icon name="arrowUpRight" className="size-4" />
                     </a>
                   )}
-                </p>
-
-                <ul className="mt-3 flex flex-wrap gap-2">
-                  {item.tags.map((tag) => (
-                    <li key={tag}>
-                      <TechBadge>{tag}</TechBadge>
-                    </li>
-                  ))}
-                </ul>
-              </motion.li>
-            );
-          })}
-        </ol>
+                </motion.li>
+              );
+            })}
+          </motion.ol>
+        </div>
       </div>
     </section>
   );

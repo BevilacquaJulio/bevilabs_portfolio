@@ -1,171 +1,245 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useReducedMotion, useScroll, useTransform, type MotionStyle } from 'framer-motion';
 import { Icon } from '@/components/Icon';
-import { StatusBadge } from '@/components/Badge';
-import { Button } from '@/components/Button';
-import { useCountUp } from '@/hooks/useCountUp';
 import { staggerContainer, staggerItem } from '@/lib/motion';
-import { cn } from '@/lib/cn';
-import { HERO, HERO_STATS, PILLARS } from '../data/content';
-import { useProjectsQuery } from '@/features/projects/hooks/useProjectsQuery';
+import { HERO, PROFILE } from '../data/content';
+
+const ACTION_BASE =
+  'inline-flex min-h-12 items-center justify-center gap-2 rounded-full px-5 text-[0.84rem] font-semibold ' +
+  'transition-[transform,background-color,border-color,color,box-shadow] duration-200 ease-[var(--ease-out)] ' +
+  'active:scale-[0.97] motion-reduce:active:scale-100';
+
+/** Curva de saída do título mascarado. Cada palavra sobe de dentro do próprio bloco. */
+const WORD_EASE = [0.23, 1, 0.32, 1] as const;
 
 export function Hero() {
-  const { data } = useProjectsQuery();
-  const projectCount = data?.total ?? 0;
+  const sectionRef = useRef<HTMLElement>(null);
+  const reducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  // O conteúdo recua discretamente sem comprometer a leitura ou os controles.
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.92], [1, 0.72]);
+  const contentY = useTransform(scrollYProgress, [0, 1], [0, -24]);
+  const contentStyle: MotionStyle | undefined = reducedMotion
+    ? undefined
+    : { opacity: contentOpacity, y: contentY };
+
+  const facts = [...HERO.facts, { label: 'Base', value: PROFILE.location }] as const;
 
   return (
-    <main
+    <section
+      ref={sectionRef}
       id="inicio"
-      className="relative z-2 flex min-h-dvh w-full flex-col items-center justify-center overflow-hidden pt-28 pb-16 md:pt-32"
+      aria-labelledby="hero-title"
+      className="relative z-2 flex min-h-[min(100svh,44rem)] items-center overflow-hidden border-b border-line pt-[calc(var(--header-h)+env(safe-area-inset-top)+0.5rem)] pb-5 md:min-h-[min(86svh,42rem)] md:pt-[calc(var(--header-h)+1rem)] md:pb-7"
     >
-      <Glow className="animate-float-slow top-[10%] -left-[10%] size-[400px]" />
-      <Glow className="animate-float-slow bottom-[5%] -right-[15%] size-[500px] [animation-delay:-4s]" />
-
       <motion.div
+        style={contentStyle}
         variants={staggerContainer}
-        initial="hidden"
+        initial={reducedMotion ? false : 'hidden'}
         animate="visible"
-        className="layout flex flex-col items-stretch"
+        className="layout w-full"
       >
-        <section className="w-full text-center">
-          <motion.div variants={staggerItem}>
-            <StatusBadge className="mb-6 md:mb-8">{HERO.badge}</StatusBadge>
-          </motion.div>
-
-          <motion.h1 variants={staggerItem} className="mb-6 flex flex-col gap-2">
-            <span className="text-[clamp(0.8rem,2.5vw,1.1rem)] font-medium tracking-[0.22em] text-fg-muted uppercase">
-              {HERO.kicker}
+        <motion.div
+          variants={staggerItem}
+          className="flex flex-col items-start gap-2.5 border-b border-line pb-3.5 font-mono text-[0.65rem] font-medium tracking-[0.085em] uppercase sm:flex-row sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-6 sm:gap-y-3 sm:pb-4 sm:text-[0.7rem] sm:tracking-[0.105em] md:text-xs"
+        >
+          <span className="flex flex-col items-start gap-1 min-[360px]:flex-row min-[360px]:flex-wrap min-[360px]:items-center min-[360px]:gap-x-2.5">
+            <span className="text-fg">{PROFILE.name}</span>
+            <span aria-hidden="true" className="hidden text-line-strong min-[360px]:inline">
+              /
             </span>
-            <span className="neon-text font-display text-[clamp(2.25rem,9vw,4.5rem)] leading-[1.05] font-extrabold tracking-[-0.03em]">
-              {HERO.brand}
-              <sup className="reg reg--lg">®</sup>
-            </span>
-          </motion.h1>
+            <span className="text-fg-muted">{HERO.role}</span>
+          </span>
+          <span className="inline-flex items-center gap-2 text-fg-muted">
+            <span aria-hidden="true" className="size-1.5 rounded-full bg-success" />
+            {HERO.status}
+          </span>
+        </motion.div>
 
-          <motion.p
-            variants={staggerItem}
-            className="mx-auto mb-10 max-w-xl text-[clamp(0.95rem,2vw,1.15rem)] leading-relaxed font-light text-fg-muted"
-          >
-            {HERO.subtitle}
-          </motion.p>
-
-          <motion.div
-            variants={staggerItem}
-            className="mb-14 flex flex-wrap justify-center gap-3 md:gap-4"
-          >
-            <a href={HERO.ctaPrimary.href} className="group w-full max-w-[280px] sm:w-auto">
-              <Button variant="primary" className="w-full">
-                {HERO.ctaPrimary.label}
-              </Button>
-            </a>
-            <a href={HERO.ctaSecondary.href} className="w-full max-w-[280px] sm:w-auto">
-              <Button variant="ghost" className="w-full">
-                {HERO.ctaSecondary.label}
-              </Button>
-            </a>
-          </motion.div>
-
-          <motion.div
-            variants={staggerItem}
-            className="panel mx-auto flex w-full flex-col items-center gap-4 px-6 py-6 [box-shadow:var(--shadow-neon-glow)] sm:max-w-2xl sm:flex-row sm:justify-center sm:gap-8 sm:px-10"
-          >
-            {HERO_STATS.map((stat, index) => (
-              <div key={stat.label} className="contents">
-                {index > 0 && (
-                  <span
-                    aria-hidden="true"
-                    className="h-px w-10 bg-gradient-to-r from-transparent via-white/10 to-transparent sm:h-10 sm:w-px sm:bg-gradient-to-b"
-                  />
-                )}
-                <Stat
-                  {...stat}
-                  value={stat.label === 'Projetos' ? projectCount : stat.value}
-                />
-              </div>
-            ))}
-          </motion.div>
-        </section>
-
-        <section className="mt-14 grid w-full grid-cols-1 gap-4 md:mt-20 md:grid-cols-3 md:gap-6">
-          {PILLARS.map((pillar, index) => (
-            <motion.article
-              key={pillar.title}
-              variants={staggerItem}
-              whileHover={{ y: -6 }}
-              transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-              custom={index}
-              className={cn(
-                'group rounded-2xl border p-6 text-center transition-colors duration-300 md:p-8 md:px-6',
-                pillar.highlight
-                  ? 'border-transparent bg-black [box-shadow:var(--shadow-accent-glow-strong)]'
-                  : 'border-line bg-bg-elevated [box-shadow:var(--shadow-neon-border)] hover:border-line-strong hover:[box-shadow:var(--shadow-neon-glow-strong)]',
-              )}
+        <div className="grid items-center gap-7 pt-5 md:gap-8 md:pt-8 lg:grid-cols-12 lg:gap-10 xl:gap-12">
+          <div className="min-w-0 lg:col-span-7">
+            <h1
+              id="hero-title"
+              aria-label={`${HERO.title.join(' ')} ${HERO.titleAccent.join(' ')}`}
+              className="max-w-[15.5ch] font-display text-[1.72rem] leading-[1.1] font-semibold tracking-[-0.03em] text-balance sm:text-[1.95rem] md:text-[clamp(1.95rem,3.5vw,3.25rem)] md:leading-[1.06] md:tracking-[-0.035em]"
             >
-              <span
-                className={cn(
-                  'mb-5 inline-flex size-12 items-center justify-center rounded-lg transition-transform duration-300 group-hover:scale-110',
-                  pillar.highlight
-                    ? 'bg-white/10 text-neon'
-                    : 'bg-bg-subtle text-fg [box-shadow:var(--shadow-neon-border)]',
-                )}
-              >
-                <Icon name={pillar.icon} className="size-6" />
+              <span aria-hidden="true">
+                {HERO.title.map((word, index) => (
+                  <MaskedWord
+                    key={`${word}-${index}`}
+                    word={word}
+                    index={index}
+                    reduced={Boolean(reducedMotion)}
+                  />
+                ))}
               </span>
-              <h3 className="mb-2 font-display text-[1.1rem] font-bold tracking-[-0.01em]">
-                {pillar.title}
-              </h3>
-              <p
-                className={cn(
-                  'text-sm leading-relaxed font-light',
-                  pillar.highlight ? 'text-white/60' : 'text-fg-muted',
-                )}
+              <span aria-hidden="true" className="text-fg-muted">
+                {HERO.titleAccent.map((word, index) => (
+                  <MaskedWord
+                    key={`${word}-${index}`}
+                    word={word}
+                    index={HERO.title.length + index}
+                    reduced={Boolean(reducedMotion)}
+                  />
+                ))}
+              </span>
+            </h1>
+
+            <motion.p
+              variants={staggerItem}
+              className="mt-4 max-w-[51ch] text-[0.92rem] leading-[1.62] text-fg-muted sm:text-[0.95rem] md:mt-6 md:text-base"
+            >
+              {HERO.subtitle}
+            </motion.p>
+
+            <motion.div
+              variants={staggerItem}
+              className="mt-5 flex flex-wrap gap-2.5 md:mt-6 md:gap-3"
+            >
+              <a
+                href={HERO.ctaPrimary.href}
+                className={`${ACTION_BASE} w-full border border-ink bg-ink text-paper shadow-[0_10px_24px_rgb(16_16_15_/_0.14)] hover:-translate-y-px hover:shadow-[0_14px_32px_rgb(16_16_15_/_0.2)] sm:w-auto`}
               >
-                {pillar.text}
+                {HERO.ctaPrimary.label}
+                <Icon name="arrowUpRight" className="size-4" weight="bold" />
+              </a>
+              <a
+                href={HERO.ctaSecondary.href}
+                className={`${ACTION_BASE} w-full border border-line-strong bg-bg-elevated text-fg hover:border-ink hover:bg-bg-subtle sm:w-auto`}
+              >
+                {HERO.ctaSecondary.label}
+              </a>
+            </motion.div>
+
+            <motion.dl
+              variants={staggerItem}
+              className="mt-6 grid grid-cols-2 border-y border-line sm:grid-cols-3 md:mt-8"
+            >
+              {facts.map((fact, index) => (
+                <div
+                  key={fact.label}
+                  className={`py-3 pr-3 sm:py-3.5 ${
+                    index === facts.length - 1
+                      ? 'col-span-2 border-t border-line sm:col-span-1 sm:border-t-0 sm:pl-4'
+                      : index > 0
+                        ? 'border-l border-line pl-4'
+                        : ''
+                  }`}
+                >
+                  <dt className="font-mono text-[0.62rem] font-medium tracking-[0.1em] text-fg-subtle uppercase">
+                    {fact.label}
+                  </dt>
+                  <dd className="mt-1.5 text-sm font-semibold tracking-[-0.015em] text-fg">
+                    {fact.value}
+                  </dd>
+                </div>
+              ))}
+            </motion.dl>
+          </div>
+
+          <motion.aside
+            variants={staggerItem}
+            aria-label="Resumo do escopo profissional"
+            className="relative min-w-0 rounded-[1rem] border border-line bg-bg-elevated/80 p-4 shadow-[0_16px_45px_rgb(16_16_15_/_0.045)] sm:rounded-[1.25rem] sm:p-6 lg:col-span-5 lg:p-7"
+          >
+            <div className="flex items-center justify-between gap-4 border-b border-line pb-3.5 font-mono text-[0.64rem] font-medium tracking-[0.1em] text-fg-subtle uppercase">
+              <span>{HERO.focus.eyebrow}</span>
+              <span>Full stack</span>
+            </div>
+
+            <h2 className="mt-4 max-w-[17ch] font-display text-[1.28rem] leading-[1.12] font-semibold tracking-[-0.032em] text-balance sm:mt-4 sm:text-[1.4rem] md:text-[clamp(1.4rem,1.95vw,1.75rem)] md:leading-[1.1] md:tracking-[-0.036em]">
+              {HERO.focus.title}
+            </h2>
+            <p className="mt-3.5 max-w-[43ch] text-[0.9rem] leading-[1.62] text-fg-muted">
+              {HERO.focus.text}
+            </p>
+
+            <dl className="mt-5 border-y border-line sm:mt-6">
+              {HERO.focus.areas.map((area) => (
+                <div
+                  key={area.label}
+                  className="grid gap-1 border-b border-line py-3 last:border-b-0 sm:grid-cols-[7.5rem_1fr] sm:gap-5 sm:py-3.5"
+                >
+                  <dt className="font-mono text-[0.64rem] font-medium tracking-[0.09em] text-fg-subtle uppercase">
+                    {area.label}
+                  </dt>
+                  <dd className="text-sm font-semibold tracking-[-0.012em] text-fg sm:text-right">
+                    {area.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
+            <div className="mt-5 sm:mt-6">
+              <p className="font-mono text-[0.62rem] font-medium tracking-[0.1em] text-fg-subtle uppercase">
+                Cobertura do sistema
               </p>
-            </motion.article>
-          ))}
-        </section>
+              <div className="relative mt-3.5">
+                <motion.span
+                  aria-hidden="true"
+                  initial={reducedMotion ? false : { scaleX: 0 }}
+                  animate={{ scaleX: 1 }}
+                  transition={{ delay: 0.58, duration: 0.58, ease: WORD_EASE }}
+                  className="absolute top-[0.27rem] right-[10%] left-[10%] h-px origin-left bg-line-strong"
+                />
+                <ul className="relative grid grid-cols-4 gap-1">
+                  {HERO.focus.flow.map((label, index) => (
+                    <li key={label} className="min-w-0 text-center">
+                      <motion.span
+                        aria-hidden="true"
+                        initial={reducedMotion ? false : { scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{
+                          delay: 0.64 + index * 0.08,
+                          duration: 0.28,
+                          ease: WORD_EASE,
+                        }}
+                        className="mx-auto block size-2.5 rounded-full border-2 border-bg-elevated bg-ink"
+                      />
+                      <span className="mt-2.5 block truncate font-mono text-[0.56rem] tracking-[0.07em] text-fg-subtle uppercase sm:text-[0.6rem]">
+                        {label}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </motion.aside>
+        </div>
       </motion.div>
-    </main>
+    </section>
   );
 }
 
-function Stat({
-  value,
-  suffix,
-  label,
-  countUp,
+/**
+ * Palavra do titulo dentro de uma mascara.
+ * O padding compensa a altura de acentos e cedilhas, que a mascara cortaria.
+ */
+function MaskedWord({
+  word,
+  index,
+  reduced,
+  className = '',
 }: {
-  value: number | string;
-  suffix?: string;
-  label: string;
-  countUp: boolean;
+  word: string;
+  index: number;
+  reduced: boolean;
+  className?: string;
 }) {
-  const target = typeof value === 'number' ? value : 0;
-  const { ref, value: animated } = useCountUp(target);
-
   return (
-    <div className="flex min-w-20 flex-col items-center gap-1">
-      <span
-        ref={ref}
-        className="neon-text font-display text-[1.6rem] font-extrabold tracking-[-0.02em] tabular-nums md:text-[1.75rem]"
+    <span className="mr-[0.22em] inline-block overflow-hidden pb-[0.09em] align-bottom -mb-[0.09em]">
+      <motion.span
+        initial={reduced ? false : { y: '108%' }}
+        animate={{ y: '0%' }}
+        transition={{ delay: 0.08 + index * 0.045, duration: 0.5, ease: WORD_EASE }}
+        className={`inline-block ${className}`}
       >
-        {countUp ? `${animated}${suffix ?? ''}` : value}
-      </span>
-      <span className="text-[0.72rem] font-medium tracking-[0.08em] text-fg-muted uppercase">
-        {label}
-      </span>
-    </div>
-  );
-}
-
-function Glow({ className }: { className: string }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={cn(
-        'pointer-events-none absolute rounded-full bg-[radial-gradient(circle,rgba(0,240,255,0.05)_0%,transparent_70%)] blur-[100px]',
-        className,
-      )}
-    />
+        {word}
+      </motion.span>
+    </span>
   );
 }

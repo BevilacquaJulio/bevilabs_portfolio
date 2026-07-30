@@ -1,276 +1,259 @@
-# Bevilacqua Labs — Design System
+# Bevilacqua Labs: sistema visual
 
-> Fonte de verdade visual do projeto. Consulte este documento antes de criar qualquer tela, componente ou página nova.
+Fonte de verdade para a interface pública, login e painel administrativo.
 
----
+## 1. Direção
 
-## 1. Identidade
+O produto é um portfólio de desenvolvedor para recrutadores, clientes e outros devs. A página precisa provar capacidade técnica, facilitar a leitura rápida e conduzir para projetos e contato.
 
-| Item | Valor |
-|------|-------|
-| Marca | Bevilacqua Labs® |
-| Tom | Tecnológico, minimalista, premium |
-| Modo | Escuro (dark-first) |
-| Estética | Monocromático com destaques em neon preto |
+- Linguagem: editorial-tech, clara e monocromática
+- Tema: claro fixo
+- Assinatura: build rail com progresso real de leitura
+- Destaque: preto estrutural, sem neon e sem gradientes coloridos
+- Redesign: visual novo com conteúdo, rotas e contratos preservados
 
----
+### Dials
+
+| Superfície | Variação | Movimento | Densidade |
+| --- | ---: | ---: | ---: |
+| Portfólio público | 8/10 | 7/10 | 4/10 |
+| Login | 7/10 | 4/10 | 3/10 |
+| Admin | 5/10 | 3/10 | 7/10 |
 
 ## 2. Cores
 
-### Superfícies
-
 | Token | Valor | Uso |
-|-------|-------|-----|
-| `--color-bg` | `#0a0a0a` | Fundo principal |
-| `--color-bg-elevated` | `#141414` | Cards, inputs, painéis |
-| `--color-bg-subtle` | `#1a1a1a` | Hover, badges, ícones |
-| `--color-bg-muted` | `#111111` | Áreas secundárias |
+| --- | --- | --- |
+| `--color-bg` / `--color-paper` | `#F4F4F1` | Canvas principal |
+| `--color-bg-elevated` | `#FFFFFF` | Superfícies e formulários |
+| `--color-bg-subtle` | `#E9E9E4` | Agrupamento e hover |
+| `--color-bg-muted` | `#EFEFEB` | Campos internos e skeleton |
+| `--color-fg` / `--color-ink` | `#10100F` | Texto e destaque estrutural |
+| `--color-fg-muted` | `#5F5F59` | Corpo secundário |
+| `--color-fg-subtle` | `#696962` | Metadados com contraste AA |
+| `--color-line` | `#D8D8D2` | Divisores |
+| `--color-line-strong` | `#B8B8B0` | Bordas interativas |
+| `--color-danger` | `#B42318` | Ações destrutivas |
+| `--color-success` | `#247044` | Estado real de disponibilidade |
 
-### Texto
+Regras:
 
-| Token | Valor | Uso |
-|-------|-------|-----|
-| `--color-text` | `#f8f8f8` | Texto principal |
-| `--color-text-muted` | `#a3a3a3` | Subtítulos, labels |
-| `--color-text-subtle` | `#525252` | Placeholders, hints |
-
-### Acentos (neon preto)
-
-| Token | Valor | Uso |
-|-------|-------|-----|
-| `--color-accent` | `#0a0a0a` | Botões primários, destaques |
-| `--color-accent-text` | `#ffffff` | Texto sobre accent |
-| `--color-border` | `rgba(255,255,255,0.08)` | Bordas padrão |
-| `--color-border-strong` | `rgba(255,255,255,0.15)` | Bordas em hover/focus |
-
-### Efeitos glow (neon preto)
-
-```css
---neon-glow: 0 0 20px rgba(0,0,0,0.6), 0 0 40px rgba(0,0,0,0.3);
---neon-glow-strong: 0 0 10px rgba(0,0,0,0.8), 0 0 30px rgba(0,0,0,0.5), 0 0 60px rgba(0,0,0,0.2);
---neon-border: 0 0 0 1px rgba(255,255,255,0.08), 0 0 15px rgba(0,0,0,0.4);
---neon-ring: 0 0 0 2px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.5);
-```
-
----
+- Preto é o único destaque visual global.
+- Vermelho e verde são reservados a estados semânticos.
+- Não usar glow, neon, purple-blue gradient ou texto em gradiente.
+- Superfícies podem alternar entre paper, branco e cinza frio, sem inverter o tema da página.
 
 ## 3. Tipografia
 
-| Token | Fonte | Uso |
-|-------|-------|-----|
-| `--font-display` | Syne | Títulos, logo, números |
-| `--font-body` | Outfit | Corpo, UI, formulários |
+As fontes são entregues pelo bundle com Fontsource. Não há dependência de Google Fonts no carregamento da página.
 
-### Escala
+| Papel | Família | Uso |
+| --- | --- | --- |
+| Display | Syne Variable | Marca, hero e títulos principais |
+| Corpo e UI | Outfit Variable | Parágrafos, formulários e controles |
+| Utilitária | JetBrains Mono Variable | Períodos, tags e metadados curtos |
 
-| Classe / Uso | Tamanho | Peso |
-|--------------|---------|------|
-| Hero brand | `clamp(2.5rem, 7vw, 4.5rem)` | 800 |
-| H1 seção | `clamp(1.75rem, 4vw, 2.5rem)` | 700 |
-| H2 / card title | `1.1rem` | 700 |
-| Body | `0.875rem – 1rem` | 300–400 |
-| Label / badge | `0.75rem – 0.8rem` | 500 |
-| Uppercase label | `0.75rem` | 500, `letter-spacing: 0.08em` |
+Princípios:
 
-### Marca registrada
+- Títulos usam tracking negativo e poucas linhas.
+- Corpo mantém medida máxima de aproximadamente 62 a 68 caracteres.
+- Mono é informação, não decoração.
+- Eyebrows são limitados a uma ocorrência para cada três seções.
 
-```html
-<sup class="reg">®</sup>
+## 4. Forma e elevação
+
+O sistema usa três níveis coerentes:
+
+| Elemento | Raio |
+| --- | ---: |
+| Campo, ícone e controle compacto | `10px` |
+| Card e mídia | `16px` |
+| Painel de trabalho e formulário admin | `24px` |
+| Botão, status e tag | `999px` |
+
+Sombras:
+
+- Cards claros: sombra difusa de baixa opacidade
+- Superfície em destaque: sombra preta curta, sem glow
+- Listas editoriais: preferir linhas e espaço em vez de caixas
+
+## 5. Layout
+
+- Container máximo: `1240px`
+- Gutter mobile: `20px`
+- Gutter tablet/desktop: `40px`
+- Gutter amplo: `48px`
+- Header: até `76px`
+- Hero: `min-height: 100svh`, nunca `100vh`
+- Mobile abaixo de `768px`: todas as composições assimétricas viram uma coluna
+
+### Ordem pública
+
+1. Hero
+2. Projetos
+3. Sobre
+4. Processo
+5. Stack
+6. Experiência
+7. Formação
+8. Contato
+
+Projetos aparecem cedo porque são a principal prova para a audiência técnica.
+
+## 6. Movimento
+
+Curvas:
+
+```css
+--ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 ```
 
-- `.reg`: `font-size: 0.55em`, `opacity: 0.7`
-- `.reg--large`: `font-size: 0.35em` (títulos grandes)
+Regras:
 
----
+- Feedback de botão: `100-200ms`
+- Menus e drawers: `180-250ms`
+- Reveals de conteúdo: `450-600ms`
+- Entrada usa ease-out; movimento contínuo usa ease-in-out.
+- Apenas `transform` e `opacity` são animados.
+- Hover com deslocamento existe somente em ponteiro fino.
+- `MotionConfig reducedMotion="user"` governa o app inteiro.
+- CSS também desliga deslocamentos sob `prefers-reduced-motion`.
+- Scroll nunca é observado com listener nativo para animar.
 
-## 4. Espaçamento
+Motivação:
 
-| Token | Valor |
-|-------|-------|
-| `--space-xs` | `0.25rem` |
-| `--space-sm` | `0.5rem` |
-| `--space-md` | `1rem` |
-| `--space-lg` | `1.5rem` |
-| `--space-xl` | `2rem` |
-| `--space-2xl` | `2.5rem` |
-| `--space-3xl` | `4rem` |
-| `--space-section` | `5rem` |
+- Hero: título revelado palavra por palavra, dentro de máscara.
+- System trace: o waterfall preenche na ordem real das camadas.
+- Build rail: mostra progresso e seção ativa.
+- Reveals: organizam a leitura.
+- Botões: confirmam a ação.
 
-Padding de página: `2rem` (mobile), `2.5rem` (desktop).
+## 6.1 Elemento assinatura: system trace
 
----
+O painel `SystemTrace` é o único momento de ousadia da página. Tudo em volta permanece silencioso.
 
-## 5. Raios de borda
+- Desenha o caminho de uma requisição pelas camadas reais do projeto.
+- As barras preenchem em sequência, respeitando o offset de cada etapa.
+- O total conta em tempo real durante a passada.
+- Repete a cada `6,3s`, e apenas enquanto o painel está em tela.
+- Sob `prefers-reduced-motion`, nasce no estado final e não repete.
+
+Regras de integridade:
+
+- Os tempos são de referência e ilustram proporção entre camadas. Nunca apresentar como telemetria ao vivo.
+- O rodapé declara "Tempos de referência".
+- O `figcaption` descreve todas as etapas em texto para leitores de tela; as barras são `aria-hidden`.
+
+Usos:
+
+| Superfície | Rota | Papel |
+| --- | --- | --- |
+| Hero | `GET /api/projects` | Prova técnica logo na abertura |
+| Login | `POST /api/auth/login` | Explica o que acontece ao entrar |
+
+## 6.2 Escala de empilhamento
+
+Todo `z-index` sai de `theme.css`. Nenhum valor solto no JSX.
 
 | Token | Valor | Uso |
-|-------|-------|-----|
-| `--radius-sm` | `8px` | Ícones, inputs |
-| `--radius-md` | `16px` | Cards |
-| `--radius-lg` | `24px` | Painéis, stats |
-| `--radius-full` | `9999px` | Botões, badges |
-
----
-
-## 6. Transições
-
-| Token | Valor | Uso |
-|-------|-------|-----|
-| `--transition-fast` | `0.2s cubic-bezier(0.4,0,0.2,1)` | Hover simples |
-| `--transition-smooth` | `0.4s cubic-bezier(0.4,0,0.2,1)` | Cards, nav |
-| `--transition-spring` | `0.6s cubic-bezier(0.34,1.56,0.64,1)` | Entradas animadas |
-
----
+| --- | ---: | --- |
+| `--z-background` | `0` | Papel e grão |
+| `--z-content` | `2` | Seções |
+| `--z-rail` | `40` | Build rail lateral |
+| `--z-menu` | `90` | Menu mobile |
+| `--z-header` | `100` | Header fixo e barra do admin |
+| `--z-drawer` | `110` | Editor fullscreen do admin |
+| `--z-skip` | `120` | Skip link |
 
 ## 7. Componentes
 
-### Botão primário (`.btn--primary`)
+### Botões
 
-- Fundo: `--color-accent` (preto)
-- Texto: branco
-- Sombra: `--neon-glow-strong`
-- Hover: `translateY(-2px)`, glow intensificado
-- Border-radius: `--radius-full`
-- Padding: `0.85rem 2rem`
+- Primário: tinta preta, texto paper, pill
+- Secundário: superfície clara com borda
+- Destrutivo: vermelho apenas em exclusão
+- Altura mínima: `44px`
+- Press: escala `0.97`
+- Nunca aninhar `<button>` dentro de `<a>` ou `<Link>`
 
-### Botão ghost (`.btn--ghost`)
+### Campos
 
-- Fundo: transparente
-- Borda: `1.5px solid rgba(255,255,255,0.12)`
-- Hover: borda clara + `--color-bg-subtle`
+- Label sempre visível acima do campo
+- Placeholder apenas como exemplo
+- Erro abaixo do campo e ligado com `aria-describedby`
+- Focus com borda preta e ring de 3px
+- Altura mínima: `46px`
 
-### Botão perigo (`.btn--danger`)
+### Ícones
 
-- Borda vermelha sutil, texto `#f87171`
-- Usado apenas em admin (excluir)
+- Família única: Phosphor Icons
+- Peso padrão: regular ou light
+- Ícone estrutural nunca é emoji
+- O modelo de projeto mantém os nomes existentes e os mapeia para Phosphor
 
-### Card (`.feature-card` / `.project-card`)
+### Cards e listas
 
-- Fundo: `--color-bg-elevated`
-- Borda: `--color-border`
-- Sombra: `--neon-border`
-- Hover: `translateY(-4px)`, `--neon-glow-strong`
-- Padding: `2rem 1.5rem`
-- Border-radius: `--radius-md`
+- Card apenas quando a superfície representa uma unidade navegável ou um painel real.
+- Stack usa bento assimétrico porque os grupos são unidades distintas.
+- Experiência usa scroll-snap horizontal para uma lista longa.
+- Admin usa lista densa, sem transformar cada linha em um card independente.
 
-### Card destacado (`.feature-card--highlight`)
+## 8. Login e admin
 
-- Fundo: preto puro `#000000`
-- Texto: branco
-- Sombra: `--neon-glow-strong`
+### Login
 
-### Badge (`.hero__badge`)
+- Desktop: composição split-screen
+- Esquerda: painel preto com malha blueprint, marca e o trace da própria autenticação
+- Direita: formulário claro e objetivo
+- Mobile: marca mínima, formulário no foco e o trace em versão clara abaixo
+- Somente senha, de acordo com o contrato atual
+- Rota marcada com `noindex,nofollow`
 
-- Fundo: `--color-bg-subtle`
-- Borda sutil + `--neon-border`
-- Dot pulsante preto com glow
+### Admin
 
-### Input / Textarea / Select (`.field__input`)
+- Desktop: lista e inspector sticky
+- Mobile: editor fullscreen com Escape, focus trap e retorno de foco
+- Estados loading, vazio, erro, edição e confirmação de exclusão são obrigatórios
+- Links de projeto aceitam somente HTTPS e respostas antigas inseguras não viram links
+- CRUD e autenticação continuam usando a API existente
 
-- Fundo: `--color-bg-subtle`
-- Borda: `--color-border`
-- Focus: `--neon-ring` + `--color-border-strong`
-- Border-radius: `--radius-sm`
-- Padding: `0.75rem 1rem`
-- Fonte: `--font-body`
+## 9. Acessibilidade
 
-### Header fixo
+- Um único `<main>` na página pública
+- Skip link no início
+- Focus visível
+- Contraste WCAG AA para texto e controles
+- Alvos de toque com no mínimo `44 x 44px`
+- Menu e drawer restauram o foco ao fechar
+- Conteúdo de fundo fica inert durante overlays
+- Gráficos decorativos são `aria-hidden` e têm equivalente em texto
+- Movimento reduzido preserva fades úteis e remove deslocamentos
 
-- `backdrop-filter: blur(20px)`
-- Fundo: `rgba(10,10,10,0.75)`
-- Borda inferior: `rgba(255,255,255,0.05)`
-- z-index: `100`
+## 10. Assets
 
----
+O site não usa fotografia nem ilustração decorativa. Todo o visual é desenhado em código, com os mesmos tokens da interface.
 
-## 8. Layout
+| Arquivo | Uso |
+| --- | --- |
+| `/images/og-cover.png` | Compartilhamento social, 1200 x 630 |
+| `/favicon.svg` | Ícone da aba |
 
-### Grid de features/projetos
+O card social é gerado a partir das próprias fontes do bundle (Syne, Outfit, JetBrains Mono) e repete o waterfall do hero. Não há dependência de banco de imagens.
 
-```css
-display: grid;
-grid-template-columns: repeat(3, 1fr); /* desktop */
-gap: 1.5rem;
-max-width: 900px;
-```
+## 11. Checklist de entrega
 
-Mobile (`max-width: 768px`): `grid-template-columns: 1fr`.
-
-### Seções
-
-- `min-height: 100vh` para hero
-- `padding-top: 8rem` (compensa header fixo)
-- z-index conteúdo: `2` (acima do canvas e noise)
-
-### Canvas de fundo
-
-- `#grid-canvas`: fixed, full viewport, z-index `0`
-- Pontos: branco com baixa opacidade, reagem ao mouse
-- `.noise`: overlay SVG, opacity `0.03`
-
----
-
-## 9. Animações
-
-| Nome | Uso |
-|------|-----|
-| `fadeUp` | Entrada de hero e grids |
-| `float` | Glows decorativos |
-| `pulse` | Badge dot "online" |
-
-Contadores: easing cúbico `1 - (1-t)³`, duração `1500ms`.
-
----
-
-## 10. Acessibilidade
-
-- `lang="pt-BR"` em todas as páginas
-- Elementos decorativos: `aria-hidden="true"`
-- Links externos: `target="_blank"` + `rel="noopener noreferrer"`
-- Contraste mínimo WCAA AA entre texto e fundo
-- Focus visível em inputs e botões (`outline` ou `--neon-ring`)
-
----
-
-## 11. Nomenclatura BEM
-
-```
-.block__element--modifier
-```
-
-Exemplos: `.hero__title`, `.project-card__icon`, `.nav-link--active`, `.field__label`.
-
----
-
-## 12. Páginas do sistema
-
-| Página | Arquivo | Propósito |
-|--------|---------|-----------|
-| Landing | `index.html` | Apresentação + listagem pública de projetos |
-| Admin | `admin.html` | CRUD de projetos (título, ícone, descrição, link) |
-
-### Modelo de projeto
-
-```json
-{
-  "id": "uuid",
-  "title": "string",
-  "icon": "string (id: folder | rocket | zap | layers | code | globe | link | box | terminal | chart)",
-  "description": "string",
-  "link": "url",
-  "createdAt": "ISO date"
-}
-```
-
-Persistência: `localStorage` chave `bevilabs_projects`.
-
----
-
-## 13. Checklist para novos componentes
-
-- [ ] Usa tokens de `variables.css` (nunca cores hardcoded)
-- [ ] Segue BEM consistente com o restante
-- [ ] Tem estado hover/focus
-- [ ] Responsivo no breakpoint `768px`
-- [ ] Fonte display para títulos, body para texto
-- [ ] Sombra neon preto nos destaques
-- [ ] z-index respeita camadas (canvas → noise → conteúdo → header)
+- [ ] Tema claro consistente em todas as seções
+- [ ] Nenhum neon ou cor de destaque não semântica
+- [ ] Hero cabe no viewport em desktop; no mobile o system trace é o primeiro momento de scroll
+- [ ] Projetos aparecem logo após o hero
+- [ ] Máximo de três eyebrows na página
+- [ ] Sem botões e links aninhados
+- [ ] Sem em dash visível
+- [ ] Nenhum `z-index` fora dos tokens
+- [ ] Nenhum utilitário CSS sem uso
+- [ ] Mobile validado em `375px`
+- [ ] Desktop validado em `1440px`
+- [ ] Reduced motion validado
+- [ ] Login e CRUD testados
+- [ ] Typecheck, lint, testes e build aprovados

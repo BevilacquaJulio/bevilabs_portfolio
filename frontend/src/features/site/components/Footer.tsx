@@ -4,19 +4,13 @@ export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="relative z-2 py-10 text-center">
+    <footer className="relative z-2 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
       <div className="layout">
-        <Reveal>
-          <p className="text-[0.8rem] text-fg-muted">
-            © {year} Bevilacqua Labs<sup className="reg">®</sup>. Todos os direitos reservados.
+        <Reveal className="flex flex-col gap-2 border-t border-line py-5 text-[0.8rem] text-fg-muted sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:py-6 sm:text-[0.84rem]">
+          <p>
+            © {year} Bevilacqua Labs<sup className="reg">®</sup>
           </p>
-          <p className="mt-2 text-[0.72rem] text-fg-subtle">
-            Construido com React, NestJS e TypeScript.
-          </p>
-          <span
-            aria-hidden="true"
-            className="mx-auto mt-4 block h-0.5 w-15 rounded-full bg-neon [box-shadow:var(--shadow-accent-glow)]"
-          />
+          <p className="font-mono text-[0.68rem] tracking-[0.04em]">Node.js / React / TypeScript</p>
         </Reveal>
       </div>
     </footer>

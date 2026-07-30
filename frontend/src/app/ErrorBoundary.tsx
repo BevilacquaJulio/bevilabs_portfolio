@@ -12,22 +12,24 @@ export class ErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo): void {
-    console.error('Erro nao tratado na UI:', error, info.componentStack);
+    console.error('Erro não tratado na UI:', error, info.componentStack);
   }
 
   render(): ReactNode {
     if (!this.state.hasError) return this.props.children;
 
     return (
-      <main className="flex min-h-dvh flex-col items-center justify-center px-6 text-center">
-        <h1 className="font-display text-xl font-bold">Algo quebrou por aqui</h1>
-        <p className="mt-2 max-w-sm text-sm font-light text-fg-muted">
-          Recarregue a pagina. Se continuar, me avise pelo e-mail de contato.
+      <main className="relative z-2 flex min-h-dvh flex-col items-center justify-center px-[var(--layout-pad)] pt-[calc(2rem+env(safe-area-inset-top))] pb-[calc(2rem+env(safe-area-inset-bottom))] text-center">
+        <h1 className="font-display text-2xl leading-tight font-bold tracking-[-0.035em]">
+          Algo quebrou por aqui
+        </h1>
+        <p className="mt-3 max-w-sm text-[0.95rem] leading-relaxed text-fg-muted">
+          Recarregue a página. Se continuar, me avise pelo e-mail de contato.
         </p>
         <button
           type="button"
           onClick={() => window.location.reload()}
-          className="mt-6 rounded-full border border-line-strong px-5 py-2 text-sm font-medium transition-colors hover:border-neon/45 hover:text-neon"
+          className="mt-7 inline-flex min-h-12 w-full max-w-xs items-center justify-center rounded-full border border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-paper transition-[transform,box-shadow] duration-200 ease-[var(--ease-out)] active:scale-[0.97] sm:w-auto"
         >
           Recarregar
         </button>

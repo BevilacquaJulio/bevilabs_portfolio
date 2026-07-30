@@ -1,4 +1,4 @@
-import { motion, type HTMLMotionProps } from 'framer-motion';
+import { motion, useReducedMotion, type HTMLMotionProps } from 'framer-motion';
 import type { ReactNode } from 'react';
 import { defaultViewport, revealVariants } from '@/lib/motion';
 
@@ -10,13 +10,15 @@ type RevealProps = Omit<HTMLMotionProps<'div'>, 'variants' | 'children'> & {
 
 /** Wrapper de reveal em scroll. Anima uma unica vez por elemento. */
 export function Reveal({ children, delay = 0, ...props }: RevealProps) {
+  const shouldReduceMotion = useReducedMotion();
+
   return (
     <motion.div
-      initial="hidden"
+      initial={shouldReduceMotion ? false : 'hidden'}
       whileInView="visible"
       viewport={defaultViewport}
       variants={revealVariants}
-      transition={{ delay }}
+      transition={{ delay: shouldReduceMotion ? 0 : delay }}
       {...props}
     >
       {children}

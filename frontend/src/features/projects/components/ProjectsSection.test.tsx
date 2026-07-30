@@ -9,7 +9,7 @@ const project: Project = {
   id: '1',
   title: 'Change Tracker',
   icon: 'chart',
-  description: 'Auditoria de mudancas com historico completo.',
+  description: 'Auditoria de mudancas com historico completo em React e NestJS.',
   link: 'https://example.com',
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
@@ -23,6 +23,10 @@ describe('ProjectsSection', () => {
   it('mostra o estado de carregamento antes da resposta', () => {
     vi.spyOn(api, 'listProjects').mockReturnValue(new Promise(() => {}));
     renderWithProviders(<ProjectsSection />);
+
+    expect(
+      screen.getByRole('region', { name: /Sistemas que eu já construí/i }),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText('Carregando projetos')).toBeInTheDocument();
   });
 
@@ -37,9 +41,27 @@ describe('ProjectsSection', () => {
     renderWithProviders(<ProjectsSection />);
 
     expect(await screen.findByText('Change Tracker')).toBeInTheDocument();
-    expect(
-      screen.getByRole('link', { name: /Abrir projeto Change Tracker/i }),
-    ).toHaveAttribute('href', 'https://example.com');
+    expect(screen.getByRole('link', { name: /Abrir projeto Change Tracker/i })).toHaveAttribute(
+      'href',
+      'https://example.com/',
+    );
+    expect(screen.getByLabelText(/Tecnologias citadas neste projeto/i)).toHaveTextContent('React');
+    expect(screen.getByLabelText(/Tecnologias citadas neste projeto/i)).toHaveTextContent('NestJS');
+  });
+
+  it('não renderiza protocolos inseguros recebidos da API', async () => {
+    vi.spyOn(api, 'listProjects').mockResolvedValue({
+      data: [{ ...project, link: 'javascript:alert(1)' }],
+      total: 1,
+      page: 1,
+      limit: 50,
+    });
+
+    renderWithProviders(<ProjectsSection />);
+
+    expect(await screen.findByText('Change Tracker')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /Abrir projeto Change Tracker/i })).toBeNull();
+    expect(screen.getByText('Link indisponível')).toBeInTheDocument();
   });
 
   it('mostra o estado vazio quando nao ha projetos', async () => {
@@ -56,8 +78,12 @@ describe('ProjectsSection', () => {
     renderWithProviders(<ProjectsSection />);
 
     await waitFor(() =>
-      expect(screen.getByText(/Nao consegui carregar os projetos/i)).toBeInTheDocument(),
+      expect(screen.getByText(/Não consegui carregar os projetos/i)).toBeInTheDocument(),
     );
-    expect(screen.getByRole('button', { name: /Tentar de novo/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Tentar de novo/i })).toHaveClass(
+      'min-h-11',
+      'w-full',
+      'sm:w-auto',
+    );
   });
 });

@@ -12,16 +12,23 @@ import { ProjectsSection } from '@/features/projects/components/ProjectsSection'
 export default function HomePage() {
   return (
     <>
+      <a className="skip-link" href="#conteudo">
+        Pular para o conteúdo
+      </a>
       <Header />
-      <Hero />
-      <About />
-      <Process />
-      <Stack />
-      <Timeline />
-      <Education />
-      <ProjectsSection />
-      <Contact />
-      <Footer />
+      <main id="conteudo">
+        <Hero />
+        <ProjectsSection />
+        <About />
+        <Process />
+        <Stack />
+        <Timeline />
+        <Education />
+        <Contact />
+      </main>
+      <div id="site-footer">
+        <Footer />
+      </div>
     </>
   );
 }

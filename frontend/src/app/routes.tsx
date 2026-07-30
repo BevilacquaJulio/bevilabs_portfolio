@@ -11,11 +11,14 @@ const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 function RouteFallback() {
   return (
     <div
-      className="flex min-h-dvh items-center justify-center"
+      className="relative z-2 flex min-h-dvh flex-col items-center justify-center gap-4 px-[var(--layout-pad)] pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
       role="status"
       aria-label="Carregando"
     >
-      <span className="size-8 animate-spin rounded-full border-2 border-neon border-t-transparent" />
+      <span aria-hidden="true" className="font-display text-2xl font-extrabold tracking-[-0.05em]">
+        BL
+      </span>
+      <span aria-hidden="true" className="skeleton h-1 w-24 rounded-full" />
     </div>
   );
 }

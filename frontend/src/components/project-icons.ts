@@ -21,12 +21,12 @@ export const PROJECT_ICON_LABELS: Record<ProjectIconName, string> = {
   rocket: 'Foguete',
   zap: 'Raio',
   layers: 'Camadas',
-  code: 'Codigo',
+  code: 'Código',
   globe: 'Globo',
   link: 'Link',
   box: 'Caixa',
   terminal: 'Terminal',
-  chart: 'Grafico',
+  chart: 'Gráfico',
 };
 
 /** Protege contra um icone desconhecido vindo do banco. */

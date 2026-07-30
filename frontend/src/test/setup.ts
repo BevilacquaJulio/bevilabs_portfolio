@@ -1,7 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 import { vi } from 'vitest';
 
-// jsdom nao implementa matchMedia — os hooks de responsividade dependem dele.
+// jsdom nao implementa matchMedia; os hooks de responsividade dependem dele.
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
   value: (query: string) => ({
