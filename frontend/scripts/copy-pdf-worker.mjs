@@ -7,8 +7,8 @@ const source = join(root, 'node_modules/pdfjs-dist/build/pdf.worker.min.mjs');
 const target = join(root, 'public/pdf.worker.js');
 
 if (!existsSync(source)) {
-  console.warn('[copy-pdf-worker] pdfjs-dist ainda nao instalado; pulando copia.');
-  process.exit(0);
+  console.warn('[copy-pdf-worker] pdfjs-dist ausente; execute npm ci antes do build.');
+  process.exit(1);
 }
 
 copyFileSync(source, target);
