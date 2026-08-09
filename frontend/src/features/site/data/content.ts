@@ -1,20 +1,30 @@
 import type { IconName } from '@/components/Icon';
-import type { TraceSpan } from '@/components/SystemTrace';
+import type { TechSlug } from '@/features/site/components/tech-glyphs';
 
 /**
- * Conteudo editorial do site em um unico lugar.
- * Trocar texto aqui nao exige mexer em componente nenhum.
+ * Todo o texto do site em um lugar só.
+ *
+ * Regra de divisão, para nenhuma seção repetir a outra:
+ *   Hero        quem é e o que faz, em três linhas.
+ *   Projetos    o trabalho entregue. Vem do banco, via API.
+ *   Stack       o inventário de tecnologias, com marca e categoria.
+ *   Trajetória  onde, quando e o resultado de cada passagem.
+ *   Sobre       como trabalha, e os números que sustentam.
+ *   Contato     os canais.
  */
 
 export const PROFILE = {
   name: 'Julio Bevilacqua',
-  initials: 'JB',
-  role: 'Node.js & React Developer',
-  roleLong: 'Desenvolvedor Full Stack, Node.js (NestJS) e React',
+  fullName: 'Julio Cesar Ferreira Bevilacqua',
+  brand: 'Bevilacqua Labs',
+  initials: 'BL',
+  role: 'Desenvolvedor Full Stack',
+  stackLine: 'Node + React',
   location: 'São Paulo, SP',
+  country: 'Brasil',
   email: 'juliobevi1@gmail.com',
-  phone: '(11) 97710-5654',
-  phoneHref: '+5511977105654',
+  phoneLabel: '(11) 97710-5654',
+  whatsapp: 'https://wa.me/5511977105654',
   linkedin: 'https://linkedin.com/in/julio-bevi',
   linkedinLabel: 'linkedin.com/in/julio-bevi',
   github: 'https://github.com/BevilacquaJulio',
@@ -22,294 +32,258 @@ export const PROFILE = {
 } as const;
 
 export const HERO = {
-  status: 'Disponível para oportunidades',
+  status: {
+    lead: 'Disponível',
+    detail: 'para novas oportunidades',
+  },
+  /** Cada letra sobe de dentro da própria máscara. */
+  wordmark: ['Bevilacqua', 'Labs'] as const,
+  greeting: 'por Julio Bevilacqua',
   role: 'Desenvolvedor Full Stack',
-  /** As duas partes formam uma única frase no título. */
-  title: ['Do', 'requisito', 'ao', 'deploy,'],
-  titleAccent: ['com', 'visão', 'de', 'produto.'],
+  stackLine: 'Node.js + React',
+  statement:
+    'Aplicações completas, da modelagem de dados e APIs NestJS à interface React e ao deploy com Docker.',
+  ctaPrimary: { label: 'Ver projetos', href: '#projetos' },
+  ctaSecondary: { label: 'Falar comigo', href: '#contato' },
+  /** Três provas curtas na régua abaixo da apresentação. */
+  proof: [
+    { icon: 'code', value: '2+ anos', label: 'em produção' },
+    { icon: 'chart', value: 'R$ 200 mil+', label: 'processados' },
+    { icon: 'pin', value: 'São Paulo', label: 'Brasil' },
+  ],
+} as const satisfies {
+  status: { lead: string; detail: string };
+  wordmark: readonly [string, string];
+  greeting: string;
+  role: string;
+  stackLine: string;
+  statement: string;
+  ctaPrimary: { label: string; href: string };
+  ctaSecondary: { label: string; href: string };
+  proof: ReadonlyArray<{ icon: IconName; value: string; label: string }>;
+};
+
+export const PROJECTS_SECTION = {
+  label: 'Meus projetos',
+  title: 'Projetos em produção',
   subtitle:
-    'Construo APIs em NestJS e interfaces React conectadas por TypeScript, da modelagem do banco à publicação em Docker.',
-  ctaPrimary: { label: 'Ver experiência', href: '#experiencia' },
-  ctaSecondary: { label: 'Ver projetos', href: '#projetos' },
-  facts: [
-    { label: 'Experiência', value: '2 anos em produção' },
-    { label: 'Especialidade', value: 'Node.js + React' },
-  ],
-  focus: {
-    eyebrow: 'Escopo profissional',
-    title: 'TypeScript de ponta a ponta.',
-    text: 'Um único ecossistema técnico, com contratos claros entre as camadas e menos ruído entre back-end e front-end.',
-    areas: [
-      { label: 'Back-end', value: 'Node.js, NestJS e Prisma' },
-      { label: 'Front-end', value: 'React, TypeScript e Vite' },
-      { label: 'Dados e entrega', value: 'MySQL, Docker e Traefik' },
-    ],
-    flow: ['Dados', 'API', 'Interface', 'Deploy'],
-  },
+    'Sistemas no ar, com usuários reais. Em cada um eu fui do modelo de dados até a publicação.',
 } as const;
 
-/**
- * O que acontece quando a senha do admin e enviada. Alimenta a tela de login.
- */
-export const LOGIN_TRACE = {
-  method: 'POST',
-  route: '/api/auth/login',
-  status: '200 OK',
-  note: 'Tempos de referência',
-  spans: [
-    { service: 'traefik', op: 'tls + rate limit', start: 0, dur: 3 },
-    { service: 'nestjs', op: 'validação da senha', start: 3, dur: 2 },
-    { service: 'bcrypt', op: 'comparação do hash', start: 5, dur: 82 },
-    { service: 'jwt', op: 'access + refresh', start: 87, dur: 4 },
-    { service: 'cookie', op: 'httpOnly + sameSite', start: 91, dur: 1 },
-  ] satisfies readonly TraceSpan[],
+export const STACK_SECTION = {
+  label: 'Stacks',
+  title: 'Minhas habilidades e stacks que eu uso',
+  subtitle:
+    'TypeScript conecta banco, API e interface. Filtre por camada para ver o que cada uma resolve.',
 } as const;
 
-export const ABOUT = {
-  eyebrow: 'Perfil',
-  title: 'Sobre mim',
-  /** Frase de abertura, em destaque. Segura sozinha a hierarquia da seção. */
-  lead: 'Construo sistemas full stack em Node e React, da modelagem do banco ao deploy, e mantenho cada um deles rodando em produção.',
-  /** Princípios de trabalho. A numeração dos cards já dá a leitura da lista. */
-  approach: [
-    {
-      label: 'Mesma língua',
-      title: 'Front e back falam a mesma língua.',
-      text: 'TypeScript do banco à tela, sem regra duplicada no caminho.',
-    },
-    {
-      label: 'Sem bagunça',
-      title: 'Cada parte fica no lugar certo.',
-      text: 'Módulos claros, validação na entrada e acessos bem definidos.',
-    },
-    {
-      label: 'No ar',
-      title: 'Não deixo projeto preso no localhost.',
-      text: 'Testes no que importa, Docker e deploy em Linux com HTTPS.',
-    },
-    {
-      label: 'Junto com o time',
-      title: 'Dou contexto e faço a entrega andar.',
-      text: 'Referência técnica de três devs, do requisito ao deploy.',
-    },
-  ],
-  /** Ficha rápida da coluna lateral. Cada item é uma linha alinhada à mesma grade. */
-  facts: [
-    { label: 'Base', value: 'São Paulo, SP' },
-    { label: 'Foco', value: 'Node.js, NestJS, React, Vite e TypeScript' },
-    { label: 'Formação', value: 'Análise e Desenvolvimento de Sistemas' },
-    { label: 'Idiomas', value: 'Inglês avançado' },
-  ],
+export type TechGroupId = 'backend' | 'frontend' | 'dados' | 'infra';
+
+export const TECH_GROUPS: ReadonlyArray<{ id: TechGroupId; name: string; role: string }> = [
+  { id: 'backend', name: 'Back-end', role: 'Regra de negócio, contrato e autenticação' },
+  { id: 'frontend', name: 'Front-end', role: 'Interface, estado e formulário' },
+  { id: 'dados', name: 'Dados', role: 'Modelagem, migração e persistência' },
+  { id: 'infra', name: 'Infra e qualidade', role: 'Publicação, proxy, TLS e testes' },
+];
+
+export type TechItem = { slug: TechSlug; name: string; group: TechGroupId };
+
+export const TECH_ITEMS: readonly TechItem[] = [
+  { slug: 'nodedotjs', name: 'Node.js', group: 'backend' },
+  { slug: 'nestjs', name: 'NestJS', group: 'backend' },
+  { slug: 'typescript', name: 'TypeScript', group: 'backend' },
+  { slug: 'jsonwebtokens', name: 'JWT', group: 'backend' },
+
+  { slug: 'react', name: 'React', group: 'frontend' },
+  { slug: 'vite', name: 'Vite', group: 'frontend' },
+  { slug: 'tailwindcss', name: 'Tailwind', group: 'frontend' },
+
+  { slug: 'mysql', name: 'MySQL', group: 'dados' },
+  { slug: 'mariadb', name: 'MariaDB', group: 'dados' },
+  { slug: 'prisma', name: 'Prisma', group: 'dados' },
+
+  { slug: 'docker', name: 'Docker', group: 'infra' },
+  { slug: 'traefikproxy', name: 'Traefik', group: 'infra' },
+  { slug: 'nginx', name: 'Nginx', group: 'infra' },
+  { slug: 'linux', name: 'Linux', group: 'infra' },
+  { slug: 'git', name: 'Git', group: 'infra' },
+  { slug: 'vitest', name: 'Vitest', group: 'infra' },
+];
+
+export const JOURNEY_SECTION = {
+  label: 'Trajetória',
+  title: 'Minha trajetória profissional',
+  subtitle: 'Onde eu trabalhei, o que construí e o que ficou de resultado em cada passagem.',
 } as const;
 
-export const ABOUT_STATS: ReadonlyArray<{ value: string; label: string }> = [
-  { value: 'R$200 mil+', label: 'Processados em um único evento' },
-  { value: '3', label: 'Devs sob liderança técnica' },
-  { value: '2 anos', label: 'Entregando sistemas em produção' },
-  { value: '100%', label: 'TypeScript de ponta a ponta' },
-];
-
-export const PROCESS: ReadonlyArray<{ icon: IconName; title: string; text: string }> = [
-  {
-    icon: 'search',
-    title: 'Entender',
-    text: 'Mergulho no problema real antes de pensar em código: regras de negócio, usuários e restrições técnicas.',
-  },
-  {
-    icon: 'compass',
-    title: 'Modelar',
-    text: 'Desenho o schema Prisma e os contratos da API em Zod. O tipo nasce uma vez e vale para o servidor e para o cliente.',
-  },
-  {
-    icon: 'code',
-    title: 'Construir',
-    text: 'NestJS separando controller, service e repository; React com componentes pequenos e estado de servidor no TanStack Query. Testes com Vitest.',
-  },
-  {
-    icon: 'rocket',
-    title: 'Publicar',
-    text: 'Build Docker multi-stage, Docker Compose e Traefik em VPS Linux, com TLS automático e migrations versionadas.',
-  },
-];
-
-/**
- * Competências agrupadas nas mesmas categorias do currículo.
- * A ordem alimenta as três fileiras da seção, três grupos por fileira.
- */
-export const STACK: ReadonlyArray<{
-  icon: IconName;
-  title: string;
-  items: readonly string[];
-}> = [
-  // Fluxo do sistema: linguagens, API e interface.
-  {
-    icon: 'code',
-    title: 'Linguagens',
-    items: ['TypeScript', 'JavaScript (ES6+)', 'SQL'],
-  },
-  {
-    icon: 'node',
-    title: 'Back-end',
-    items: [
-      'Node.js',
-      'NestJS',
-      'APIs REST',
-      'Prisma ORM',
-      'Arquitetura modular (controllers, services, DTOs, guards)',
-    ],
-  },
-  {
-    icon: 'react',
-    title: 'Front-end',
-    items: ['React', 'Vite', 'TailwindCSS'],
-  },
-  {
-    icon: 'database',
-    title: 'Banco de Dados',
-    items: ['MySQL', 'MariaDB', 'Modelagem relacional', 'Migrations'],
-  },
-  {
-    icon: 'shield',
-    title: 'Segurança & Autenticação',
-    items: ['JWT', 'bcrypt', 'RBAC', 'Validação de schema (Zod)', 'Helmet', 'Rate limiting'],
-  },
-  {
-    icon: 'check',
-    title: 'Testes & Qualidade',
-    items: ['Vitest', 'Supertest (e2e)', 'Testing Library', 'ESLint', 'Prettier'],
-  },
-  {
-    icon: 'terminal',
-    title: 'DevOps & Infraestrutura',
-    items: [
-      'Linux',
-      'Docker',
-      'Docker Compose',
-      'Traefik',
-      'Nginx',
-      "SSL/Let's Encrypt",
-      'Deploy em VPS',
-    ],
-  },
-  {
-    icon: 'github',
-    title: 'Controle de Versão',
-    items: ['Git', 'GitHub', 'Branches por ambiente (dev / homologação / produção)', 'Code review'],
-  },
-  {
-    icon: 'layers',
-    title: 'Metodologias & Gestão',
-    items: ['Scrum', 'Kanban', 'Jira', 'Trello'],
-  },
-];
-
-export const TIMELINE: ReadonlyArray<{
+export type JourneyEntry = {
+  id: string;
   period: string;
-  title: string;
-  text: string;
+  role: string;
+  org: string;
+  summary: string;
+  /** Um número só por entrada, e apenas quando existe um de verdade. */
+  highlight?: { value: string; label: string };
   tags: readonly string[];
-}> = [
+  link?: { href: string; label: string };
+  kind?: 'work' | 'education';
+};
+
+export const JOURNEY: readonly JourneyEntry[] = [
   {
-    period: 'Set/2024 a Jul/2026',
-    title: 'Desenvolvedor Full Stack · DSG Grupo',
-    text: 'Referência técnica de um time de três desenvolvedores, do levantamento de requisitos ao deploy. Construí o sistema de vendas, saldo e estornos de um evento presencial que processou mais de R$ 200 mil, com permissões por perfil e trilha de estornos auditável.',
+    id: 'dsg',
+    period: 'Set/2024 · Jul/2026',
+    role: 'Desenvolvedor Full Stack',
+    org: 'DSG Grupo',
+    summary:
+      'Referência técnica de um time de três desenvolvedores, do levantamento de requisitos ao deploy. Construí o sistema de vendas, saldo e estornos de um evento presencial, com permissão por perfil e trilha auditável, e padronizei o versionamento por ambiente.',
+    highlight: { value: 'R$ 200 mil+', label: 'processados em um único evento' },
     tags: ['NestJS', 'React', 'TypeScript', 'MySQL', 'Docker'],
   },
   {
-    period: 'Jul/2026',
-    title: 'Bevilacqua Labs® · portfólio full stack',
-    text: 'Este site: API em NestJS com Prisma e MySQL, autenticação JWT com refresh token rotativo e painel admin em React com TanStack Query. Deploy em Docker Compose atrás de Traefik com TLS automático.',
-    tags: ['NestJS', 'Prisma', 'React', 'Vite', 'Docker', 'Traefik'],
-  },
-  {
-    period: 'Jun/2026',
-    title: 'Sistemas de back-end (projetos pessoais)',
-    text: 'Arquiteto serviços de controle financeiro, change tracking com auditoria e controle de pedidos: API tipada, migrations versionadas e publicação em produção com Docker, Traefik e SSL automático.',
-    tags: ['Node.js', 'TypeScript', 'Prisma', 'Traefik'],
-  },
-  {
+    id: 'atlas',
     period: 'Fev/2026',
-    title: 'Desenvolvedor Full Stack · Freelance, Atlas Stock',
-    text: 'Sistema de gestão operacional, financeira e de estoque para uma empresa de blindagem de veículos: API em NestJS com MySQL, controle de custos por projeto e dashboard de indicadores em tempo real.',
-    tags: ['NestJS', 'React', 'MySQL', 'Dashboard'],
+    role: 'Full Stack · Freelance',
+    org: 'Atlas Stock',
+    summary:
+      'Sistema de gestão operacional, financeira e de estoque para uma empresa de blindagem de veículos, com controle de custo por projeto, rastreabilidade de material e dashboard de indicadores em tempo real.',
+    tags: ['NestJS', 'Prisma', 'React', 'MySQL'],
   },
   {
-    period: 'Jan/2026',
-    title: 'Desenvolvedor Front-End · Freelance, Ultradesc Descartáveis',
-    text: 'Landing page institucional e painel administrativo para a Ultradesc Descartáveis, empresa de produtos hospitalares. Projeto real em produção.',
-    tags: ['JavaScript', 'HTML', 'CSS', 'MySQL'],
-  },
-  {
+    id: 'motor-racing',
     period: 'Mar/2025',
-    title: 'Desenvolvedor Front-End · Freelance, Motor Racing Performance & Consulting',
-    text: 'Cliente americano (giaffone.com): animações responsivas orientadas a scroll, vídeo gerado com IA (Google Veo) integrado via Canvas e condução solo de todo o deploy em produção.',
-    tags: ['JavaScript', 'Canvas', 'Animações', 'IA generativa'],
+    role: 'Front-End · Freelance',
+    org: 'Motor Racing Performance, cliente americano',
+    summary:
+      'Abertura orientada a scroll com 49 quadros desenhados em Canvas, interpolados por requestAnimationFrame e mantidos em refs para não re-renderizar o React. Player de vídeo, carrossel e deploy conduzidos sozinho.',
+    highlight: { value: '60 fps', label: 'na animação de abertura' },
+    tags: ['React', 'TypeScript', 'Canvas API', 'Vite'],
+    link: { href: 'https://giaffone.com', label: 'giaffone.com' },
+  },
+  {
+    id: 'labs',
+    period: 'Contínuo',
+    role: 'Projetos próprios',
+    org: 'Bevilacqua Labs',
+    summary:
+      'Sistemas conteinerizados que eu modelo, construo, publico e mantenho na minha própria VPS, com TLS automático, migrations versionadas, logs estruturados e documentação de API.',
+    tags: ['NestJS', 'Prisma', 'React', 'Traefik'],
+  },
+  {
+    id: 'senac',
+    period: 'Ago/2024 · Dez/2026',
+    role: 'Tecnólogo em Análise e Desenvolvimento de Sistemas',
+    org: 'Universidade Senac Santo Amaro',
+    summary:
+      'Em andamento. Inglês avançado, usado na leitura de documentação técnica e no atendimento a cliente internacional.',
+    tags: [],
+    kind: 'education',
   },
 ];
 
-export const TIMELINE_LINKS: Record<string, { href: string; label: string }> = {
-  'Desenvolvedor Front-End · Freelance, Ultradesc Descartáveis': {
-    href: 'https://ultradesc.com',
-    label: 'ultradesc.com',
-  },
-  'Desenvolvedor Front-End · Freelance, Motor Racing Performance & Consulting': {
-    href: 'https://giaffone.com',
-    label: 'giaffone.com',
-  },
-};
-
-export const EDUCATION = {
-  eyebrow: 'Formação',
-  title: 'Formação e idiomas',
-  /** Linhas de uma mesma grade: período à esquerda, título ao centro, situação à direita. */
-  items: [
-    {
-      icon: 'graduation',
-      period: 'Ago/2024 a Dez/2026',
-      title: 'Tecnólogo em Análise e Desenvolvimento de Sistemas',
-      detail: 'Universidade Senac Santo Amaro',
-      status: 'Em andamento',
-    },
-    {
-      icon: 'globe',
-      period: 'Contínuo',
-      title: 'Inglês avançado',
-      detail: 'Documentação técnica, escrita e atendimento a cliente internacional',
-      status: 'Avançado',
-    },
+export const ABOUT = {
+  label: 'Sobre mim',
+  title: 'Construindo software que resolve problemas reais',
+  paragraphs: [
+    'Desenvolvedor Full Stack com experiência na criação de aplicações web completas, da arquitetura do back-end até interfaces modernas, bonitas e responsivas.',
+    'Desenvolvo sistemas utilizados em produção, com foco em performance, segurança e experiência do usuário.',
+    'Trabalho com Node.js, NestJS, React, TypeScript, MySQL, Docker e Linux, construindo APIs REST, autenticação, controle de permissões, dashboards e integrações.',
   ],
-} as const satisfies {
-  eyebrow: string;
-  title: string;
-  items: ReadonlyArray<{
-    icon: IconName;
-    period: string;
-    title: string;
-    detail: string;
-    status: string;
-  }>;
-};
-
-export const CONTACT = {
-  eyebrow: 'Contato',
-  title: 'O próximo sistema pode começar aqui.',
-  lead: 'Se você tem uma vaga, um produto em construção ou um problema de engenharia, entre em contato comigo.',
 } as const;
 
-export const NAV_LINKS = [
-  { href: '#inicio', label: 'Início', id: 'inicio' },
-  { href: '#projetos', label: 'Projetos', id: 'projetos' },
-  { href: '#sobre', label: 'Sobre', id: 'sobre' },
-  { href: '#stack', label: 'Stack', id: 'stack' },
-  { href: '#contato', label: 'Contato', id: 'contato' },
-] as const;
+/**
+ * O número conta de zero até o valor quando o card entra na tela.
+ * Quando o dado não é numérico, `text` entra no lugar e não há contagem.
+ */
+export type Metric = {
+  icon: IconName;
+  prefix?: string;
+  value?: number;
+  suffix?: string;
+  text?: string;
+  label: string;
+  /** Um só por seção: o número mais forte ganha o card em azul cheio. */
+  featured?: boolean;
+};
 
-export const SECTION_IDS = [
-  'inicio',
-  'sobre',
-  'metodologia',
-  'stack',
-  'experiencia',
-  'projetos',
-  'contato',
-] as const;
+export const ABOUT_METRICS: readonly Metric[] = [
+  { icon: 'calendar', value: 2, suffix: '+', label: 'anos de experiência profissional' },
+  { icon: 'squares', value: 6, suffix: '+', label: 'sistemas desenvolvidos' },
+  {
+    icon: 'chart',
+    prefix: 'R$ ',
+    value: 200,
+    suffix: ' mil+',
+    label: 'em transações processadas nos sistemas que auxiliei em desenvolvimento',
+    featured: true,
+  },
+  { icon: 'gear', text: 'Full Stack', label: 'React · NestJS · Docker' },
+];
+
+export const CONTACT = {
+  label: 'Contato',
+  title: 'Se interessou no meu perfil?',
+  lead: 'Aberto a vagas full stack e a projetos freelance. Escolha o canal que preferir.',
+  availability: 'Disponível para novas oportunidades',
+} as const;
+
+export type ContactChannel = {
+  id: string;
+  icon: IconName;
+  label: string;
+  value: string;
+  href: string;
+  external?: boolean;
+};
+
+export const CONTACT_CHANNELS: readonly ContactChannel[] = [
+  {
+    id: 'email',
+    icon: 'mail',
+    label: 'E-mail',
+    value: PROFILE.email,
+    href: `mailto:${PROFILE.email}`,
+  },
+  {
+    id: 'whatsapp',
+    icon: 'whatsapp',
+    label: 'WhatsApp',
+    value: PROFILE.phoneLabel,
+    href: PROFILE.whatsapp,
+    external: true,
+  },
+  {
+    id: 'linkedin',
+    icon: 'linkedin',
+    label: 'LinkedIn',
+    value: PROFILE.linkedinLabel,
+    href: PROFILE.linkedin,
+    external: true,
+  },
+  {
+    id: 'github',
+    icon: 'github',
+    label: 'GitHub',
+    value: PROFILE.githubLabel,
+    href: PROFILE.github,
+    external: true,
+  },
+];
+
+export const NAV_LINKS = [
+  { href: '#projetos', label: 'Projetos', id: 'projetos', icon: 'folder' },
+  { href: '#stack', label: 'Stacks', id: 'stack', icon: 'layers' },
+  { href: '#trajetoria', label: 'Trajetória', id: 'trajetoria', icon: 'path' },
+  { href: '#sobre', label: 'Sobre Mim', id: 'sobre', icon: 'user' },
+  { href: '#contato', label: 'Contato', id: 'contato', icon: 'mail' },
+] as const satisfies ReadonlyArray<{
+  href: string;
+  label: string;
+  id: string;
+  icon: IconName;
+}>;
+
+/** As cinco paradas do trilho lateral. A hero não entra: ela é o ponto de partida. */
+export const RAIL_SECTIONS = NAV_LINKS;
+
+export const SECTION_IDS = ['inicio', ...NAV_LINKS.map((link) => link.id)] as const;

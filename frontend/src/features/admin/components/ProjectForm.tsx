@@ -7,7 +7,7 @@ import {
   PROJECT_ICONS,
   PROJECT_ICON_LABELS,
   normalizeProjectIcon,
-} from '@/components/project-icons';
+} from '@/features/projects/project-icons';
 import { cn } from '@/lib/cn';
 import { getApiErrorMessage } from '@/lib/api';
 import {

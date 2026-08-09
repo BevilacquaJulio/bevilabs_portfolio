@@ -1,156 +1,178 @@
-import { motion, useReducedMotion } from 'framer-motion';
-import { Reveal } from '@/components/Reveal';
-import { defaultViewport, staggerContainer, staggerItem } from '@/lib/motion';
-import { ABOUT, ABOUT_STATS, PROFILE } from '../data/content';
+import { useEffect, useRef } from 'react';
+import {
+  animate,
+  motion,
+  useInView,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+} from 'framer-motion';
+import { Icon } from '@/components/Icon';
+import { SectionHeading } from '@/components/SectionHeading';
+import { cn } from '@/lib/cn';
+import { defaultViewport, EASE_OUT, hoverSpring } from '@/lib/motion';
+import { ABOUT, ABOUT_METRICS, type Metric } from '../data/content';
 
+/**
+ * Sobre.
+ *
+ * A primeira frase é tratada como abertura, em corpo grande: ela sozinha diz o
+ * que ele faz. As outras duas explicam como. Embaixo, quatro números em cards
+ * altos, e o mais forte deles em azul cheio, para o olho ter onde parar.
+ */
 export function About() {
-  const shouldReduceMotion = useReducedMotion();
+  const reducedMotion = useReducedMotion();
 
   return (
     <section
       id="sobre"
       aria-labelledby="sobre-title"
-      className="relative z-2 scroll-mt-24 py-12 md:py-20"
+      className="surface-about relative z-[var(--z-content)] scroll-mt-24 py-14 sm:py-20 md:py-28"
     >
       <div className="layout">
-        <div className="grid items-center gap-8 lg:grid-cols-[minmax(16rem,0.72fr)_minmax(0,1.5fr)] lg:gap-12 xl:gap-14">
-          <Reveal className="lg:pt-2">
-            <h2
-              id="sobre-title"
-              className="max-w-[9ch] font-display text-[1.6rem] leading-[1.05] font-extrabold tracking-[-0.042em] text-balance md:text-[clamp(1.75rem,3.4vw,2.6rem)] md:leading-[1.01] md:tracking-[-0.048em]"
-            >
-              {ABOUT.title}
-            </h2>
+        <SectionHeading id="sobre-title" label={ABOUT.label} title={ABOUT.title} />
 
-            <div className="mt-5 flex items-center gap-3.5 sm:mt-6">
-              <span
-                aria-hidden="true"
-                className="flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-sm)] bg-ink font-display text-[0.78rem] font-extrabold text-paper"
+        <div className="mt-8 grid gap-6 lg:mt-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-14">
+          <motion.p
+            initial={reducedMotion ? false : { opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={defaultViewport}
+            transition={{ duration: 0.6, delay: 0.1, ease: EASE_OUT }}
+            className="max-w-[46ch] text-[1.12rem] leading-[1.55] font-semibold tracking-[-0.015em] text-ink text-pretty sm:text-[1.32rem]"
+          >
+            {ABOUT.paragraphs[0]}
+          </motion.p>
+
+          <div className="max-w-[58ch] space-y-4 lg:pt-1.5">
+            {ABOUT.paragraphs.slice(1).map((paragraph, index) => (
+              <motion.p
+                key={paragraph}
+                initial={reducedMotion ? false : { opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={defaultViewport}
+                transition={{ duration: 0.55, delay: 0.2 + index * 0.09, ease: EASE_OUT }}
+                className="text-[0.95rem] leading-[1.7] text-fg-muted sm:text-[1rem]"
               >
-                {PROFILE.initials}
-              </span>
-              <div className="min-w-0">
-                <p className="font-display text-base leading-tight font-bold tracking-[-0.025em]">
-                  {PROFILE.name}
-                </p>
-                <p className="mt-1 text-[0.8rem] leading-snug text-fg-muted">{PROFILE.role}</p>
-              </div>
-            </div>
-
-            <dl className="mt-5 grid grid-cols-1 gap-x-5 gap-y-4 border-t border-line pt-5 min-[390px]:grid-cols-2 sm:mt-6 sm:gap-y-5 sm:pt-6 lg:grid-cols-1">
-              {ABOUT.facts.map((fact) => (
-                <div key={fact.label}>
-                  <dt className="font-mono text-[0.58rem] font-medium tracking-[0.11em] text-fg-subtle uppercase">
-                    {fact.label}
-                  </dt>
-                  <dd className="mt-1.5 max-w-[32ch] text-[0.84rem] leading-snug text-fg">
-                    {fact.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </Reveal>
-
-          <Reveal className="min-w-0">
-            <div className="blueprint relative overflow-hidden rounded-[var(--radius-md)] bg-ink p-5 text-paper sm:rounded-[var(--radius-lg)] sm:p-6 md:p-8 lg:p-9">
-              <div className="relative z-1 flex items-center justify-between gap-5">
-                <span className="font-mono text-[0.62rem] font-medium tracking-[0.12em] text-white/55 uppercase">
-                  Tese de trabalho
-                </span>
-                <span className="flex items-center gap-2 font-mono text-[0.6rem] text-white/55 uppercase">
-                  <span aria-hidden="true" className="size-1.5 rounded-full bg-success" />
-                  Em produção
-                </span>
-              </div>
-
-              <p className="relative z-1 mt-7 max-w-[24ch] font-display text-[1.25rem] leading-[1.15] font-semibold tracking-[-0.032em] text-balance sm:mt-8 sm:text-[1.35rem] md:mt-10 md:text-[clamp(1.35rem,2.5vw,1.95rem)] md:leading-[1.12] md:tracking-[-0.038em]">
-                {ABOUT.lead}
-              </p>
-
-              <div className="relative z-1 mt-7 flex flex-wrap items-center gap-x-2 gap-y-2 border-t border-white/18 pt-4 font-mono text-[0.58rem] tracking-[0.045em] text-white/55 uppercase sm:mt-9 sm:gap-x-3 sm:text-[0.62rem] sm:tracking-[0.06em]">
-                <span>Banco</span>
-                <span aria-hidden="true">→</span>
-                <span>API</span>
-                <span aria-hidden="true">→</span>
-                <span>Interface</span>
-                <span aria-hidden="true">→</span>
-                <span>Deploy</span>
-              </div>
-            </div>
-          </Reveal>
+                {paragraph}
+              </motion.p>
+            ))}
+          </div>
         </div>
 
-        <motion.ul
-          variants={staggerContainer}
-          initial={shouldReduceMotion ? false : 'hidden'}
-          whileInView="visible"
-          viewport={defaultViewport}
-          className="mt-10 grid gap-3 border-t border-line pt-10 sm:grid-cols-2 md:mt-12 md:gap-4 md:pt-12 lg:grid-cols-4"
-        >
-          {ABOUT.approach.map((item, index) => (
-            <motion.li
-              key={item.label}
-              variants={staggerItem}
-              className="group rounded-[var(--radius-md)] border border-line bg-bg-elevated/70 p-4 transition-[border-color,background-color,box-shadow] duration-200 ease-[var(--ease-out)] hover:border-line-strong hover:bg-bg-elevated hover:shadow-[0_10px_30px_rgb(16_16_15_/_0.04)] motion-reduce:transition-none sm:p-5"
-            >
-              <div className="flex items-center justify-between gap-3">
-                <p className="font-mono text-[0.62rem] font-medium tracking-[0.1em] text-fg-subtle uppercase">
-                  {item.label}
-                </p>
-                <span
-                  aria-hidden="true"
-                  className="font-mono text-[0.62rem] tabular-nums text-fg-subtle/70 transition-colors duration-200 group-hover:text-fg-muted"
-                >
-                  {String(index + 1).padStart(2, '0')}
-                </span>
-              </div>
-              <p className="mt-3.5 font-display text-base leading-snug font-bold tracking-[-0.02em]">
-                {item.title}
-              </p>
-              <p className="mt-2 text-[0.85rem] leading-[1.58] text-fg-muted">{item.text}</p>
-            </motion.li>
+        <ul className="mt-11 grid grid-cols-1 gap-3 min-[420px]:grid-cols-2 sm:gap-4 lg:mt-16 lg:grid-cols-4">
+          {ABOUT_METRICS.map((metric, index) => (
+            <MetricCard key={metric.label} metric={metric} index={index} />
           ))}
-        </motion.ul>
-
-        <motion.dl
-          variants={staggerContainer}
-          initial={shouldReduceMotion ? false : 'hidden'}
-          whileInView="visible"
-          viewport={defaultViewport}
-          className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-[var(--radius-md)] bg-ink p-px md:mt-12 lg:grid-cols-5"
-        >
-          {ABOUT_STATS.map((stat, index) => (
-            <motion.div
-              key={stat.label}
-              variants={staggerItem}
-              className={[
-                'flex min-h-28 flex-col justify-end p-4 sm:min-h-32 sm:p-5 md:p-6',
-                index === 0 ? 'col-span-2 bg-ink text-paper lg:col-span-2' : 'bg-bg-elevated',
-                index === ABOUT_STATS.length - 1 ? 'col-span-2 lg:col-span-1' : '',
-              ].join(' ')}
-            >
-              <dt
-                className={[
-                  'order-2 mt-3 max-w-[21ch] text-[0.8rem] leading-snug',
-                  index === 0 ? 'text-white/62' : 'text-fg-muted',
-                ].join(' ')}
-              >
-                {stat.label}
-              </dt>
-              <dd
-                className={[
-                  'order-1 font-display leading-none font-extrabold tracking-[-0.055em]',
-                  index === 0
-                    ? 'text-[1.75rem] sm:text-[clamp(1.9rem,4vw,2.9rem)]'
-                    : 'text-[1.28rem] sm:text-[clamp(1.45rem,2.2vw,1.85rem)]',
-                ].join(' ')}
-              >
-                {stat.value}
-              </dd>
-            </motion.div>
-          ))}
-        </motion.dl>
+        </ul>
       </div>
     </section>
+  );
+}
+
+function MetricCard({ metric, index }: { metric: Metric; index: number }) {
+  const ref = useRef<HTMLLIElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.5 });
+  const reducedMotion = useReducedMotion();
+  const featured = Boolean(metric.featured);
+
+  const target = metric.value ?? 0;
+  const count = useMotionValue(0);
+  const rounded = useTransform(count, (value) => String(Math.round(value)));
+
+  useEffect(() => {
+    if (!inView || metric.value === undefined) return;
+
+    if (reducedMotion) {
+      count.set(target);
+      return;
+    }
+
+    const controls = animate(count, target, {
+      duration: 1.3,
+      delay: 0.12 + index * 0.08,
+      ease: EASE_OUT,
+    });
+
+    return () => controls.stop();
+  }, [inView, reducedMotion, count, target, index, metric.value]);
+
+  const readable = metric.text ?? `${metric.prefix ?? ''}${metric.value}${metric.suffix ?? ''}`;
+
+  return (
+    <motion.li
+      ref={ref}
+      initial={reducedMotion ? false : { opacity: 0, y: 26 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={defaultViewport}
+      transition={{ duration: 0.6, delay: index * 0.08, ease: EASE_OUT }}
+    >
+      <motion.div
+        whileHover={reducedMotion ? undefined : { y: -6 }}
+        transition={hoverSpring}
+        className={cn(
+          'group relative flex h-full min-h-[9.75rem] flex-col justify-between overflow-hidden rounded-[var(--radius-md)] p-4 sm:min-h-[13.5rem] sm:p-6',
+          'transition-[border-color,box-shadow] duration-300 ease-[var(--ease-out)]',
+          featured
+            ? 'border border-accent-deep bg-accent text-on-accent [box-shadow:0_18px_44px_rgb(27_79_166/0.32)] hover:[box-shadow:0_26px_60px_rgb(27_79_166/0.42)]'
+            : 'border border-line bg-bg-elevated [box-shadow:var(--shadow-panel)] hover:border-accent/45 hover:[box-shadow:0_20px_46px_rgb(7_26_49/0.1)]',
+        )}
+      >
+        {featured && <span aria-hidden="true" className="blueprint absolute inset-0 opacity-70" />}
+
+        <span
+          aria-hidden="true"
+          className={cn(
+            'relative inline-flex size-10 items-center justify-center rounded-[var(--radius-sm)] border sm:size-11',
+            'transition-[background-color,border-color,transform] duration-300 ease-[var(--ease-out)]',
+            'group-hover:scale-105 motion-reduce:transform-none',
+            featured
+              ? 'border-white/25 bg-white/15 text-on-accent'
+              : 'border-line bg-bg-subtle text-accent group-hover:border-accent/40 group-hover:bg-accent/12',
+          )}
+        >
+          <Icon name={metric.icon} className="size-5" weight="bold" />
+        </span>
+
+        <div className="relative mt-4 sm:mt-6">
+          <p
+            aria-hidden="true"
+            className={cn(
+              'font-display leading-[0.95] font-bold tracking-[-0.05em] tabular-nums',
+              metric.text
+                ? 'text-[clamp(1.5rem,3.4vw,1.95rem)]'
+                : 'text-[clamp(2.1rem,5.4vw,3rem)]',
+              featured ? 'text-on-accent' : 'text-ink',
+            )}
+          >
+            {metric.text ?? (
+              <>
+                {metric.prefix}
+                <motion.span>{rounded}</motion.span>
+                {metric.suffix}
+              </>
+            )}
+          </p>
+          <p
+            aria-hidden="true"
+            className={cn(
+              'mt-3 text-[0.84rem] leading-[1.45]',
+              featured ? 'text-white/85' : 'text-fg-muted',
+            )}
+          >
+            {metric.label}
+          </p>
+          <span className="sr-only">
+            {readable} {metric.label}
+          </span>
+        </div>
+
+        {!featured && (
+          <span
+            aria-hidden="true"
+            className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-accent transition-transform duration-500 ease-[var(--ease-out)] group-hover:scale-x-100 motion-reduce:transition-none"
+          />
+        )}
+      </motion.div>
+    </motion.li>
   );
 }

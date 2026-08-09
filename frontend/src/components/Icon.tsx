@@ -33,6 +33,16 @@ import { EyeIcon } from '@phosphor-icons/react/dist/csr/Eye';
 import { EyeSlashIcon } from '@phosphor-icons/react/dist/csr/EyeSlash';
 import { XIcon } from '@phosphor-icons/react/dist/csr/X';
 import { ListIcon } from '@phosphor-icons/react/dist/csr/List';
+import { CalendarBlankIcon } from '@phosphor-icons/react/dist/csr/CalendarBlank';
+import { UsersThreeIcon } from '@phosphor-icons/react/dist/csr/UsersThree';
+import { SquaresFourIcon } from '@phosphor-icons/react/dist/csr/SquaresFour';
+import { WhatsappLogoIcon } from '@phosphor-icons/react/dist/csr/WhatsappLogo';
+import { ArrowRightIcon } from '@phosphor-icons/react/dist/csr/ArrowRight';
+import { ArrowDownIcon } from '@phosphor-icons/react/dist/csr/ArrowDown';
+import { GearSixIcon } from '@phosphor-icons/react/dist/csr/GearSix';
+import { SparkleIcon } from '@phosphor-icons/react/dist/csr/Sparkle';
+import { UserIcon } from '@phosphor-icons/react/dist/csr/User';
+import { PathIcon } from '@phosphor-icons/react/dist/csr/Path';
 
 const ICONS = {
   folder: FolderIcon,
@@ -69,6 +79,16 @@ const ICONS = {
   eyeSlash: EyeSlashIcon,
   x: XIcon,
   menu: ListIcon,
+  calendar: CalendarBlankIcon,
+  users: UsersThreeIcon,
+  squares: SquaresFourIcon,
+  whatsapp: WhatsappLogoIcon,
+  arrowRight: ArrowRightIcon,
+  arrowDown: ArrowDownIcon,
+  gear: GearSixIcon,
+  sparkle: SparkleIcon,
+  user: UserIcon,
+  path: PathIcon,
 } as const satisfies Record<string, PhosphorIcon>;
 
 export type IconName = keyof typeof ICONS;

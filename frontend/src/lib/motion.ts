@@ -1,66 +1,71 @@
-import { useReducedMotion, type Transition, type Variants } from 'framer-motion';
+import {
+  type useSpring,
+  type Transition,
+  type Variants,
+} from 'framer-motion';
 
 /**
- * Os reveals animam `y`, e nao a string `transform`.
+ * Linguagem de movimento do site.
  *
- * O Framer Motion escreve o resultado da animacao como estilo inline. Uma string
- * `transform: translateY(0px)` inline vence qualquer classe `hover:-translate-y-*`
- * do Tailwind, e o hover do card morre sem erro nenhum. Falando `y`, o hover passa
- * pelo mesmo motion value do reveal e os dois se compoem.
+ * Regra 1: só `transform` e `opacity` são animados.
+ * Regra 2: os reveals animam `y`, nunca a string `transform`. O Framer grava o
+ *          resultado como estilo inline, e `transform: translateY(0px)` inline
+ *          vence qualquer `hover:-translate-y-*` do Tailwind — o hover morre em
+ *          silêncio. Falando `y`, hover e reveal compartilham o mesmo motion value.
+ * Regra 3: toda animação aqui tem um motivo declarado. Nada existe "porque ficou legal".
  */
-export const revealVariants: Variants = {
+
+/** Curva de saída padrão: sai rápido, assenta devagar. */
+export const EASE_OUT = [0.22, 1, 0.36, 1] as const;
+
+export const staggerItem: Variants = {
   hidden: { opacity: 0, y: 12 },
   visible: {
     opacity: 1,
     y: 0,
-    transition: { duration: 0.44, ease: [0.23, 1, 0.32, 1] },
+    transition: { duration: 0.5, ease: EASE_OUT },
   },
 };
 
-export const staggerContainer: Variants = {
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: 0.065, delayChildren: 0.04 },
-  },
-};
-
-export const staggerItem: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.42, ease: [0.23, 1, 0.32, 1] },
-  },
-};
-
+/** Troca de rota. Motivo: sinalizar mudança de contexto sem custo de leitura. */
 export const pageTransition: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.28, ease: [0.23, 1, 0.32, 1] } },
+  visible: { opacity: 1, transition: { duration: 0.3, ease: EASE_OUT } },
   exit: { opacity: 0, transition: { duration: 0.16 } },
 };
 
-/** Viewport padrao: anima uma vez, quando 15% do bloco entra na tela. */
-export const defaultViewport = { once: true, amount: 0.15 } as const;
+/** Viewport padrão: anima uma vez, quando 18% do bloco entra na tela. */
+export const defaultViewport = { once: true, amount: 0.18 } as const;
 
-/** Mola curta e firme: sobe rapido, assenta sem balancar. */
+/** Mola curta e firme: sobe rápido, assenta sem balançar. */
 export const hoverSpring: Transition = {
   type: 'spring',
-  stiffness: 380,
-  damping: 30,
-  mass: 0.7,
+  stiffness: 420,
+  damping: 32,
+  mass: 0.65,
 };
 
 /**
- * Hover unico de card do site. Todo cartao clicavel ou destacavel usa este preset,
- * para o conjunto reagir como um sistema so.
+ * Config de mola aceita por `useSpring`. O framer-motion não reexporta
+ * `SpringOptions`, e `Transition` é largo demais: aceita `duration`/`ease`,
+ * que a mola ignora.
  */
-export function useCardHover(distance = -6) {
-  const shouldReduceMotion = useReducedMotion();
+type SpringConfig = NonNullable<Parameters<typeof useSpring>[1]>;
 
-  if (shouldReduceMotion) return {};
+/**
+ * Mola do painel que segue o cursor. Mais frouxa, para dar peso.
+ * Sem `type: 'spring'` — quem consome é `useSpring`, que já é mola.
+ */
+export const cursorSpring: SpringConfig = {
+  stiffness: 220,
+  damping: 26,
+  mass: 0.5,
+};
 
-  return {
-    whileHover: { y: distance, transition: hoverSpring },
-    whileTap: { y: distance / 3, transition: { duration: 0.12 } },
-  } as const;
+/**
+ * Escalonamento por índice, limitado a 6 passos.
+ * Sem o teto, uma lista de 20 itens faria o último entrar 1,4s depois do primeiro.
+ */
+export function stepDelay(index: number, step = 0.06, max = 6) {
+  return Math.min(index, max) * step;
 }

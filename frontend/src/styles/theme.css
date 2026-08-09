@@ -1,71 +1,133 @@
 @import 'tailwindcss';
 
 /*
- * Bevilacqua Labs
- * Linguagem: editorial-tech clara, monocromática e orientada a provas.
- * O preto marca decisões e momentos-chave; cinzas nunca substituem hierarquia.
+ * Bevilacqua Labs — sistema visual
+ *
+ * Direção: engenharia em papel branco frio com tinta azul-marinho.
+ * O navy é o "preto" da marca; o azul de destaque é o ÚNICO acento do site
+ * e marca apenas o que é interativo ou o que é prova (números, estado ativo).
+ *
+ * Todo par de cor abaixo foi medido: nenhum texto fica abaixo de 4.5:1.
  */
 @theme {
-  --color-paper: #f4f4f1;
-  --color-ink: #10100f;
-
-  --color-bg: #f4f4f1;
+  /* ---------- superfícies claras ---------- */
+  --color-paper: #f7f9fc;
+  --color-bg: #f7f9fc;
   --color-bg-elevated: #ffffff;
-  --color-bg-subtle: #e9e9e4;
-  --color-bg-muted: #efefeb;
+  --color-bg-subtle: #edf1f8;
+  --color-bg-muted: #e5ebf5;
 
-  --color-fg: #10100f;
-  --color-fg-muted: #50504b;
-  --color-fg-subtle: #62625c;
+  /* ---------- tinta navy ---------- */
+  --color-ink: #071a31;
+  --color-ink-2: #0c2749;
+  --color-ink-3: #16406f;
 
-  --color-line: #cecec7;
-  --color-line-strong: #a8a8a0;
-  --color-danger: #b42318;
-  --color-success: #247044;
+  --color-fg: #071a31;
+  --color-fg-muted: #40597a;
+  --color-fg-subtle: #546c8b;
 
-  --font-display: 'Syne Variable', 'Syne', sans-serif;
-  --font-body: 'Outfit Variable', 'Outfit', sans-serif;
-  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', monospace;
+  /* ---------- acento único ---------- */
+  --color-accent: #2765cc;
+  --color-accent-deep: #1b4fa6;
+  --color-accent-soft: #6fa3ee;
+  --color-on-accent: #ffffff;
+  --color-white: #ffffff;
 
-  --radius-sm: 10px;
-  --radius-md: 16px;
-  --radius-lg: 24px;
+  /* ---------- texto sobre navy ---------- */
+  --color-on-dark: #eaf0f8;
+  --color-on-dark-muted: #93aac7;
 
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
-  --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-spring: cubic-bezier(0.34, 1.2, 0.64, 1);
+  --color-line: #dde5f0;
+  --color-line-strong: #c0cdde;
+
+  --color-danger: #b4231a;
+  --color-success: #1e7a4c;
+
+  /* ---------- tipografia ----------
+   * Space Grotesk: geométrica com esquinas técnicas. Carrega a marca.
+   * Syntha Nova: títulos de seção, com suporte aos acentos do português.
+   * Manrope: humanista, alta legibilidade em corpo pequeno.
+   * JetBrains Mono: dado, período, domínio. Nunca decoração. */
+  --font-display: 'Space Grotesk Variable', 'Space Grotesk', system-ui, sans-serif;
+  --font-futuristic: 'Nevera', 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-section: 'Syntha Nova', 'Space Grotesk Variable', system-ui, sans-serif;
+  --font-body: 'Manrope Variable', 'Manrope', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, monospace;
+
+  /* ---------- forma ----------
+   * Regra única: pill para o que é acionável, 8px para controle compacto,
+   * 14px para card, 22px para painel grande. Nada fora desta escala. */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+
+  /* ---------- curvas ---------- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.28, 0.64, 1);
 }
 
 :root {
   color-scheme: light;
 
-  --ink-rgb: 16, 16, 15;
+  --ink-rgb: 7, 26, 49;
+  --accent-rgb: 39, 101, 204;
 
-  --shadow-panel: 0 1px 0 rgb(255 255 255 / 0.88) inset, 0 18px 55px rgb(16 16 15 / 0.07);
-  --shadow-float: 0 24px 80px rgb(16 16 15 / 0.13);
+  --shadow-panel: 0 1px 0 rgb(255 255 255 / 0.9) inset, 0 16px 44px rgb(7 26 49 / 0.06);
+  --shadow-float: 0 26px 70px rgb(7 26 49 / 0.16);
+  --shadow-accent: 0 12px 30px rgb(27 79 166 / 0.24);
 
-  --layout-max: 1240px;
-  --layout-pad: 1.25rem;
-  --header-h: 4.5rem;
-
-  /*
-   * Escala unica de empilhamento. Todo z-index do app sai daqui,
-   * inclusive os valores usados via classe utilitaria no JSX.
+  /* ---------- partitura de superfícies ----------
+   *
+   * Cada seção tem a própria cor, e o fim de uma é o começo da outra: a
+   * página escurece de cima para baixo, com dois blocos navy que também são
+   * diferentes entre si. Ninguém repete ninguém, e a emenda é sentida sem
+   * precisar de linha divisória.
+   *
+   *   hero      quase branco  ->  azul lavanda
+   *   projetos  azul lavanda  ->  branco puro
+   *   stack     navy médio                          (bloco escuro 1)
+   *   percurso  azul claro    ->  quase branco
+   *   sobre     quase branco  ->  azul acinzentado
+   *   contato   navy profundo                       (bloco escuro 2)
    */
+  --surface-hero-a: #fcfdff;
+  --surface-hero-b: #e9f0fb;
+  --surface-projects: #ffffff;
+  --surface-stack: #0d2a4d;
+  --surface-journey-a: #f1f5fd;
+  --surface-journey-b: #fafcff;
+  --surface-about-a: #fafcff;
+  --surface-about-b: #e8eff9;
+  --surface-contact: #061527;
+
+  --layout-max: 1280px;
+  --layout-pad: 1.25rem;
+
+  /* O header encolhe no scroll. As duas alturas vivem aqui para que
+   * scroll-padding, hero e drawer leiam sempre o mesmo número. */
+  --header-h: 4.25rem;
+  --header-h-compact: 3.5rem;
+
+  /* Escala única de empilhamento. Nenhum z-index solto no JSX. */
   --z-background: 0;
   --z-content: 2;
+  /* O grão passa por cima das seções, senão some atrás delas. */
+  --z-grain: 3;
   --z-rail: 40;
   --z-menu: 90;
   --z-header: 100;
   --z-drawer: 110;
   --z-skip: 120;
+  --z-preloader: 200;
 }
 
-@media (min-width: 769px) {
+@media (min-width: 768px) {
   :root {
-    --layout-pad: 2.5rem;
-    --header-h: 4.75rem;
+    --layout-pad: 2.25rem;
+    --header-h: 5rem;
+    --header-h-compact: 3.75rem;
   }
 }
 

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { PROJECT_ICONS } from '@/components/project-icons';
+import { PROJECT_ICONS } from '@/features/projects/project-icons';
 
 /** Espelha o projectInputSchema do backend; cliente e servidor validam igual. */
 const httpsUrlSchema = z

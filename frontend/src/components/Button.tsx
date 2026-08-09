@@ -18,11 +18,12 @@ const BASE =
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'border border-ink bg-ink text-paper [box-shadow:0_8px_20px_rgb(16_16_15_/_0.14)] ' +
-    'hover:not-disabled:-translate-y-px hover:not-disabled:[box-shadow:0_12px_28px_rgb(16_16_15_/_0.2)]',
+    'border border-accent bg-accent text-on-accent ' +
+    'hover:not-disabled:border-accent-deep hover:not-disabled:bg-accent-deep hover:not-disabled:text-on-accent ' +
+    'hover:not-disabled:[box-shadow:var(--shadow-accent)]',
   ghost:
     'border border-line-strong bg-bg-elevated text-fg ' +
-    'hover:not-disabled:border-ink hover:not-disabled:bg-bg-subtle',
+    'hover:not-disabled:border-accent hover:not-disabled:bg-bg-subtle hover:not-disabled:text-accent',
   danger:
     'border border-danger/35 bg-bg-elevated text-danger ' +
     'hover:not-disabled:border-danger hover:not-disabled:bg-danger/7',

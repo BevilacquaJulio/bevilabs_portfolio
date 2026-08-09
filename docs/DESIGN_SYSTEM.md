@@ -1,259 +1,251 @@
 # Bevilacqua Labs: sistema visual
 
-Fonte de verdade para a interface pública, login e painel administrativo.
+Fonte de verdade da interface pública, do login e do painel administrativo.
+Os valores abaixo espelham `frontend/src/styles/theme.css`. Quando um dos dois mudar, o outro muda junto.
 
 ## 1. Direção
 
-O produto é um portfólio de desenvolvedor para recrutadores, clientes e outros devs. A página precisa provar capacidade técnica, facilitar a leitura rápida e conduzir para projetos e contato.
+Portfólio de desenvolvedor full stack. A audiência principal é o recrutador técnico; a secundária, o cliente de freelance. As duas escaneiam antes de ler, então o site aposta em pouco texto, hierarquia forte e prova numérica.
 
-- Linguagem: editorial-tech, clara e monocromática
-- Tema: claro fixo
-- Assinatura: build rail com progresso real de leitura
-- Destaque: preto estrutural, sem neon e sem gradientes coloridos
-- Redesign: visual novo com conteúdo, rotas e contratos preservados
+- Linguagem: engenharia em papel branco frio com tinta azul-marinho
+- Tema: claro, travado. Dois blocos navy quebram o ritmo (Stack e Contato)
+- Assinatura: o lettering `BEVILACQUA` com `LABS` esticado embaixo, e o monograma que se desenha
+- Destaque: um único azul. Nada de neon, nada de gradiente colorido
 
 ### Dials
 
 | Superfície | Variação | Movimento | Densidade |
 | --- | ---: | ---: | ---: |
-| Portfólio público | 8/10 | 7/10 | 4/10 |
-| Login | 7/10 | 4/10 | 3/10 |
-| Admin | 5/10 | 3/10 | 7/10 |
+| Portfólio público | 7/10 | 7/10 | 3/10 |
+| Login | 6/10 | 4/10 | 3/10 |
+| Admin | 4/10 | 3/10 | 7/10 |
 
 ## 2. Cores
 
-| Token | Valor | Uso |
-| --- | --- | --- |
-| `--color-bg` / `--color-paper` | `#F4F4F1` | Canvas principal |
-| `--color-bg-elevated` | `#FFFFFF` | Superfícies e formulários |
-| `--color-bg-subtle` | `#E9E9E4` | Agrupamento e hover |
-| `--color-bg-muted` | `#EFEFEB` | Campos internos e skeleton |
-| `--color-fg` / `--color-ink` | `#10100F` | Texto e destaque estrutural |
-| `--color-fg-muted` | `#5F5F59` | Corpo secundário |
-| `--color-fg-subtle` | `#696962` | Metadados com contraste AA |
-| `--color-line` | `#D8D8D2` | Divisores |
-| `--color-line-strong` | `#B8B8B0` | Bordas interativas |
-| `--color-danger` | `#B42318` | Ações destrutivas |
-| `--color-success` | `#247044` | Estado real de disponibilidade |
+Todo par de texto e fundo foi medido. Nenhum fica abaixo de 4.5:1.
+
+| Token | Valor | Uso | Contraste |
+| --- | --- | --- | --- |
+| `--color-paper` / `--color-bg` | `#F7F9FC` | Canvas | base |
+| `--color-bg-elevated` | `#FFFFFF` | Cards, formulários | base |
+| `--color-bg-subtle` | `#EDF1F8` | Agrupamento, hover de linha | base |
+| `--color-bg-muted` | `#E5EBF5` | Campos internos | base |
+| `--color-ink` / `--color-fg` | `#071A31` | Texto, blocos escuros | 16.6:1 no papel |
+| `--color-ink-2` | `#0C2749` | Segunda superfície navy | |
+| `--color-ink-3` | `#16406F` | Terceira superfície navy | |
+| `--color-fg-muted` | `#40597A` | Corpo secundário | 6.8:1 |
+| `--color-fg-subtle` | `#546C8B` | Metadados | 5.1:1 |
+| `--color-accent` | `#2765CC` | Único acento: links, estado ativo, CTA | 5.2:1 |
+| `--color-accent-deep` | `#1B4FA6` | Hover do acento | 7.3:1 |
+| `--color-accent-soft` | `#6FA3EE` | Acento sobre navy | 6.8:1 no ink |
+| `--color-on-dark` | `#EAF0F8` | Texto sobre navy | 15.3:1 |
+| `--color-on-dark-muted` | `#93AAC7` | Secundário sobre navy | 7.3:1 |
+| `--color-line` | `#DDE5F0` | Divisores | |
+| `--color-line-strong` | `#C0CDDE` | Bordas interativas | |
+| `--color-danger` | `#B4231A` | Ação destrutiva | |
+| `--color-success` | `#1E7A4C` | Estado real de disponibilidade | |
 
 Regras:
 
-- Preto é o único destaque visual global.
-- Vermelho e verde são reservados a estados semânticos.
-- Não usar glow, neon, purple-blue gradient ou texto em gradiente.
-- Superfícies podem alternar entre paper, branco e cinza frio, sem inverter o tema da página.
+- Azul é o único destaque. Nenhuma outra cor entra por motivo estético.
+- Vermelho e verde só carregam estado semântico.
+- Sem glow, sem neon, sem texto em gradiente.
+- A página é clara. Os blocos navy são composição, não inversão de tema.
 
 ## 3. Tipografia
 
-As fontes são entregues pelo bundle com Fontsource. Não há dependência de Google Fonts no carregamento da página.
+Entregues pelo bundle, via Fontsource. Nenhuma requisição ao Google Fonts.
 
 | Papel | Família | Uso |
 | --- | --- | --- |
-| Display | Syne Variable | Marca, hero e títulos principais |
-| Corpo e UI | Outfit Variable | Parágrafos, formulários e controles |
-| Utilitária | JetBrains Mono Variable | Períodos, tags e metadados curtos |
+| Display | Space Grotesk Variable | Marca, títulos, números de métrica |
+| Corpo | Manrope Variable | Parágrafos, formulários, controles |
+| Utilitária | JetBrains Mono Variable | Período, domínio, índice, rótulo curto |
 
 Princípios:
 
-- Títulos usam tracking negativo e poucas linhas.
-- Corpo mantém medida máxima de aproximadamente 62 a 68 caracteres.
-- Mono é informação, não decoração.
-- Eyebrows são limitados a uma ocorrência para cada três seções.
+- Título usa tracking negativo forte (`-0.035em` a `-0.055em`) e no máximo duas linhas.
+- Corpo fica entre 46 e 62 caracteres de medida.
+- Mono é dado, nunca decoração. O utilitário `meta` existe para isso.
+- Zero sobrancelhas acima de título de seção. A posição na página já classifica a seção.
 
-## 4. Forma e elevação
-
-O sistema usa três níveis coerentes:
+## 4. Forma
 
 | Elemento | Raio |
 | --- | ---: |
-| Campo, ícone e controle compacto | `10px` |
-| Card e mídia | `16px` |
-| Painel de trabalho e formulário admin | `24px` |
-| Botão, status e tag | `999px` |
+| Campo, ícone, chip | `8px` (`--radius-sm`) |
+| Card, painel, linha destacada | `14px` (`--radius-md`) |
+| Painel grande | `22px` (`--radius-lg`) |
+| Botão, pill, status | `999px` |
 
-Sombras:
+Sombras: `--shadow-panel` para card claro, `--shadow-float` para elemento que flutua sobre a página, `--shadow-accent` para CTA em hover. Nenhuma sombra preta pura.
 
-- Cards claros: sombra difusa de baixa opacidade
-- Superfície em destaque: sombra preta curta, sem glow
-- Listas editoriais: preferir linhas e espaço em vez de caixas
+## 4.1 Partitura de superfícies
+
+Cada seção tem a própria cor, e o fim de uma é o começo da outra. A página escurece de cima para baixo, e os dois blocos navy também são diferentes entre si. Nenhuma seção repete a cor da vizinha.
+
+| Seção | Token | Valor |
+| --- | --- | --- |
+| Hero | `--surface-hero-a` a `--surface-hero-b` | `#FCFDFF` a `#E9F0FB` |
+| Projetos | `--surface-projects` | `#E9F0FB` a `#FFFFFF` a `#EEF3FC` |
+| Stack | `--surface-stack` | `#0D2A4D` |
+| Trajetória | `--surface-journey-a/b` | `#F1F5FD` a `#FAFCFF` |
+| Sobre | `--surface-about-a/b` | `#FAFCFF` a `#E8EFF9` |
+| Contato e rodapé | `--surface-contact` | `#061527` |
+
+As duas emendas para navy levam um fio de luz de 1px em `--color-accent-soft`, com degradê para transparente nas pontas. As emendas entre superfícies claras não precisam de linha: a cor já entrega uma na outra.
+
+Contraste medido em todas: nenhum texto abaixo de 4.5:1.
 
 ## 5. Layout
 
-- Container máximo: `1240px`
-- Gutter mobile: `20px`
-- Gutter tablet/desktop: `40px`
-- Gutter amplo: `48px`
-- Header: até `76px`
-- Hero: `min-height: 100svh`, nunca `100vh`
-- Mobile abaixo de `768px`: todas as composições assimétricas viram uma coluna
+- Container: `1280px`
+- Gutter: `20px` no celular, `36px` no tablet, `48px` acima de `1280px`
+- Header: `80px` no topo da página, `60px` depois do scroll
+- Hero: `min-h-svh`, nunca `100vh`
+- Abaixo de `768px` toda composição assimétrica vira uma coluna
 
 ### Ordem pública
 
 1. Hero
 2. Projetos
-3. Sobre
-4. Processo
-5. Stack
-6. Experiência
-7. Formação
-8. Contato
+3. Stack
+4. Trajetória
+5. Sobre
+6. Contato
 
-Projetos aparecem cedo porque são a principal prova para a audiência técnica.
+Seis seções, seis famílias de layout diferentes. Nenhuma seção repete o assunto da outra: a hero não cita tecnologia, o Sobre não cita tecnologia, e a Stack é o único inventário do site.
 
 ## 6. Movimento
 
-Curvas:
-
 ```css
---ease-out: cubic-bezier(0.23, 1, 0.32, 1);
---ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+--ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 ```
 
 Regras:
 
-- Feedback de botão: `100-200ms`
-- Menus e drawers: `180-250ms`
-- Reveals de conteúdo: `450-600ms`
-- Entrada usa ease-out; movimento contínuo usa ease-in-out.
-- Apenas `transform` e `opacity` são animados.
-- Hover com deslocamento existe somente em ponteiro fino.
-- `MotionConfig reducedMotion="user"` governa o app inteiro.
-- CSS também desliga deslocamentos sob `prefers-reduced-motion`.
-- Scroll nunca é observado com listener nativo para animar.
+- Feedback de botão: `100-200ms`. Menu e drawer: `180-260ms`. Reveal: `450-700ms`.
+- Só `transform` e `opacity` são animados.
+- `MotionConfig reducedMotion="user"` governa o app inteiro, e o CSS remove deslocamentos sob `prefers-reduced-motion`.
+- Nenhum `addEventListener('scroll')`. Tudo passa por `useScroll` ou `IntersectionObserver`.
+- Reveal anima `y`, nunca a string `transform`: um `transform` inline vence o `hover:` do Tailwind e mata o gesto em silêncio. `src/lib/motion.test.ts` prende isso.
 
-Motivação:
+Inventário, com o motivo de cada uma:
 
-- Hero: título revelado palavra por palavra, dentro de máscara.
-- System trace: o waterfall preenche na ordem real das camadas.
-- Build rail: mostra progresso e seção ativa.
-- Reveals: organizam a leitura.
-- Botões: confirmam a ação.
-
-## 6.1 Elemento assinatura: system trace
-
-O painel `SystemTrace` é o único momento de ousadia da página. Tudo em volta permanece silencioso.
-
-- Desenha o caminho de uma requisição pelas camadas reais do projeto.
-- As barras preenchem em sequência, respeitando o offset de cada etapa.
-- O total conta em tempo real durante a passada.
-- Repete a cada `6,3s`, e apenas enquanto o painel está em tela.
-- Sob `prefers-reduced-motion`, nasce no estado final e não repete.
-
-Regras de integridade:
-
-- Os tempos são de referência e ilustram proporção entre camadas. Nunca apresentar como telemetria ao vivo.
-- O rodapé declara "Tempos de referência".
-- O `figcaption` descreve todas as etapas em texto para leitores de tela; as barras são `aria-hidden`.
-
-Usos:
-
-| Superfície | Rota | Papel |
+| Onde | O que faz | Por quê |
 | --- | --- | --- |
-| Hero | `GET /api/projects` | Prova técnica logo na abertura |
-| Login | `POST /api/auth/login` | Explica o que acontece ao entrar |
+| Cortina de abertura | Monograma se desenha, letreiro completa, barra enche | Estado de carregamento |
+| Hero | Letra a letra sob máscara, e parallax do monograma | Ordem de leitura, e a marca é o visual |
+| Header | Encolhe e ganha fundo passando de `48px` | Posição na página |
+| Trilho lateral | Preenche conforme o scroll | Orientação |
+| Fundo | Duas manchas derivam em `34s` e `46s` | Única animação atmosférica |
+| Linha de projeto | Fundo acende, seta preenche, ficha segue o cursor | Feedback e prova |
+| Stack | Trilho entre as estações se desenha | Conta o fluxo ponta a ponta |
+| Trajetória | Linha preenche com o scroll, marcador acende | Progresso da carreira |
+| Métricas | Número conta de zero até o valor | Puxa o olho para a prova |
 
-## 6.2 Escala de empilhamento
+### Cortina de abertura
 
-Todo `z-index` sai de `theme.css`. Nenhum valor solto no JSX.
+Dois segundos, contados por `setTimeout` em `PRELOADER_MS`. Roda uma vez por aba (`sessionStorage`) e não roda sob movimento reduzido. Enquanto ela está na tela, a hero segura a própria entrada via `BootContext`.
 
-| Token | Valor | Uso |
-| --- | ---: | --- |
-| `--z-background` | `0` | Papel e grão |
-| `--z-content` | `2` | Seções |
-| `--z-rail` | `40` | Build rail lateral |
-| `--z-menu` | `90` | Menu mobile |
-| `--z-header` | `100` | Header fixo e barra do admin |
-| `--z-drawer` | `110` | Editor fullscreen do admin |
-| `--z-skip` | `120` | Skip link |
+### Escala de empilhamento
+
+Todo `z-index` sai de `theme.css`.
+
+| Token | Valor |
+| --- | ---: |
+| `--z-background` | `0` |
+| `--z-content` | `2` |
+| `--z-rail` | `40` |
+| `--z-menu` | `90` |
+| `--z-header` | `100` |
+| `--z-drawer` | `110` |
+| `--z-skip` | `120` |
+| `--z-preloader` | `200` |
 
 ## 7. Componentes
 
 ### Botões
 
-- Primário: tinta preta, texto paper, pill
-- Secundário: superfície clara com borda
-- Destrutivo: vermelho apenas em exclusão
-- Altura mínima: `44px`
-- Press: escala `0.97`
-- Nunca aninhar `<button>` dentro de `<a>` ou `<Link>`
+Todo alvo acionável de destaque passa por `ActionButton`, do CTA da hero ao cadeado do header. Um componente só, para o conjunto reagir como um sistema e não como cinco.
+
+| Variante | Uso |
+| --- | --- |
+| `primary` | Ação principal. Azul cheio, texto branco, sombra de acento. |
+| `outline` | Ação secundária sobre superfície clara. Borda e texto em azul. |
+| `ghost-dark` | Ação sobre navy. |
+| `icon` | Redondo, sem rótulo. Exige `aria-label`. |
+
+- Todos carregam a mesma mola magnética (`useMagnetic`), o mesmo `scale(0.96)` no clique e o mesmo deslocamento do ícone no hover.
+- Altura mínima `44px` nos tamanhos `md` e `lg`.
+- Nunca aninhar `<button>` dentro de `<a>`.
+
+### Header
+
+Uma peça só, em três grupos: marca, menu e ações. No topo da página os três ficam afastados e o menu tem a própria pastilha branca. Passando de `48px` de scroll, a distância entre eles fecha, a pastilha do menu some e os três viram um bloco único, menor e flutuante. Voltando à hero, o movimento se desfaz.
+
+O que anima é `gap`, `padding`, cor e sombra: tudo interpolável em CSS, sem morfose de layout. O mesmo comportamento vale no celular, onde a pastilha mostra só os ícones e abre o rótulo do item ativo.
+
+- Indicador do item ativo e realce de hover usam `layoutId`, então correm de um item ao outro com mola em vez de piscar.
+- O rótulo ativo trunca em telas estreitas: o menu nunca empurra nada para fora da tela.
+
+### Título de seção
+
+`SectionHeading` dimensiona o título pelo próprio comprimento, via container query. Uma linha a partir de `1024px`, duas linhas abaixo disso, sempre ocupando a largura disponível. Nada de `text-balance`: ele existe para forçar quebra equilibrada, e a regra aqui é o contrário.
 
 ### Campos
 
-- Label sempre visível acima do campo
-- Placeholder apenas como exemplo
-- Erro abaixo do campo e ligado com `aria-describedby`
-- Focus com borda preta e ring de 3px
-- Altura mínima: `46px`
+- Label sempre visível acima. Placeholder só como exemplo.
+- Erro abaixo, ligado por `aria-describedby`. Foco com borda acento e ring de 3px.
+- Altura mínima `46px`, `font-size: 1rem` para o Safari não dar zoom.
 
 ### Ícones
 
-- Família única: Phosphor Icons
-- Peso padrão: regular ou light
-- Ícone estrutural nunca é emoji
-- O modelo de projeto mantém os nomes existentes e os mapeia para Phosphor
+Família única: Phosphor, via `@/components/Icon`. Peso `regular` ou `bold`. Nenhum SVG desenhado à mão, com uma exceção: o monograma, que é a marca.
 
-### Cards e listas
+### Listas
 
-- Card apenas quando a superfície representa uma unidade navegável ou um painel real.
-- Stack usa bento assimétrico porque os grupos são unidades distintas.
-- Experiência usa scroll-snap horizontal para uma lista longa.
-- Admin usa lista densa, sem transformar cada linha em um card independente.
+- Projeto é linha, não card: a lista continua legível com 4 ou com 40, e não sobra órfão no fim da grade.
+- Stack usa quatro estações ligadas por trilho.
+- Admin usa lista densa.
 
 ## 8. Login e admin
 
-### Login
-
-- Desktop: composição split-screen
-- Esquerda: painel preto com malha blueprint, marca e o trace da própria autenticação
-- Direita: formulário claro e objetivo
-- Mobile: marca mínima, formulário no foco e o trace em versão clara abaixo
-- Somente senha, de acordo com o contrato atual
-- Rota marcada com `noindex,nofollow`
-
-### Admin
-
-- Desktop: lista e inspector sticky
-- Mobile: editor fullscreen com Escape, focus trap e retorno de foco
-- Estados loading, vazio, erro, edição e confirmação de exclusão são obrigatórios
-- Links de projeto aceitam somente HTTPS e respostas antigas inseguras não viram links
-- CRUD e autenticação continuam usando a API existente
+- Login: só senha, rota marcada `noindex,nofollow`.
+- Admin: lista mais inspector no desktop, editor em tela cheia no celular com Escape, focus trap e retorno de foco.
+- Estados de loading, vazio, erro, edição e confirmação de exclusão são obrigatórios.
+- Link de projeto só aceita `https`.
 
 ## 9. Acessibilidade
 
-- Um único `<main>` na página pública
-- Skip link no início
-- Focus visível
-- Contraste WCAG AA para texto e controles
-- Alvos de toque com no mínimo `44 x 44px`
-- Menu e drawer restauram o foco ao fechar
-- Conteúdo de fundo fica inert durante overlays
-- Gráficos decorativos são `aria-hidden` e têm equivalente em texto
-- Movimento reduzido preserva fades úteis e remove deslocamentos
+- Um único `<main>` na página pública, com skip link.
+- Contraste AA em todo texto e controle. Alvo de toque de `44 x 44px`.
+- Menu e drawer devolvem o foco. Conteúdo de fundo fica `inert` durante overlay.
+- Gráfico decorativo é `aria-hidden` e tem equivalente em texto. Número animado tem `sr-only` com o valor final.
 
 ## 10. Assets
 
-O site não usa fotografia nem ilustração decorativa. Todo o visual é desenhado em código, com os mesmos tokens da interface.
+Sem fotografia e sem ilustração de banco. Todo o visual nasce em código, com os mesmos tokens da interface.
 
 | Arquivo | Uso |
 | --- | --- |
-| `/images/og-cover.png` | Compartilhamento social, 1200 x 630 |
-| `/favicon.svg` | Ícone da aba |
-
-O card social é gerado a partir das próprias fontes do bundle (Syne, Outfit, JetBrains Mono) e repete o waterfall do hero. Não há dependência de banco de imagens.
+| `/favicon.svg` | Monograma BL em navy |
+| `/images/meta/og-cover.png` | Cartão social, 1200 x 630, gerado com as fontes do bundle |
 
 ## 11. Checklist de entrega
 
-- [ ] Tema claro consistente em todas as seções
-- [ ] Nenhum neon ou cor de destaque não semântica
-- [ ] Hero cabe no viewport em desktop; no mobile o system trace é o primeiro momento de scroll
-- [ ] Projetos aparecem logo após o hero
-- [ ] Máximo de três eyebrows na página
-- [ ] Sem botões e links aninhados
-- [ ] Sem em dash visível
+- [ ] Tema claro consistente; blocos navy apenas em Stack e Contato
+- [ ] Um único acento, o mesmo em todas as seções
+- [ ] Uma única escala de raio
+- [ ] Zero sobrancelha acima de título de seção
+- [ ] Seis seções, seis famílias de layout, sem assunto repetido entre elas
+- [ ] Hero cabe no viewport em desktop e em `375px`
+- [ ] Nenhum em dash visível
 - [ ] Nenhum `z-index` fora dos tokens
-- [ ] Nenhum utilitário CSS sem uso
-- [ ] Mobile validado em `375px`
-- [ ] Desktop validado em `1440px`
-- [ ] Reduced motion validado
+- [ ] Nenhum listener de scroll nativo
+- [ ] Contraste AA verificado em texto e controle
+- [ ] Validado em `375px`, `768px`, `1280px` e `1440px`
+- [ ] Movimento reduzido validado, incluindo a cortina de abertura
 - [ ] Login e CRUD testados
-- [ ] Typecheck, lint, testes e build aprovados
+- [ ] `typecheck`, `lint`, `test` e `build` aprovados

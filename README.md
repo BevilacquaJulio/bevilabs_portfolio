@@ -51,14 +51,17 @@ bevilabs_portfolio/
 ├── frontend/                 SPA React
 │   ├── src/
 │   │   ├── app/              App, rotas lazy, ErrorBoundary, Background
-│   │   ├── components/       Button, Icon, Reveal, Badge, SectionHeading...
+│   │   ├── components/       Button, Icon, SectionHeading (compartilhados)
 │   │   ├── features/
-│   │   │   ├── site/         Seções do portfólio + content.ts (texto)
-│   │   │   ├── projects/     API, hooks React Query, cards
+│   │   │   ├── site/         Seções, shell (preloader/boot), hooks e UI do site
+│   │   │   ├── projects/     API, hooks React Query, project-icons, listagem
 │   │   │   └── admin/        Login e CRUD de projetos
-│   │   ├── hooks/            useNeonGrid, useCountUp, useActiveSection...
 │   │   ├── lib/              api (axios), auth-store, motion, cn
-│   │   └── styles/           theme.css (design tokens) + globals.css
+│   │   ├── pages/            HomePage, AdminPage, NotFoundPage
+│   │   └── styles/           theme.css, globals.css, fonts/
+│   ├── public/
+│   │   ├── fonts/brand/      Nevera, Syntha Nova
+│   │   └── images/           brand/, hero/, meta/
 │   ├── nginx.conf            SPA fallback + cache de assets
 │   └── Dockerfile
 │

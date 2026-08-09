@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Button } from '@/components/Button';
 import { Icon } from '@/components/Icon';
-import { normalizeProjectIcon } from '@/components/project-icons';
+import { normalizeProjectIcon } from '@/features/projects/project-icons';
 import { cn } from '@/lib/cn';
 import { getApiErrorMessage } from '@/lib/api';
 import {

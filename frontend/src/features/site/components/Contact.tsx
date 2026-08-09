@@ -1,112 +1,146 @@
+import { motion, useReducedMotion } from 'framer-motion';
+import { ActionButton } from '@/features/site/components/ActionButton';
+import { DottedSectionBackground } from '@/features/site/components/DottedSectionBackground';
 import { Icon } from '@/components/Icon';
-import { Reveal } from '@/components/Reveal';
-import { CONTACT, PROFILE } from '../data/content';
+import { SectionHeading } from '@/components/SectionHeading';
+import { useDottedFieldPointer } from '@/features/site/hooks/useDottedFieldPointer';
+import { cn } from '@/lib/cn';
+import { defaultViewport, EASE_OUT, stepDelay } from '@/lib/motion';
+import { CONTACT, CONTACT_CHANNELS, PROFILE, type ContactChannel } from '../data/content';
 
+/**
+ * Contato.
+ *
+ * Bloco escuro que fecha a página, dividido em duas colunas: à esquerda o
+ * convite, a disponibilidade e o botão principal; à direita a lista de canais.
+ *
+ * Cada linha da lista é um alvo grande, com o valor sempre visível. Nada de
+ * esconder o e-mail atrás de um formulário: quem está com pressa copia e sai.
+ */
 export function Contact() {
+  const reducedMotion = useReducedMotion();
+  const dots = useDottedFieldPointer();
+
   return (
     <section
       id="contato"
       aria-labelledby="contato-title"
-      className="relative z-2 scroll-mt-24 py-12 md:py-18"
+      onPointerMove={dots.onPointerMove}
+      onPointerLeave={dots.onPointerLeave}
+      className="surface-contact relative isolate z-[var(--z-content)] scroll-mt-24 overflow-hidden py-14 text-on-dark sm:py-20 md:py-28"
     >
-      <div className="layout">
-        <Reveal>
-          <div className="blueprint overflow-hidden rounded-[var(--radius-md)] bg-ink text-paper [box-shadow:var(--shadow-float)] sm:rounded-[var(--radius-lg)]">
-            <div className="grid gap-5 px-5 py-6 sm:gap-7 sm:px-7 sm:py-7 md:px-9 md:py-9 lg:grid-cols-12 lg:gap-x-10">
-              <div className="lg:col-span-8">
-                <h2
-                  id="contato-title"
-                  className="max-w-[13ch] font-display text-[1.6rem] leading-[1.04] font-semibold tracking-[-0.042em] text-balance sm:text-[1.78rem] md:text-[clamp(1.8rem,3.8vw,3.1rem)] md:leading-[0.99] md:tracking-[-0.05em]"
-                >
-                  {CONTACT.title}
-                </h2>
-              </div>
+      <DottedSectionBackground x={dots.x} y={dots.y} presence={dots.presence} />
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_70%_70%_at_85%_5%,rgb(39_101_204/0.24),transparent_62%)]"
+      />
+      <span
+        aria-hidden="true"
+        className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-soft/45 to-transparent"
+      />
 
-              <p className="max-w-[38ch] self-end text-[0.92rem] leading-[1.6] text-paper/68 sm:text-[0.96rem] lg:col-span-4">
-                {CONTACT.lead}
-              </p>
-            </div>
+      <div className="layout relative z-[1] grid gap-10 sm:gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:items-start lg:gap-16">
+        <div className="lg:sticky lg:top-[calc(var(--header-h-compact)+3rem)]">
+          <SectionHeading
+            id="contato-title"
+            label={CONTACT.label}
+            title={CONTACT.title}
+            subtitle={CONTACT.lead}
+            tone="dark"
+          />
 
-            <a
+          <motion.div
+            initial={reducedMotion ? false : { opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={defaultViewport}
+            transition={{ duration: 0.55, delay: 0.32, ease: EASE_OUT }}
+            className="mt-8 flex flex-col items-start gap-5 sm:mt-10"
+          >
+            <ActionButton
               href={`mailto:${PROFILE.email}`}
-              className="group focus-on-dark flex min-h-20 items-center gap-3 border-y border-white/18 px-5 py-4 transition-colors duration-200 ease-[var(--ease-out)] hover:bg-white/8 active:bg-white/12 sm:gap-4 sm:px-7 sm:py-5 md:min-h-24 md:px-9"
-              aria-label={`Enviar e-mail para ${PROFILE.email}`}
+              variant="primary"
+              size="lg"
+              icon="arrowUpRight"
             >
-              <Icon name="mail" className="size-5 shrink-0 md:size-7" weight="light" />
-              <span className="min-w-0 flex-1 break-words font-display text-[0.88rem] leading-[1.14] font-semibold tracking-[-0.028em] min-[360px]:text-[0.96rem] min-[390px]:text-[1.02rem] md:text-[clamp(1.1rem,2.9vw,2.15rem)] md:leading-none md:tracking-[-0.04em]">
-                {PROFILE.email}
-              </span>
-              <Icon
-                name="arrowUpRight"
-                className="size-5 shrink-0 transition-transform duration-200 ease-[var(--ease-out)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 md:size-7"
-                weight="light"
-              />
-            </a>
+              Enviar um e-mail
+            </ActionButton>
 
-            <div className="grid gap-px bg-white/14 min-[390px]:grid-cols-2 lg:grid-cols-4">
-              <ContactItem
-                icon="phone"
-                label="Telefone"
-                value={PROFILE.phone}
-                href={`tel:${PROFILE.phoneHref}`}
-              />
-              <ContactItem
-                icon="linkedin"
-                label="LinkedIn"
-                value="Abrir perfil"
-                href={PROFILE.linkedin}
-                external
-              />
-              <ContactItem
-                icon="github"
-                label="GitHub"
-                value="Ver código"
-                href={PROFILE.github}
-                external
-              />
-              <ContactItem icon="pin" label="Base" value={PROFILE.location} />
-            </div>
-          </div>
-        </Reveal>
+            <p className="inline-flex items-center gap-2.5 rounded-full border border-white/14 px-3.5 py-1.5">
+              <span aria-hidden="true" className="relative flex size-1.5 shrink-0">
+                <span className="absolute inline-flex size-full animate-ping rounded-full bg-success/80 motion-reduce:hidden" />
+                <span className="relative inline-flex size-1.5 rounded-full bg-success" />
+              </span>
+              <span className="font-mono text-[0.66rem] font-medium tracking-[0.12em] text-on-dark-muted uppercase">
+                {CONTACT.availability}
+              </span>
+            </p>
+
+            <p className="flex items-center gap-2.5 font-mono text-[0.7rem] tracking-[0.1em] text-on-dark-muted uppercase">
+              <Icon name="pin" className="size-3.5 shrink-0" />
+              {PROFILE.location}, {PROFILE.country}
+            </p>
+          </motion.div>
+        </div>
+
+        <ul className="border-t border-white/12">
+          {CONTACT_CHANNELS.map((channel, index) => (
+            <Channel key={channel.id} channel={channel} index={index} />
+          ))}
+        </ul>
       </div>
     </section>
   );
 }
 
-type ContactItemProps = {
-  icon: 'phone' | 'linkedin' | 'github' | 'pin';
-  label: string;
-  value: string;
-  href?: string;
-  external?: boolean;
-};
-
-function ContactItem({ icon, label, value, href, external }: ContactItemProps) {
-  const content = (
-    <>
-      <Icon name={icon} className="size-5 shrink-0 text-paper/58" weight="light" />
-      <span>
-        <span className="block text-[0.72rem] font-medium text-paper/52">{label}</span>
-        <span className="mt-1 block text-sm font-semibold text-paper">{value}</span>
-      </span>
-      {href && <Icon name="arrowUpRight" className="ml-auto size-4 shrink-0 text-paper/58" />}
-    </>
-  );
-
-  const className =
-    'flex min-h-16 items-center gap-3 bg-ink px-5 py-3.5 transition-colors duration-200 ease-[var(--ease-out)] sm:min-h-18 sm:px-7 lg:px-5';
-
-  if (!href) {
-    return <div className={className}>{content}</div>;
-  }
+function Channel({ channel, index }: { channel: ContactChannel; index: number }) {
+  const reducedMotion = useReducedMotion();
+  const external = channel.external
+    ? { target: '_blank' as const, rel: 'noopener noreferrer' }
+    : {};
 
   return (
-    <a
-      href={href}
-      className={`focus-on-dark ${className} hover:bg-white/8 active:bg-white/12`}
-      {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+    <motion.li
+      initial={reducedMotion ? false : { opacity: 0, y: 18 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={defaultViewport}
+      transition={{ duration: 0.5, delay: stepDelay(index, 0.07), ease: EASE_OUT }}
+      className="border-b border-white/12"
     >
-      {content}
-    </a>
+      <a
+        href={channel.href}
+        {...external}
+        className="group focus-on-dark relative flex min-h-20 items-center gap-4 overflow-hidden px-2 py-4 sm:min-h-24 sm:gap-6 sm:px-4"
+      >
+        {/* Preenchimento que entra pela esquerda no hover. */}
+        <span
+          aria-hidden="true"
+          className={cn(
+            'absolute inset-0 origin-left scale-x-0 bg-accent/14',
+            'transition-transform duration-500 ease-[var(--ease-out)]',
+            'group-hover:scale-x-100 group-focus-visible:scale-x-100 motion-reduce:transition-none',
+          )}
+        />
+
+        <span
+          aria-hidden="true"
+          className="relative inline-flex size-11 shrink-0 items-center justify-center rounded-[var(--radius-sm)] border border-white/14 text-accent-soft transition-[background-color,border-color,color,transform] duration-300 ease-[var(--ease-out)] group-hover:border-accent-soft group-hover:bg-accent-soft group-hover:text-ink group-hover:scale-105 motion-reduce:transform-none sm:size-12"
+        >
+          <Icon name={channel.icon} className="size-5" weight="bold" />
+        </span>
+
+        <span className="relative min-w-0 flex-1">
+          <span className="meta block text-on-dark-muted">{channel.label}</span>
+          <span className="mt-1.5 block [overflow-wrap:anywhere] font-display text-[1rem] leading-[1.35] font-bold tracking-[-0.03em] text-on-dark transition-transform duration-300 ease-[var(--ease-out)] group-hover:translate-x-1 motion-reduce:transform-none sm:truncate sm:text-[1.2rem]">
+            {channel.value}
+          </span>
+        </span>
+
+        <Icon
+          name="arrowUpRight"
+          className="relative size-5 shrink-0 text-on-dark-muted transition-[transform,color] duration-300 ease-[var(--ease-out)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent-soft motion-reduce:transform-none"
+          weight="bold"
+        />
+      </a>
+    </motion.li>
   );
 }

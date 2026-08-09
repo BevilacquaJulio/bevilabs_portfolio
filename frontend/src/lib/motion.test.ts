@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join } from 'node:path';
-import { revealVariants, staggerItem } from './motion';
+import { staggerItem } from './motion';
 
 const SRC = join(process.cwd(), 'src');
 
@@ -20,7 +20,7 @@ function walk(dir: string): string[] {
  */
 describe('linguagem de movimento', () => {
   it('anima `y` em vez da string `transform` nos presets compartilhados', () => {
-    for (const variants of [revealVariants, staggerItem]) {
+    for (const variants of [staggerItem]) {
       for (const state of ['hidden', 'visible'] as const) {
         const target = variants[state] as Record<string, unknown>;
         expect(target).not.toHaveProperty('transform');

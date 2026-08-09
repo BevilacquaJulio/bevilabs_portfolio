@@ -1,8 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './app/App';
-import '@fontsource-variable/syne';
-import '@fontsource-variable/outfit';
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/manrope';
 import '@fontsource-variable/jetbrains-mono';
 import './styles/globals.css';
 

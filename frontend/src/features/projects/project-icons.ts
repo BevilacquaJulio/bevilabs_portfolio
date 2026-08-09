@@ -1,4 +1,4 @@
-import type { IconName } from './Icon';
+import type { IconName } from '@/components/Icon';
 
 /** Icones oferecidos ao admin ao cadastrar um projeto. */
 export const PROJECT_ICONS = [

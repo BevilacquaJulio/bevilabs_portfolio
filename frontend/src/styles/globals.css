@@ -1,3 +1,5 @@
+@import './fonts/syntha-nova.css';
+@import './fonts/nevera.css';
 @import './theme.css';
 
 *,
@@ -10,8 +12,9 @@ html {
   position: relative;
   overflow-x: hidden;
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-h) + 1rem);
-  background: var(--color-bg);
+  scroll-padding-top: calc(var(--header-h-compact) + 1.5rem);
+  /* Cor da hero: é ela que aparece no elástico do topo, no iOS. */
+  background: var(--surface-hero-a);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
@@ -21,21 +24,49 @@ body {
   min-width: 0;
   min-height: 100dvh;
   overflow-x: hidden;
-  background: var(--color-bg);
+  background: var(--surface-hero-a);
   color: var(--color-fg);
   font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.6;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 body[data-menu-open='true'],
-body[data-drawer-open='true'] {
+body[data-drawer-open='true'],
+body[data-preloader='true'] {
   overflow: hidden;
 }
 
-a {
-  text-decoration: none;
+@layer base {
+  /* Só text-decoration aqui: `color: inherit` fora de layer vence utilitários
+     como `text-on-accent` (item ativo do header, CTAs). O preflight do Tailwind
+     já herda cor de link na base layer. */
+  a {
+    text-decoration: none;
+  }
+}
+
+/* Texto branco sobre fundo azul — regra explícita fora de layer para vencer
+   qualquer herança de cor em links e botões de destaque. */
+:is(a, button).bg-accent,
+:is(a, button).bg-accent-deep,
+a.text-on-accent,
+button.text-on-accent {
+  color: var(--color-on-accent);
+}
+
+:is(a, button).bg-accent:hover,
+:is(a, button).bg-accent:focus-visible,
+:is(a, button).bg-accent-deep:hover,
+:is(a, button).bg-accent-deep:focus-visible,
+a.text-on-accent:hover,
+a.text-on-accent:focus-visible,
+button.text-on-accent:hover,
+button.text-on-accent:focus-visible {
+  color: var(--color-on-accent);
 }
 
 button,
@@ -51,53 +82,128 @@ a {
   touch-action: manipulation;
 }
 
-img {
+img,
+svg {
   display: block;
   max-width: 100%;
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-ink);
-  outline-offset: 4px;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
 }
 
 .focus-on-dark:focus-visible {
-  outline-color: var(--color-paper);
+  outline-color: var(--color-accent-soft);
 }
 
 ::selection {
-  background: var(--color-ink);
-  color: var(--color-paper);
+  background: var(--color-accent);
+  color: #fff;
+}
+
+/* =========================================================
+   Scrollbar na cor de destaque
+   ========================================================= */
+
+@supports (scrollbar-color: auto) {
+  html {
+    scrollbar-color: var(--color-accent) var(--color-bg-subtle);
+    scrollbar-width: thin;
+  }
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 12px;
+  height: 12px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg);
+  background: var(--color-bg-subtle);
 }
 
 ::-webkit-scrollbar-thumb {
-  border: 3px solid var(--color-bg);
+  border: 3px solid var(--color-bg-subtle);
   border-radius: 999px;
-  background: #8e8e87;
+  background: var(--color-accent);
+  transition: background-color 180ms var(--ease-out);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-ink);
+  background: var(--color-accent-deep);
 }
 
-/* ---------- utilitários de composição ---------- */
-
-/* Faixas alternadas na landing: cinza claro (ímpar) e branco (par). */
-main#conteudo > section:nth-child(odd) {
-  background-color: var(--color-bg);
+::-webkit-scrollbar-corner {
+  background: var(--color-bg-subtle);
 }
 
-main#conteudo > section:nth-child(even) {
-  background-color: var(--color-bg-elevated);
+/* =========================================================
+   Cursor próprio
+   O atributo só é ligado por JS, em ponteiro fino. Se o script
+   falhar, o cursor nativo continua lá.
+   ========================================================= */
+
+html[data-cursor='custom'],
+html[data-cursor='custom'] body,
+html[data-cursor='custom'] a,
+html[data-cursor='custom'] button,
+html[data-cursor='custom'] [role='button'],
+html[data-cursor='custom'] summary,
+html[data-cursor='custom'] label {
+  cursor: none;
 }
+
+html[data-cursor='custom'] input,
+html[data-cursor='custom'] textarea,
+html[data-cursor='custom'] select {
+  cursor: auto;
+}
+
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--z-skip);
+  pointer-events: none;
+  border-radius: 999px;
+  will-change: transform;
+}
+
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  background: var(--color-accent);
+}
+
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  margin: -17px 0 0 -17px;
+  border: 1.5px solid rgb(var(--accent-rgb) / 0.55);
+  background: rgb(var(--accent-rgb) / 0.06);
+}
+
+/* Segurança adicional: layout mobile sempre usa o cursor nativo, inclusive
+   quando é simulado numa janela estreita de um computador com mouse. */
+@media (max-width: 1023px), (hover: none), (pointer: coarse) {
+  html[data-cursor='custom'] *,
+  html[data-cursor='custom'] *::before,
+  html[data-cursor='custom'] *::after {
+    cursor: revert !important;
+  }
+
+  .cursor-dot,
+  .cursor-ring {
+    display: none !important;
+  }
+}
+
+/* =========================================================
+   Utilitários de composição
+   ========================================================= */
 
 @utility layout {
   width: 100%;
@@ -113,12 +219,99 @@ main#conteudo > section:nth-child(even) {
   box-shadow: var(--shadow-panel);
 }
 
-/* Malha técnica das superfícies escuras. Só linha, sem imagem. */
+/* Malha técnica das superfícies navy. Só linha, sem imagem. */
 @utility blueprint {
   background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.055) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.055) 1px, transparent 1px);
-  background-size: 3.5rem 3.5rem;
+    linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
+  background-size: 3.25rem 3.25rem;
+}
+
+/* =========================================================
+   Campo pontilhado das seções navy
+
+   A grade base não anima e também aparece no mobile. Em desktop, duas
+   camadas perfeitamente alinhadas surgem sob o mouse, ampliando os mesmos
+   pontos por proximidade sem criar centenas de elementos no DOM.
+   ========================================================= */
+
+.dotted-field {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  contain: paint;
+  --dots-x: 50%;
+  --dots-y: 50%;
+}
+
+.dotted-field__base,
+.dotted-field__focus,
+.dotted-field__core {
+  position: absolute;
+  inset: -2rem;
+  background-position: 0 0;
+  background-size: 2rem 2rem;
+}
+
+.dotted-field__base {
+  opacity: 0.82;
+  background-image: radial-gradient(circle, rgb(111 163 238 / 0.22) 0 1px, transparent 1.15px);
+  -webkit-mask-image: radial-gradient(ellipse 92% 84% at 50% 46%, #000 25%, transparent 96%);
+  mask-image: radial-gradient(ellipse 92% 84% at 50% 46%, #000 25%, transparent 96%);
+}
+
+.dotted-field__focus,
+.dotted-field__core {
+  display: none;
+  opacity: 0;
+}
+
+@supports (mask-image: radial-gradient(circle at 50% 50%, #000, transparent)) {
+  @media (min-width: 1024px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+    .dotted-field__focus,
+    .dotted-field__core {
+      display: block;
+      will-change: opacity, mask-position;
+    }
+
+    .dotted-field__focus {
+      background-image: radial-gradient(circle, rgb(111 163 238 / 0.62) 0 1.9px, transparent 2.1px);
+      -webkit-mask-image: radial-gradient(
+        circle 13rem at var(--dots-x) var(--dots-y),
+        #000 0%,
+        rgb(0 0 0 / 0.82) 42%,
+        transparent 76%
+      );
+      mask-image: radial-gradient(
+        circle 13rem at var(--dots-x) var(--dots-y),
+        #000 0%,
+        rgb(0 0 0 / 0.82) 42%,
+        transparent 76%
+      );
+    }
+
+    .dotted-field__core {
+      background-image: radial-gradient(
+        circle,
+        rgb(178 205 255 / 0.82) 0 2.7px,
+        transparent 2.95px
+      );
+      -webkit-mask-image: radial-gradient(
+        circle 6.5rem at var(--dots-x) var(--dots-y),
+        #000 0%,
+        rgb(0 0 0 / 0.74) 36%,
+        transparent 72%
+      );
+      mask-image: radial-gradient(
+        circle 6.5rem at var(--dots-x) var(--dots-y),
+        #000 0%,
+        rgb(0 0 0 / 0.74) 36%,
+        transparent 72%
+      );
+    }
+  }
 }
 
 @utility field {
@@ -143,13 +336,12 @@ main#conteudo > section:nth-child(even) {
   }
 
   &:hover:not(:focus) {
-    border-color: #8e8e87;
+    border-color: #93a6bf;
   }
 
   &:focus {
-    border-color: var(--color-ink);
-    background: #fff;
-    box-shadow: 0 0 0 3px rgb(var(--ink-rgb) / 0.1);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px rgb(var(--accent-rgb) / 0.16);
   }
 
   &[aria-invalid='true'] {
@@ -157,7 +349,37 @@ main#conteudo > section:nth-child(even) {
   }
 
   &[aria-invalid='true']:focus {
-    box-shadow: 0 0 0 3px rgb(180 35 24 / 0.12);
+    box-shadow: 0 0 0 3px rgb(180 35 26 / 0.14);
+  }
+}
+
+/* Rótulo utilitário: mono, caixa alta, tracking largo.
+ * Usado só onde o texto É metadado (período, domínio, índice). */
+@utility meta {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@utility skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--color-bg-muted) 30%,
+    var(--color-bg-subtle) 48%,
+    var(--color-bg-muted) 66%
+  );
+  background-size: 250% 100%;
+  animation: skeleton-sweep 1.35s var(--ease-in-out) infinite;
+}
+
+@keyframes skeleton-sweep {
+  from {
+    background-position: 150% 0;
+  }
+  to {
+    background-position: -50% 0;
   }
 }
 
@@ -166,95 +388,551 @@ main#conteudo > section:nth-child(even) {
   top: 0.75rem;
   left: 0.75rem;
   z-index: var(--z-skip);
+  display: inline-flex;
+  align-items: center;
   min-height: 2.75rem;
-  transform: translateY(-160%);
+  transform: translateY(-180%);
   border-radius: 999px;
-  background: var(--color-ink);
+  background: var(--color-accent);
   padding: 0.7rem 1.1rem;
-  color: var(--color-paper);
+  color: #fff;
   font-weight: 650;
-  transition: transform 160ms var(--ease-out);
+  transition: transform 180ms var(--ease-out);
 }
 
 .skip-link:focus {
   transform: translateY(0);
 }
 
-.ambient-background {
+/* =========================================================
+   Grão: única camada global. Roda por cima de tudo, em opacidade
+   baixa o bastante para funcionar sobre papel e sobre navy.
+   ========================================================= */
+
+.bg-grain {
   position: fixed;
   inset: 0;
-  z-index: var(--z-background);
+  z-index: var(--z-grain);
   pointer-events: none;
-  background:
-    radial-gradient(circle at 86% 8%, rgb(16 16 15 / 0.055), transparent 28rem),
-    radial-gradient(circle at 8% 72%, rgb(16 16 15 / 0.028), transparent 34rem), var(--color-bg);
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
-.noise {
-  position: fixed;
+/* =========================================================
+   Superfícies de seção
+
+   O fim de uma seção é o começo da outra, então a emenda não
+   aparece como corte. As duas seções navy têm valores diferentes
+   de propósito: a primeira é média, a segunda é profunda.
+   ========================================================= */
+
+.surface-hero {
+  background: linear-gradient(180deg, var(--surface-hero-a) 0%, var(--surface-hero-b) 100%);
+}
+
+.surface-projects {
+  background: linear-gradient(
+    180deg,
+    var(--surface-hero-b) 0%,
+    var(--surface-projects) 22%,
+    var(--surface-projects) 84%,
+    #eef3fc 100%
+  );
+}
+
+.surface-stack {
+  background: var(--surface-stack);
+}
+
+.surface-journey {
+  background: linear-gradient(
+    180deg,
+    var(--surface-journey-a) 0%,
+    var(--surface-journey-b) 62%,
+    var(--surface-about-a) 100%
+  );
+}
+
+.surface-about {
+  background: linear-gradient(180deg, var(--surface-about-a) 0%, var(--surface-about-b) 100%);
+}
+
+.surface-contact {
+  background: var(--surface-contact);
+}
+
+/* =========================================================
+   Título de seção
+
+   Um tamanho só para todas as seções, derivado da largura da coluna em que o
+   título vive. Antes o tamanho era medido em JavaScript com um teto de duas
+   linhas, e todo título que não caubesse nesse teto caía para o mínimo da
+   escala: "Minhas habilidades e stacks que eu uso" chegava a sair do mesmo
+   corpo do subtítulo, enquanto "Projetos em produção" ficava enorme.
+
+   Agora o título quebra em quantas linhas precisar e mantém o peso. A menor
+   diferença entre título e apoio na página é de 2x, medida no celular.
+
+   A escala é da viewport, não do container: contato vive em uma coluna mais
+   estreita que projetos, e com unidades de container ele nascia menor que os
+   outros títulos justamente por isso.
+   ========================================================= */
+
+.section-title {
+  font-size: clamp(1.95rem, 4.8vw, 3.4rem);
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+/* Textura discreta das seções claras que não são a hero. */
+.surface-texture::before {
+  content: '';
+  position: absolute;
   inset: 0;
-  z-index: 1;
+  /* Atrás do conteúdo, à frente do fundo da própria seção. */
+  z-index: -1;
   pointer-events: none;
-  opacity: 0.018;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-image:
+    linear-gradient(to right, rgb(var(--ink-rgb) / 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--ink-rgb) / 0.04) 1px, transparent 1px);
+  background-size: 4.5rem 4.5rem;
+  -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 10%, transparent 88%);
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 10%, transparent 88%);
 }
 
-.reg {
-  margin-left: 0.08em;
-  font-size: 0.5em;
-  font-weight: 500;
-  line-height: 0;
-  vertical-align: super;
-  opacity: 0.62;
+/* =========================================================
+   Fundo da hero
+
+   Camadas, de trás para frente: a imagem, banho de cor, arcos,
+   orbes, matriz de pontos nos cantos, três planos de partículas com
+   parallax e, por último, a malha e o brilho que seguem o cursor.
+
+   `--mx` e `--my` são coordenadas relativas à própria hero, escritas
+   pelo ponteiro em motion values. Nenhum render do React acontece
+   ao mover o mouse.
+   ========================================================= */
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  --mx: 50%;
+  --my: 45%;
 }
 
-.reg--lg {
-  font-size: 0.32em;
+.hero-bg > * {
+  position: absolute;
+  inset: 0;
 }
 
-@keyframes shimmer {
-  to {
-    transform: translateX(100%);
+/* Imagem de fundo: primeira camada da hero, tudo o mais pinta por cima.
+ * A máscara apaga a base da foto para o gradiente da própria seção assumir
+ * antes da emenda, então a troca de seção não aparece como corte. */
+.hero-photo {
+  background-image: url('/images/hero/hero-bg.webp');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  -webkit-mask-image: linear-gradient(
+    180deg,
+    #000 0%,
+    #000 46%,
+    rgb(0 0 0 / 0.55) 74%,
+    transparent 97%
+  );
+  mask-image: linear-gradient(180deg, #000 0%, #000 46%, rgb(0 0 0 / 0.55) 74%, transparent 97%);
+}
+
+/* Arte vertical no celular. A paisagem cortada em `cover` perdia justamente
+ * as bordas, que é onde o desenho dela acontece. A máscara é mais longa
+ * porque a tela alta dá mais espaço para a foto sumir antes da emenda. */
+@media (max-width: 767px) {
+  .hero-photo {
+    background-image: url('/images/hero/hero-bg-mobile.webp');
+    background-position: center;
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      #000 0%,
+      #000 86%,
+      rgb(0 0 0 / 0.72) 94%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(180deg, #000 0%, #000 86%, rgb(0 0 0 / 0.72) 94%, transparent 100%);
   }
 }
 
-.skeleton {
-  position: relative;
-  overflow: hidden;
-  background: var(--color-bg-subtle);
+/* Com a foto por baixo, o banho e o desenho sintético entram só como reforço:
+ * a imagem já traz malha, pontos e círculos, e repetir tudo em cima vira
+ * ruído. Os valores abaixo são o quanto sobra de cada camada. */
+.hero-wash {
+  opacity: 0.6;
+  background:
+    radial-gradient(60rem 42rem at 10% 92%, rgb(var(--accent-rgb) / 0.15), transparent 62%),
+    radial-gradient(44rem 36rem at 2% 4%, rgb(var(--accent-rgb) / 0.11), transparent 58%),
+    radial-gradient(52rem 38rem at 97% 16%, rgb(96 126 214 / 0.1), transparent 60%),
+    radial-gradient(40rem 30rem at 88% 96%, rgb(var(--accent-rgb) / 0.08), transparent 60%);
 }
 
-.skeleton::after {
+/* Orbes desfocados. Só `transform` anima, e o ciclo é longo. */
+.hero-orb {
   position: absolute;
-  inset: 0;
-  transform: translateX(-100%);
-  background: linear-gradient(90deg, transparent, rgb(255 255 255 / 0.72), transparent);
-  content: '';
-  animation: shimmer 1.5s infinite;
+  inset: auto;
+  border-radius: 50%;
+  filter: blur(28px);
+  will-change: transform;
 }
+
+.hero-orb--a {
+  top: -6rem;
+  left: -8rem;
+  width: 30rem;
+  height: 30rem;
+  background: radial-gradient(circle, rgb(var(--accent-rgb) / 0.22), transparent 66%);
+  animation: orb-a 28s var(--ease-in-out) infinite alternate;
+}
+
+.hero-orb--b {
+  bottom: -10rem;
+  left: -4rem;
+  width: 34rem;
+  height: 34rem;
+  background: radial-gradient(circle, rgb(var(--accent-rgb) / 0.26), transparent 64%);
+  animation: orb-b 36s var(--ease-in-out) infinite alternate;
+}
+
+.hero-orb--c {
+  top: 18%;
+  right: -12rem;
+  width: 32rem;
+  height: 32rem;
+  background: radial-gradient(circle, rgb(120 150 235 / 0.2), transparent 66%);
+  animation: orb-c 44s var(--ease-in-out) infinite alternate;
+}
+
+.hero-orb--d {
+  bottom: 4%;
+  right: 8%;
+  width: 20rem;
+  height: 20rem;
+  background: radial-gradient(circle, rgb(var(--accent-rgb) / 0.16), transparent 68%);
+  animation: orb-a 32s var(--ease-in-out) infinite alternate-reverse;
+}
+
+@keyframes orb-a {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(5rem, 4rem, 0) scale(1.18);
+  }
+}
+
+@keyframes orb-b {
+  from {
+    transform: translate3d(0, 0, 0) scale(1.1);
+  }
+  to {
+    transform: translate3d(7rem, -5rem, 0) scale(0.94);
+  }
+}
+
+@keyframes orb-c {
+  from {
+    transform: translate3d(0, 0, 0) scale(0.96);
+  }
+  to {
+    transform: translate3d(-6rem, 6rem, 0) scale(1.14);
+  }
+}
+
+/* Matriz de pontos nos cantos. */
+.hero-matrix {
+  position: absolute;
+  inset: auto;
+  opacity: 0.45;
+  background-image: radial-gradient(circle, rgb(var(--accent-rgb) / 0.4) 1.1px, transparent 1.2px);
+  background-size: 0.85rem 0.85rem;
+}
+
+.hero-matrix--tr {
+  top: 4.5rem;
+  right: 0;
+  width: 16rem;
+  height: 13rem;
+  -webkit-mask-image: linear-gradient(215deg, #000 8%, transparent 72%);
+  mask-image: linear-gradient(215deg, #000 8%, transparent 72%);
+}
+
+.hero-matrix--bl {
+  bottom: 0;
+  left: 0;
+  width: 12rem;
+  height: 10rem;
+  opacity: 0.32;
+  -webkit-mask-image: linear-gradient(35deg, #000 8%, transparent 74%);
+  mask-image: linear-gradient(35deg, #000 8%, transparent 74%);
+}
+
+/* Partículas: pontos, cruzes e anéis.
+ *
+ * Sem `display` aqui de propósito. Regra fora de layer vence utilitário do
+ * Tailwind, e um `display: block` neste seletor anularia o `hidden sm:block`
+ * que tira metade das partículas do celular. Posição absoluta já blocka o
+ * elemento sozinha. */
+.hero-particle {
+  position: absolute;
+  will-change: transform;
+  animation: particle-float 9s var(--ease-in-out) infinite alternate;
+}
+
+.hero-particle--dot {
+  border-radius: 50%;
+  background: rgb(var(--accent-rgb) / 0.55);
+}
+
+.hero-particle--ring {
+  border: 1.5px solid rgb(var(--accent-rgb) / 0.4);
+  border-radius: 50%;
+}
+
+.hero-particle--halo {
+  border-radius: 50%;
+  background: rgb(var(--accent-rgb) / 0.12);
+}
+
+.hero-particle--plus::before,
+.hero-particle--plus::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: rgb(var(--accent-rgb) / 0.42);
+  translate: -50% -50%;
+}
+
+.hero-particle--plus::before {
+  width: 100%;
+  height: 1.5px;
+}
+
+.hero-particle--plus::after {
+  width: 1.5px;
+  height: 100%;
+}
+
+@keyframes particle-float {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.55;
+  }
+  to {
+    transform: translate3d(0, -14px, 0);
+    opacity: 1;
+  }
+}
+
+/* Arcos: circunferências tracejadas que giram muito devagar. */
+.hero-arcs {
+  display: grid;
+  place-items: center;
+  opacity: 0.24;
+}
+
+.hero-arcs svg {
+  width: min(150vw, 92rem);
+  height: auto;
+  overflow: visible;
+}
+
+.hero-arcs circle {
+  fill: none;
+  stroke: rgb(var(--accent-rgb) / 0.34);
+  stroke-width: 0.9;
+  stroke-dasharray: 3 14;
+  transform-box: view-box;
+  transform-origin: center;
+}
+
+.hero-arcs circle:nth-child(1) {
+  animation: arc-spin 150s linear infinite;
+}
+
+.hero-arcs circle:nth-child(2) {
+  animation: arc-spin 210s linear infinite reverse;
+}
+
+.hero-arcs circle:nth-child(3) {
+  animation: arc-spin 280s linear infinite;
+}
+
+@keyframes arc-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Malha que acende ao redor do cursor. */
+.hero-hotgrid {
+  background-image:
+    linear-gradient(to right, rgb(var(--accent-rgb) / 0.42) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--accent-rgb) / 0.42) 1px, transparent 1px);
+  background-size: 4.5rem 4.5rem;
+  -webkit-mask-image: radial-gradient(
+    circle 16rem at var(--mx) var(--my),
+    #000 0%,
+    rgb(0 0 0 / 0.3) 45%,
+    transparent 74%
+  );
+  mask-image: radial-gradient(
+    circle 16rem at var(--mx) var(--my),
+    #000 0%,
+    rgb(0 0 0 / 0.3) 45%,
+    transparent 74%
+  );
+}
+
+.hero-spot {
+  background: radial-gradient(
+    circle 24rem at var(--mx) var(--my),
+    rgb(var(--accent-rgb) / 0.12),
+    transparent 64%
+  );
+}
+
+/* Emenda entre a hero e a seção seguinte. */
+.hero-seam {
+  inset: auto 0 0 0;
+  height: 7rem;
+  background: linear-gradient(180deg, transparent, var(--surface-hero-b));
+}
+
+/* No celular, a arte vertical já entrega círculos, pontos e profundidade.
+ * Remover as camadas sintéticas evita competição com o texto e deixa a foto
+ * aparecer inteira. O halo branco concentra contraste apenas atrás do conteúdo. */
+/* Tela deitada e baixa: não existe primeira tela que caiba a hero inteira, e
+ * insistir em `100svh` só empurraria o conteúdo contra as bordas. Aqui a hero
+ * volta a ter a altura do próprio conteúdo, ancorada no topo. */
+@media (orientation: landscape) and (max-height: 650px) {
+  .surface-hero {
+    min-height: 0;
+    align-items: flex-start;
+    padding-top: calc(var(--header-h) + env(safe-area-inset-top) + 0.25rem);
+    padding-bottom: 2.5rem;
+  }
+
+  /* Sem altura sobrando, não há folga para o `justify-between` repartir, e o
+   * espaçamento volta a ser só o das margens abaixo. */
+  .hero-content {
+    justify-content: flex-start;
+  }
+
+  .hero-lockup,
+  .hero-wordmark {
+    margin-top: 0.75rem !important;
+  }
+
+  .hero-role,
+  .hero-rule,
+  .hero-intro,
+  .hero-actions {
+    margin-top: 0.75rem !important;
+  }
+
+  .hero-statement {
+    margin-top: 0.5rem !important;
+  }
+
+  .hero-proof {
+    margin-top: 1.25rem !important;
+  }
+}
+
+/* Celular em pé com pouca altura. A pilha da hero mede ~535px e não cabe numa
+ * primeira tela de 650px de `svh`. Como o `justify-between` só reparte folga
+ * que existe, aqui não há nada para repartir: o que resolve é encolher o ritmo
+ * antes que o cartão de provas escorregue para fora da dobra. */
+@media (max-width: 639px) and (max-height: 700px) {
+  .hero-lockup,
+  .hero-intro,
+  .hero-actions,
+  .hero-proof {
+    margin-top: 1rem !important;
+  }
+
+  .hero-role,
+  .hero-rule {
+    margin-top: 0.75rem !important;
+  }
+
+  .hero-statement {
+    margin-top: 0.5rem !important;
+  }
+
+  .hero-proof {
+    padding-block: 0.75rem !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-content {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .hero-wash {
+    opacity: 1;
+    background: radial-gradient(
+      ellipse 88% 66% at 50% 38%,
+      rgb(252 253 255 / 0.82) 0%,
+      rgb(247 249 252 / 0.56) 52%,
+      transparent 82%
+    );
+  }
+
+  .hero-arcs,
+  .hero-orb,
+  .hero-matrix,
+  .hero-particle,
+  .hero-hotgrid,
+  .hero-spot {
+    display: none;
+  }
+
+  .hero-seam {
+    height: 4rem;
+  }
+}
+
+/* =========================================================
+   Movimento reduzido
+   ========================================================= */
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
+  .skeleton,
+  .hero-orb,
+  .hero-particle,
+  .hero-arcs circle {
+    animation: none;
+  }
+
+  .hero-hotgrid,
+  .hero-spot,
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+
   *,
   *::before,
   *::after {
-    animation-duration: 0.001ms !important;
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-    transition-duration: 0.001ms !important;
-  }
-
-  .skeleton::after {
-    display: none;
-  }
-}
-
-@media print {
-  .ambient-background,
-  .noise {
-    display: none;
   }
 }

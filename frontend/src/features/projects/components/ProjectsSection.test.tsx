@@ -24,9 +24,7 @@ describe('ProjectsSection', () => {
     vi.spyOn(api, 'listProjects').mockReturnValue(new Promise(() => {}));
     renderWithProviders(<ProjectsSection />);
 
-    expect(
-      screen.getByRole('region', { name: /Sistemas que eu já construí/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: /Projetos em produção/i })).toBeInTheDocument();
     expect(screen.getByLabelText('Carregando projetos')).toBeInTheDocument();
   });
 
@@ -45,8 +43,13 @@ describe('ProjectsSection', () => {
       'href',
       'https://example.com/',
     );
-    expect(screen.getByLabelText(/Tecnologias citadas neste projeto/i)).toHaveTextContent('React');
-    expect(screen.getByLabelText(/Tecnologias citadas neste projeto/i)).toHaveTextContent('NestJS');
+
+    const stack = screen.getByLabelText(/Tecnologias citadas neste projeto/i);
+    expect(stack).toHaveTextContent('React');
+    expect(stack).toHaveTextContent('NestJS');
+
+    // O domínio do destino fica visível na própria linha.
+    expect(screen.getByText('example.com')).toBeInTheDocument();
   });
 
   it('não renderiza protocolos inseguros recebidos da API', async () => {

@@ -3,36 +3,55 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#f4f4f1" />
+    <meta name="theme-color" content="#f7f9fc" />
     <meta
       name="description"
-      content="Julio Bevilacqua, desenvolvedor Node.js e React. APIs em NestJS, interfaces em React e deploy com Docker."
+      content="Julio Bevilacqua, desenvolvedor full stack Node e React. Sistemas web completos, do modelo de dados ao deploy em produção."
     />
     <meta name="author" content="Julio Bevilacqua" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+    <link rel="apple-touch-icon" href="/favicon.png" />
+
+    <!-- O fundo da hero é uma imagem de CSS, então o browser só a descobriria
+         depois de baixar o bundle e a folha de estilo. O `media` garante que
+         cada aparelho baixe só a arte que vai usar. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/images/hero/hero-bg.webp"
+      media="(min-width: 768px)"
+      fetchpriority="high"
+    />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/hero/hero-bg-mobile.webp"
+      media="(max-width: 767px)"
+      fetchpriority="high"
+    />
 
     <meta property="og:type" content="website" />
-    <meta property="og:title" content="Bevilacqua Labs® | Node.js e React" />
+    <meta property="og:title" content="Bevilacqua Labs | Julio Bevilacqua, Full Stack Node e React" />
     <meta
       property="og:description"
-      content="APIs em NestJS, interfaces em React e TypeScript, deploy com Docker."
+      content="Sistemas web completos, do modelo de dados ao deploy em produção. NestJS, React, TypeScript e Docker."
     />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:url" content="https://bevilabs.com.br/" />
-    <meta property="og:image" content="https://bevilabs.com.br/images/og-cover.png" />
+    <meta property="og:image" content="https://bevilabs.com.br/images/meta/og-cover.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
     <meta
       property="og:image:alt"
-      content="Cartão tipográfico do Bevilacqua Labs: Sistemas que chegam à produção, com o waterfall de uma requisição."
+      content="Cartão do Bevilacqua Labs: Julio Bevilacqua, desenvolvedor full stack Node e React."
     />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:image" content="https://bevilabs.com.br/images/og-cover.png" />
+    <meta name="twitter:image" content="https://bevilabs.com.br/images/meta/og-cover.png" />
 
     <link rel="canonical" href="https://bevilabs.com.br/" />
 
-    <title>Bevilacqua Labs® | Node.js e React</title>
+    <title>Bevilacqua Labs | Julio Bevilacqua, Full Stack Node e React</title>
   </head>
   <body>
     <div id="root"></div>

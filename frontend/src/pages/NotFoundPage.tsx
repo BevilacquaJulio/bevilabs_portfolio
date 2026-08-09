@@ -29,7 +29,7 @@ export default function NotFoundPage() {
           </p>
           <Link
             to="/"
-            className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-ink px-5 py-2.5 text-sm font-semibold text-paper transition-[transform,box-shadow] duration-200 ease-[var(--ease-out)] active:scale-[0.97] sm:w-auto"
+            className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-full bg-accent px-5 py-2.5 text-sm font-semibold text-on-accent transition-[transform,background-color,box-shadow] duration-200 ease-[var(--ease-out)] hover:bg-accent-deep hover:[box-shadow:var(--shadow-accent)] active:scale-[0.97] motion-reduce:transform-none sm:w-auto"
           >
             Voltar ao início
             <Icon name="arrowUpRight" className="size-4 rotate-[-135deg]" />
