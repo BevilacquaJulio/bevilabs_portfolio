@@ -79,6 +79,9 @@ export const RESUME = {
   missingTitle: 'Currículo indisponível',
   missingLead:
     'O arquivo PDF ainda não foi publicado neste site.',
+  renderErrorTitle: 'Não foi possível abrir o currículo',
+  renderErrorLead:
+    'O arquivo existe, mas o navegador não conseguiu renderizá-lo. Você ainda pode tentar o download.',
   loadingLabel: 'Carregando currículo…',
 } as const;
 

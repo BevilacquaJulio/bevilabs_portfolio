@@ -101,7 +101,7 @@ export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
               </div>
 
               <div className="resume-viewer__actions">
-                {showDocument && (
+                {pdfReady && (
                   <ActionButton
                     onClick={handleDownload}
                     variant="primary"
@@ -153,9 +153,11 @@ export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
                     </span>
                     <div className="max-w-md space-y-2">
                       <p className="font-display text-[1.05rem] font-bold tracking-[-0.03em] text-on-dark">
-                        {RESUME.missingTitle}
+                        {renderFailed ? RESUME.renderErrorTitle : RESUME.missingTitle}
                       </p>
-                      <p className="meta text-on-dark-muted">{RESUME.missingLead}</p>
+                      <p className="meta text-on-dark-muted">
+                        {renderFailed ? RESUME.renderErrorLead : RESUME.missingLead}
+                      </p>
                     </div>
                   </div>
                 )}

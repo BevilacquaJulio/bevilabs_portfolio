@@ -12,6 +12,8 @@ RUN npm ci
 
 COPY . .
 RUN npm run build
+# Impede publicar uma imagem que exiba o CTA sem levar o PDF correspondente.
+RUN test -f dist/documents/julio-bevilacqua.pdf
 
 # Stage 2 — runtime estatico
 FROM nginx:alpine AS runtime
@@ -20,6 +22,7 @@ RUN apk add --no-cache wget
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html
+RUN test -f /usr/share/nginx/html/documents/julio-bevilacqua.pdf
 EXPOSE 80
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
