@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useEffect, useId, useRef, useState } from 'react';
+import { useCallback, useEffect, useId, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ActionButton } from '@/features/site/components/ActionButton';
@@ -8,10 +8,6 @@ import { EASE_OUT } from '@/lib/motion';
 import { useResumePdfAvailability } from '@/features/site/hooks/use-resume-pdf';
 import { savePdf } from '@/features/site/lib/save-pdf';
 import { RESUME } from '../data/content';
-
-const ResumePdfDocument = lazy(() =>
-  import('./ResumePdfDocument').then((module) => ({ default: module.ResumePdfDocument })),
-);
 
 type ResumeViewerProps = {
   open: boolean;
@@ -26,28 +22,10 @@ export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
   const previousFocus = useRef<HTMLElement | null>(null);
   const pdfStatus = useResumePdfAvailability(open);
   const pdfReady = pdfStatus === 'ready';
-  const [pageCount, setPageCount] = useState(0);
-  const [renderFailed, setRenderFailed] = useState(false);
-
-  const handlePdfReady = useCallback((pages: number) => {
-    setPageCount(pages);
-    setRenderFailed(false);
-  }, []);
-
-  const handlePdfFail = useCallback(() => {
-    setRenderFailed(true);
-  }, []);
 
   const handleDownload = useCallback(() => {
     void savePdf(RESUME.href, RESUME.fileName);
   }, []);
-
-  useEffect(() => {
-    if (!open) {
-      setPageCount(0);
-      setRenderFailed(false);
-    }
-  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -72,8 +50,6 @@ export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
 
   if (typeof document === 'undefined') return null;
 
-  const showDocument = pdfReady && !renderFailed;
-
   return createPortal(
     <AnimatePresence>
       {open && (
@@ -93,11 +69,7 @@ export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
                 <p id={titleId} className="resume-viewer__title">
                   {RESUME.title}
                 </p>
-                <p className="resume-viewer__subtitle">
-                  {showDocument && pageCount > 0
-                    ? RESUME.pagesLabel(pageCount)
-                    : RESUME.fileName}
-                </p>
+                <p className="resume-viewer__subtitle">{RESUME.fileName}</p>
               </div>
 
               <div className="resume-viewer__actions">
@@ -143,7 +115,7 @@ export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
                   </div>
                 )}
 
-                {(pdfStatus === 'missing' || renderFailed) && (
+                {pdfStatus === 'missing' && (
                   <div className="resume-viewer__state">
                     <span
                       aria-hidden="true"
@@ -153,32 +125,19 @@ export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
                     </span>
                     <div className="max-w-md space-y-2">
                       <p className="font-display text-[1.05rem] font-bold tracking-[-0.03em] text-on-dark">
-                        {renderFailed ? RESUME.renderErrorTitle : RESUME.missingTitle}
+                        {RESUME.missingTitle}
                       </p>
-                      <p className="meta text-on-dark-muted">
-                        {renderFailed ? RESUME.renderErrorLead : RESUME.missingLead}
-                      </p>
+                      <p className="meta text-on-dark-muted">{RESUME.missingLead}</p>
                     </div>
                   </div>
                 )}
 
-                {showDocument && (
-                  <Suspense
-                    fallback={
-                      <div className="resume-viewer__state">
-                        <span aria-hidden="true" className="resume-viewer__state-icon">
-                          <Icon name="filePdf" className="size-5" weight="bold" />
-                        </span>
-                        <p className="meta text-on-dark-muted">{RESUME.loadingLabel}</p>
-                      </div>
-                    }
-                  >
-                    <ResumePdfDocument
-                      src={RESUME.href}
-                      onReady={handlePdfReady}
-                      onFail={handlePdfFail}
-                    />
-                  </Suspense>
+                {pdfReady && (
+                  <iframe
+                    src={RESUME.href}
+                    title={RESUME.title}
+                    className="resume-viewer__frame"
+                  />
                 )}
               </div>
             </motion.div>
