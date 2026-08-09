@@ -14,7 +14,7 @@ export function useBooted(): boolean {
 }
 
 /** Duração da cortina de abertura, em milissegundos. */
-export const PRELOADER_MS = 2000;
+export const PRELOADER_MS = 3000;
 
 const SESSION_KEY = 'bl:booted';
 

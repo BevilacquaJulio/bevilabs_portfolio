@@ -40,6 +40,24 @@ body[data-preloader='true'] {
   overflow: hidden;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .preloader-shimmer {
+    background-size: 220% 100%;
+    animation: preloader-shimmer 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes preloader-shimmer {
+  0%,
+  100% {
+    background-position: 120% 0;
+  }
+
+  50% {
+    background-position: -20% 0;
+  }
+}
+
 @layer base {
   /* Só text-decoration aqui: `color: inherit` fora de layer vence utilitários
      como `text-on-accent` (item ativo do header, CTAs). O preflight do Tailwind
