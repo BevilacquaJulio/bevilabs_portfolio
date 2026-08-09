@@ -1,13 +1,18 @@
-import { useCallback, useEffect, useId, useRef } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useId, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { ActionButton } from '@/features/site/components/ActionButton';
 import { Icon } from '@/components/Icon';
 import { MagneticButton } from '@/components/MagneticButton';
 import { EASE_OUT } from '@/lib/motion';
+import { useCoarsePointer } from '@/features/site/hooks/use-coarse-pointer';
 import { useResumePdfAvailability } from '@/features/site/hooks/use-resume-pdf';
 import { savePdf } from '@/features/site/lib/save-pdf';
 import { RESUME } from '../data/content';
+
+const ResumePdfDocument = lazy(() =>
+  import('./ResumePdfDocument').then((module) => ({ default: module.ResumePdfDocument })),
+);
 
 type ResumeViewerProps = {
   open: boolean;
@@ -17,15 +22,34 @@ type ResumeViewerProps = {
 /** Modal fullscreen para ler e baixar o PDF do currículo. */
 export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
   const reducedMotion = useReducedMotion();
+  const coarsePointer = useCoarsePointer();
   const titleId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
   const pdfStatus = useResumePdfAvailability(open);
   const pdfReady = pdfStatus === 'ready';
+  const [pageCount, setPageCount] = useState(0);
+  const [renderFailed, setRenderFailed] = useState(false);
+
+  const handlePdfReady = useCallback((pages: number) => {
+    setPageCount(pages);
+    setRenderFailed(false);
+  }, []);
+
+  const handlePdfFail = useCallback(() => {
+    setRenderFailed(true);
+  }, []);
 
   const handleDownload = useCallback(() => {
     void savePdf(RESUME.href, RESUME.fileName);
   }, []);
+
+  useEffect(() => {
+    if (!open) {
+      setPageCount(0);
+      setRenderFailed(false);
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -50,6 +74,9 @@ export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
 
   if (typeof document === 'undefined') return null;
 
+  const useCanvas = coarsePointer;
+  const showDocument = pdfReady && (!useCanvas || !renderFailed);
+
   return createPortal(
     <AnimatePresence>
       {open && (
@@ -69,7 +96,11 @@ export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
                 <p id={titleId} className="resume-viewer__title">
                   {RESUME.title}
                 </p>
-                <p className="resume-viewer__subtitle">{RESUME.fileName}</p>
+                <p className="resume-viewer__subtitle">
+                  {useCanvas && pageCount > 0
+                    ? RESUME.pagesLabel(pageCount)
+                    : RESUME.fileName}
+                </p>
               </div>
 
               <div className="resume-viewer__actions">
@@ -132,12 +163,49 @@ export function ResumeViewer({ open, onClose }: ResumeViewerProps) {
                   </div>
                 )}
 
-                {pdfReady && (
-                  <iframe
-                    src={RESUME.href}
-                    title={RESUME.title}
-                    className="resume-viewer__frame"
-                  />
+                {pdfReady && useCanvas && renderFailed && (
+                  <div className="resume-viewer__state">
+                    <span
+                      aria-hidden="true"
+                      className="resume-viewer__state-icon resume-viewer__state-icon--warn"
+                    >
+                      <Icon name="alert" className="size-5" weight="bold" />
+                    </span>
+                    <div className="max-w-md space-y-4">
+                      <div className="space-y-2">
+                        <p className="font-display text-[1.05rem] font-bold tracking-[-0.03em] text-on-dark">
+                          {RESUME.renderErrorTitle}
+                        </p>
+                        <p className="meta text-on-dark-muted">{RESUME.renderErrorLead}</p>
+                      </div>
+                      <ActionButton href={RESUME.href} external variant="primary" size="md" icon="filePdf">
+                        {RESUME.openExternalLabel}
+                      </ActionButton>
+                    </div>
+                  </div>
+                )}
+
+                {showDocument && useCanvas && (
+                  <Suspense
+                    fallback={
+                      <div className="resume-viewer__state">
+                        <span aria-hidden="true" className="resume-viewer__state-icon">
+                          <Icon name="filePdf" className="size-5" weight="bold" />
+                        </span>
+                        <p className="meta text-on-dark-muted">{RESUME.loadingLabel}</p>
+                      </div>
+                    }
+                  >
+                    <ResumePdfDocument
+                      src={RESUME.href}
+                      onReady={handlePdfReady}
+                      onFail={handlePdfFail}
+                    />
+                  </Suspense>
+                )}
+
+                {showDocument && !useCanvas && (
+                  <iframe src={RESUME.href} title={RESUME.title} className="resume-viewer__frame" />
                 )}
               </div>
             </motion.div>

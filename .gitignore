@@ -124,6 +124,7 @@ $RECYCLE.BIN/
 # Design e assets de trabalho (nao entram no build)
 # -----------------------------------------------------------------------------
 frontend/design-src/
+frontend/public/pdf.worker.js
 readme-ignored.md
 
 # -----------------------------------------------------------------------------

@@ -74,9 +74,15 @@ export const RESUME = {
   downloadLabel: 'Baixar PDF',
   closeLabel: 'Fechar visualização do currículo',
   closeShortLabel: 'Fechar',
+  pagesLabel: (count: number) =>
+    count === 1 ? '1 página' : `${count} páginas`,
   missingTitle: 'Currículo indisponível',
   missingLead:
     'O arquivo PDF ainda não foi publicado neste site.',
+  renderErrorTitle: 'Não foi possível abrir o currículo',
+  renderErrorLead:
+    'O arquivo existe, mas o navegador não conseguiu renderizá-lo aqui.',
+  openExternalLabel: 'Abrir currículo',
   loadingLabel: 'Carregando currículo…',
 } as const;
 
