@@ -124,6 +124,7 @@ $RECYCLE.BIN/
 # Design e assets de trabalho (nao entram no build)
 # -----------------------------------------------------------------------------
 frontend/design-src/
+readme-ignored.md
 
 # -----------------------------------------------------------------------------
 *.zip

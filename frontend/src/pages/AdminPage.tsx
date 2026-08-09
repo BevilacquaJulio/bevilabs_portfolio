@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { Icon } from '@/components/Icon';
+import { MagneticButton } from '@/components/MagneticButton';
 import { LoginForm } from '@/features/admin/components/LoginForm';
 import { ProjectForm } from '@/features/admin/components/ProjectForm';
 import { ProjectList } from '@/features/admin/components/ProjectList';
@@ -340,7 +341,7 @@ function AdminDashboard() {
                 <Icon name="globe" className="size-4" />
                 <span className="hidden sm:inline">Ver site</span>
               </Link>
-              <button
+              <MagneticButton
                 type="button"
                 onClick={() => void logout()}
                 aria-label="Sair do painel"
@@ -348,7 +349,7 @@ function AdminDashboard() {
               >
                 <Icon name="logout" className="size-4" />
                 <span className="hidden sm:inline">Sair</span>
-              </button>
+              </MagneticButton>
             </nav>
           </div>
         </header>
@@ -381,14 +382,14 @@ function AdminDashboard() {
                 Selecione um trabalho para atualizar ou abra um novo registro para publicar no
                 portfólio.
               </p>
-              <button
+              <MagneticButton
                 type="button"
                 onClick={startNewProject}
                 className="focus-on-dark mt-7 inline-flex min-h-12 w-full touch-manipulation items-center justify-center gap-2 rounded-full border border-paper bg-paper px-5 text-sm font-semibold text-ink transition-[transform,background-color] duration-200 hover:-translate-y-px hover:bg-white motion-reduce:hover:translate-y-0 sm:w-auto"
               >
                 <Icon name="plus" className="size-4" />
                 Novo projeto
-              </button>
+              </MagneticButton>
             </div>
 
             <div className="relative z-1 flex items-end justify-between gap-5 border-t border-paper/15 bg-paper/[0.035] px-5 py-5 min-[360px]:px-6 sm:px-8 lg:flex-col lg:items-start lg:justify-between lg:border-t-0 lg:border-l lg:px-8 lg:py-9">
@@ -489,14 +490,14 @@ function AdminDashboard() {
                   {editing ? 'Editar projeto' : 'Novo projeto'}
                 </h2>
               </div>
-              <button
+              <MagneticButton
                 type="button"
                 onClick={finishEditing}
                 aria-label="Fechar editor"
                 className="inline-flex size-11 shrink-0 touch-manipulation items-center justify-center rounded-full border border-line bg-bg-elevated text-fg transition-colors duration-200 hover:border-line-strong hover:bg-bg-subtle"
               >
                 <Icon name="x" className="size-5" />
-              </button>
+              </MagneticButton>
             </header>
 
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pt-3 pb-[calc(env(safe-area-inset-bottom)+1rem)] [scroll-padding-block:1rem] sm:px-5 sm:pt-5">

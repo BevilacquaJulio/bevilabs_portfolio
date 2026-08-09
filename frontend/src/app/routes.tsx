@@ -1,25 +1,21 @@
 import { lazy, Suspense } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
+import HomePage from '@/pages/HomePage';
 import { pageTransition } from '@/lib/motion';
 
-// Rotas lazy: o bundle do admin nao pesa no carregamento do site publico.
-const HomePage = lazy(() => import('@/pages/HomePage'));
+// HomePage entra no bundle inicial: evita o fallback de rota no F5 da landing.
+// Admin e 404 continuam lazy para nao pesar a primeira visita.
 const AdminPage = lazy(() => import('@/pages/AdminPage'));
 const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'));
 
 function RouteFallback() {
   return (
     <div
-      className="relative z-2 flex min-h-dvh flex-col items-center justify-center gap-4 px-[var(--layout-pad)] pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
+      className="relative z-[var(--z-content)] min-h-dvh"
       role="status"
       aria-label="Carregando"
-    >
-      <span aria-hidden="true" className="font-display text-2xl font-extrabold tracking-[-0.05em]">
-        BL
-      </span>
-      <span aria-hidden="true" className="skeleton h-1 w-24 rounded-full" />
-    </div>
+    />
   );
 }
 

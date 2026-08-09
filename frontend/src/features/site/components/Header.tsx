@@ -49,7 +49,7 @@ export function Header() {
       initial={reducedMotion ? false : { opacity: 0, y: -18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.1 }}
-      className="fixed inset-x-0 top-0 z-[var(--z-header)] px-3 pt-[calc(0.6rem+env(safe-area-inset-top))] sm:px-[var(--layout-pad)] sm:pt-[calc(0.85rem+env(safe-area-inset-top))]"
+      className="site-header fixed inset-x-0 top-0 z-[var(--z-header)] px-3 pt-[calc(0.6rem+env(safe-area-inset-top))] sm:px-[var(--layout-pad)] sm:pt-[calc(0.85rem+env(safe-area-inset-top))]"
     >
       <div
         className={cn(

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
 import { Icon } from '@/components/Icon';
+import { MagneticButton } from '@/components/MagneticButton';
 import { SectionHeading } from '@/components/SectionHeading';
 import { getApiErrorMessage } from '@/lib/api';
 import { cursorSpring, EASE_OUT } from '@/lib/motion';
@@ -85,13 +86,13 @@ export function ProjectsSection() {
               title="Não consegui carregar os projetos"
               text={getApiErrorMessage(error)}
               action={
-                <button
+                <MagneticButton
                   type="button"
                   onClick={() => void refetch()}
                   className="mt-6 inline-flex min-h-11 w-full items-center justify-center rounded-full bg-accent px-6 text-sm font-semibold text-on-accent transition-[transform,background-color] duration-200 ease-[var(--ease-out)] hover:bg-accent-deep active:scale-[0.97] motion-reduce:transform-none sm:w-auto"
                 >
                   Tentar de novo
-                </button>
+                </MagneticButton>
               }
             />
           )}

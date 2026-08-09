@@ -19,6 +19,9 @@ import { PhoneIcon } from '@phosphor-icons/react/dist/csr/Phone';
 import { LinkedinLogoIcon } from '@phosphor-icons/react/dist/csr/LinkedinLogo';
 import { GithubLogoIcon } from '@phosphor-icons/react/dist/csr/GithubLogo';
 import { LockKeyIcon } from '@phosphor-icons/react/dist/csr/LockKey';
+import { CopySimpleIcon } from '@phosphor-icons/react/dist/csr/CopySimple';
+import { FilePdfIcon } from '@phosphor-icons/react/dist/csr/FilePdf';
+import { DownloadSimpleIcon } from '@phosphor-icons/react/dist/csr/DownloadSimple';
 import { ArrowUpRightIcon } from '@phosphor-icons/react/dist/csr/ArrowUpRight';
 import { GraduationCapIcon } from '@phosphor-icons/react/dist/csr/GraduationCap';
 import { AtomIcon } from '@phosphor-icons/react/dist/csr/Atom';
@@ -89,6 +92,9 @@ const ICONS = {
   sparkle: SparkleIcon,
   user: UserIcon,
   path: PathIcon,
+  filePdf: FilePdfIcon,
+  download: DownloadSimpleIcon,
+  copy: CopySimpleIcon,
 } as const satisfies Record<string, PhosphorIcon>;
 
 export type IconName = keyof typeof ICONS;

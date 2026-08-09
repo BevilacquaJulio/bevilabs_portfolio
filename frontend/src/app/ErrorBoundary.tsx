@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { MagneticButton } from '@/components/MagneticButton';
 
 type Props = { children: ReactNode };
 type State = { hasError: boolean };
@@ -26,13 +27,13 @@ export class ErrorBoundary extends Component<Props, State> {
         <p className="mt-3 max-w-sm text-[0.95rem] leading-relaxed text-fg-muted">
           Recarregue a página. Se continuar, me avise pelo e-mail de contato.
         </p>
-        <button
+        <MagneticButton
           type="button"
           onClick={() => window.location.reload()}
           className="mt-7 inline-flex min-h-12 w-full max-w-xs items-center justify-center rounded-full border border-ink bg-ink px-5 py-2.5 text-sm font-semibold text-paper transition-[transform,box-shadow] duration-200 ease-[var(--ease-out)] active:scale-[0.97] sm:w-auto"
         >
           Recarregar
-        </button>
+        </MagneticButton>
       </main>
     );
   }

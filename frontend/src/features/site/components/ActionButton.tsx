@@ -20,8 +20,9 @@ type CommonProps = {
 
 type ActionButtonProps = CommonProps &
   (
-    | { href: string; to?: undefined; external?: boolean }
-    | { to: string; href?: undefined; external?: undefined }
+    | { href: string; to?: undefined; external?: boolean; download?: string; onClick?: undefined }
+    | { to: string; href?: undefined; external?: undefined; download?: undefined; onClick?: undefined }
+    | { onClick: () => void; href?: undefined; to?: undefined; external?: undefined; download?: undefined }
   );
 
 /**
@@ -72,6 +73,8 @@ export function ActionButton({
   href,
   to,
   external,
+  download,
+  onClick,
   ...rest
 }: ActionButtonProps) {
   const magnetic = useMagnetic(0.26);
@@ -118,9 +121,24 @@ export function ActionButton({
     );
   }
 
+  if (onClick) {
+    return (
+      <motion.button
+        type="button"
+        onClick={onClick}
+        className={classes}
+        {...motionProps}
+        {...rest}
+      >
+        {body}
+      </motion.button>
+    );
+  }
+
   return (
     <motion.a
       href={href}
+      download={download}
       {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
       className={classes}
       {...motionProps}

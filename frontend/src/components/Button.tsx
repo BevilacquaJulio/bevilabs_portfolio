@@ -1,13 +1,16 @@
-import { forwardRef, type ButtonHTMLAttributes } from 'react';
+import { forwardRef, type ReactNode } from 'react';
+import type { HTMLMotionProps } from 'framer-motion';
 import { cn } from '@/lib/cn';
+import { MagneticButton } from '@/components/MagneticButton';
 
 type Variant = 'primary' | 'ghost' | 'danger';
 type Size = 'sm' | 'md';
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+type ButtonProps = Omit<HTMLMotionProps<'button'>, 'children'> & {
   variant?: Variant;
   size?: Size;
   isLoading?: boolean;
+  children?: ReactNode;
 };
 
 const BASE =
@@ -39,7 +42,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   ref,
 ) {
   return (
-    <button
+    <MagneticButton
       ref={ref}
       type={props.type ?? 'button'}
       disabled={disabled || isLoading}
@@ -54,6 +57,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
         />
       )}
       {children}
-    </button>
+    </MagneticButton>
   );
 });

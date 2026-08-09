@@ -1,4 +1,3 @@
-import { CursorFollower } from '@/features/site/shell/CursorFollower';
 import { SectionRail } from '@/features/site/components/SectionRail';
 import { Header } from '@/features/site/components/Header';
 import { Hero } from '@/features/site/components/Hero';
@@ -12,9 +11,6 @@ import { ProjectsSection } from '@/features/projects/components/ProjectsSection'
 /**
  * Seis seções, nesta ordem:
  * abertura, prova, ferramenta, histórico, pessoa, canal.
- *
- * O cursor próprio vive aqui, e não no App, porque no painel administrativo
- * um ponteiro customizado atrapalha mais do que ajuda.
  */
 export default function HomePage() {
   return (
@@ -22,7 +18,6 @@ export default function HomePage() {
       <a className="skip-link" href="#conteudo">
         Pular para o conteúdo
       </a>
-      <CursorFollower />
       <Header />
       <SectionRail />
       <main id="conteudo">

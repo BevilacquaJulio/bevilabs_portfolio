@@ -192,26 +192,38 @@ export function Hero() {
           initial={reducedMotion ? false : { opacity: 0, y: 12 }}
           animate={show ? { opacity: 1, y: 0 } : undefined}
           transition={{ duration: 0.55, delay: base + 0.94, ease: EASE_OUT }}
-          className="hero-actions mt-6 grid w-full max-w-[23rem] grid-cols-2 gap-2.5 sm:mt-8 sm:flex sm:w-auto sm:max-w-none sm:items-center sm:gap-3.5"
+          className="hero-actions mt-6 flex w-full max-w-[23rem] flex-col items-stretch gap-2.5 sm:mt-8 sm:max-w-none sm:items-center"
         >
-          <ActionButton
-            href={HERO.ctaPrimary.href}
-            variant="primary"
-            size="lg"
-            icon="arrowDown"
-            className="w-full !min-h-[3.4rem] !px-2 text-[0.78rem] min-[360px]:!px-3 min-[360px]:text-[0.82rem] sm:w-auto sm:!min-h-12 sm:!px-7 sm:text-[0.92rem]"
-          >
-            {HERO.ctaPrimary.label}
-          </ActionButton>
+          <div className="grid w-full grid-cols-2 gap-2.5 sm:flex sm:w-auto sm:items-center sm:gap-3.5">
+            <ActionButton
+              href={HERO.ctaPrimary.href}
+              variant="primary"
+              size="lg"
+              icon="arrowDown"
+              className="w-full !min-h-[3.4rem] !px-2 text-[0.78rem] min-[360px]:!px-3 min-[360px]:text-[0.82rem] sm:w-auto sm:!min-h-12 sm:!px-7 sm:text-[0.92rem]"
+            >
+              {HERO.ctaPrimary.label}
+            </ActionButton>
+
+            <ActionButton
+              href={HERO.ctaSecondary.href}
+              variant="primary"
+              size="lg"
+              icon="arrowUpRight"
+              className="w-full !min-h-[3.4rem] !px-2 text-[0.78rem] min-[360px]:!px-3 min-[360px]:text-[0.82rem] sm:w-auto sm:!min-h-12 sm:!px-7 sm:text-[0.92rem]"
+            >
+              {HERO.ctaSecondary.label}
+            </ActionButton>
+          </div>
 
           <ActionButton
-            href={HERO.ctaSecondary.href}
+            href={HERO.ctaResume.href}
             variant="outline"
             size="lg"
-            icon="arrowUpRight"
-            className="w-full !min-h-[3.4rem] !px-2 text-[0.78rem] min-[360px]:!px-3 min-[360px]:text-[0.82rem] sm:w-auto sm:!min-h-12 sm:!px-7 sm:text-[0.92rem]"
+            icon="filePdf"
+            className="w-full !min-h-[3.35rem] !px-3 text-[0.78rem] min-[360px]:text-[0.82rem] sm:w-auto sm:!min-h-12 sm:!px-7 sm:text-[0.92rem]"
           >
-            {HERO.ctaSecondary.label}
+            {HERO.ctaResume.label}
           </ActionButton>
         </motion.div>
 

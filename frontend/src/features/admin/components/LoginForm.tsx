@@ -5,6 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { z } from 'zod';
 import { Button } from '@/components/Button';
 import { Icon } from '@/components/Icon';
+import { MagneticButton } from '@/components/MagneticButton';
 import { getApiErrorMessage } from '@/lib/api';
 import { login } from '../admin.api';
 
@@ -112,7 +113,7 @@ export function LoginForm() {
                 },
               })}
             />
-            <button
+            <MagneticButton
               type="button"
               onClick={() => setShowPassword((visible) => !visible)}
               aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
@@ -120,7 +121,7 @@ export function LoginForm() {
               className="absolute top-1/2 right-1 inline-flex size-11 touch-manipulation items-center justify-center rounded-full text-fg-subtle transition-colors duration-200 -translate-y-1/2 hover:bg-bg-muted hover:text-fg"
             >
               <Icon name={showPassword ? 'eyeSlash' : 'eye'} className="size-[1.15rem]" />
-            </button>
+            </MagneticButton>
           </div>
 
           {errors.password && (

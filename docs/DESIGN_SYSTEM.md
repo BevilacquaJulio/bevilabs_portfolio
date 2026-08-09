@@ -135,8 +135,8 @@ Inventário, com o motivo de cada uma:
 
 | Onde | O que faz | Por quê |
 | --- | --- | --- |
-| Cortina de abertura | Monograma se desenha, letreiro completa, barra enche | Estado de carregamento |
-| Hero | Letra a letra sob máscara, e parallax do monograma | Ordem de leitura, e a marca é o visual |
+| Cortina de abertura | Letreiro letra a letra, LABS vazado, barra segmentada | Estado de carregamento |
+| Hero | Letra a letra sob máscara | Ordem de leitura; a marca é o visual |
 | Header | Encolhe e ganha fundo passando de `48px` | Posição na página |
 | Trilho lateral | Preenche conforme o scroll | Orientação |
 | Fundo | Duas manchas derivam em `34s` e `46s` | Única animação atmosférica |
@@ -147,7 +147,7 @@ Inventário, com o motivo de cada uma:
 
 ### Cortina de abertura
 
-Dois segundos, contados por `setTimeout` em `PRELOADER_MS`. Roda uma vez por aba (`sessionStorage`) e não roda sob movimento reduzido. Enquanto ela está na tela, a hero segura a própria entrada via `BootContext`.
+Três segundos, contados por `setTimeout` em `PRELOADER_MS`. Roda uma vez por aba (`sessionStorage`) e não roda sob movimento reduzido. Enquanto ela está na tela, a hero segura a própria entrada via `BootContext`.
 
 ### Escala de empilhamento
 
@@ -230,7 +230,7 @@ Sem fotografia e sem ilustração de banco. Todo o visual nasce em código, com 
 
 | Arquivo | Uso |
 | --- | --- |
-| `/favicon.svg` | Monograma BL em navy |
+| `/favicon.png` | Ícone do site |
 | `/images/meta/og-cover.png` | Cartão social, 1200 x 630, gerado com as fontes do bundle |
 
 ## 11. Checklist de entrega

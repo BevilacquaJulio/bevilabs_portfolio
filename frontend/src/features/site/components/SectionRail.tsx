@@ -26,7 +26,7 @@ export function SectionRail() {
     <motion.nav
       aria-label="Índice das seções"
       style={reducedMotion ? undefined : { opacity, x }}
-      className="fixed top-1/2 left-5 z-[var(--z-rail)] hidden -translate-y-1/2 xl:block"
+      className="site-section-rail fixed top-1/2 left-5 z-[var(--z-rail)] hidden -translate-y-1/2 xl:block"
     >
       <ol className="relative flex flex-col gap-6">
         {/* Trilho e preenchimento ficam atrás das marcas. */}

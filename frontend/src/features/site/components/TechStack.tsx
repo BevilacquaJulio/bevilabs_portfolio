@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import { DottedSectionBackground } from '@/features/site/components/DottedSectionBackground';
+import { MagneticButton } from '@/components/MagneticButton';
 import { SectionHeading } from '@/components/SectionHeading';
 import { TechGlyph } from '@/features/site/components/TechGlyph';
 import { useDottedFieldPointer } from '@/features/site/hooks/useDottedFieldPointer';
@@ -148,7 +149,7 @@ function FilterChip({
   children: React.ReactNode;
 }) {
   return (
-    <button
+    <MagneticButton
       type="button"
       onClick={onClick}
       aria-pressed={active}
@@ -161,6 +162,6 @@ function FilterChip({
       )}
     >
       {children}
-    </button>
+    </MagneticButton>
   );
 }

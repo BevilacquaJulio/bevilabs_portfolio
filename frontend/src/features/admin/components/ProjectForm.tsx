@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/Button';
 import { Icon } from '@/components/Icon';
+import { MagneticButton } from '@/components/MagneticButton';
 import {
   PROJECT_ICONS,
   PROJECT_ICON_LABELS,
@@ -155,7 +156,7 @@ export function ProjectForm({ editing, onDone }: ProjectFormProps) {
           </legend>
           <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
             {PROJECT_ICONS.map((icon) => (
-              <button
+              <MagneticButton
                 key={icon}
                 type="button"
                 onClick={() => {
@@ -177,7 +178,7 @@ export function ProjectForm({ editing, onDone }: ProjectFormProps) {
                 )}
               >
                 <Icon name={icon} className="size-[1.15rem]" />
-              </button>
+              </MagneticButton>
             ))}
           </div>
           {errors.icon && (

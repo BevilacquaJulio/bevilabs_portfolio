@@ -120,7 +120,9 @@
   --z-header: 100;
   --z-drawer: 110;
   --z-skip: 120;
+  --z-resume-viewer: 210;
   --z-preloader: 200;
+  --z-cursor: 300;
 }
 
 @media (min-width: 768px) {

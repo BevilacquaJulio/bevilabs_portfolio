@@ -34,7 +34,7 @@ export const PROFILE = {
 export const HERO = {
   status: {
     lead: 'Disponível',
-    detail: 'para novas oportunidades',
+    detail: 'para contratação e novas oportunidades',
   },
   /** Cada letra sobe de dentro da própria máscara. */
   wordmark: ['Bevilacqua', 'Labs'] as const,
@@ -45,6 +45,7 @@ export const HERO = {
     'Aplicações completas, da modelagem de dados e APIs NestJS à interface React e ao deploy com Docker.',
   ctaPrimary: { label: 'Ver projetos', href: '#projetos' },
   ctaSecondary: { label: 'Falar comigo', href: '#contato' },
+  ctaResume: { label: 'Veja meu currículo', href: '#contato' },
   /** Três provas curtas na régua abaixo da apresentação. */
   proof: [
     { icon: 'code', value: '2+ anos', label: 'em produção' },
@@ -60,8 +61,26 @@ export const HERO = {
   statement: string;
   ctaPrimary: { label: string; href: string };
   ctaSecondary: { label: string; href: string };
+  ctaResume: { label: string; href: string };
   proof: ReadonlyArray<{ icon: IconName; value: string; label: string }>;
 };
+
+export const RESUME = {
+  /** Arquivo em `public/documents/`. */
+  href: '/documents/julio-bevilacqua.pdf',
+  fileName: 'julio-bevilacqua.pdf',
+  title: 'Currículo de Julio Bevilacqua',
+  viewLabel: 'Visualizar meu currículo',
+  downloadLabel: 'Baixar PDF',
+  closeLabel: 'Fechar visualização do currículo',
+  closeShortLabel: 'Fechar',
+  pagesLabel: (count: number) =>
+    count === 1 ? '1 página' : `${count} páginas`,
+  missingTitle: 'Currículo indisponível',
+  missingLead:
+    'O arquivo PDF ainda não foi publicado neste site.',
+  loadingLabel: 'Carregando currículo…',
+} as const;
 
 export const PROJECTS_SECTION = {
   label: 'Meus projetos',
@@ -224,7 +243,9 @@ export const CONTACT = {
   label: 'Contato',
   title: 'Se interessou no meu perfil?',
   lead: 'Aberto a vagas full stack e a projetos freelance. Escolha o canal que preferir.',
-  availability: 'Disponível para novas oportunidades',
+  availability: 'Disponível para contratação e novas oportunidades',
+  emailCopyLabel: 'Copiar e-mail',
+  emailCopiedLabel: 'E-mail copiado',
 } as const;
 
 export type ContactChannel = {
@@ -232,8 +253,10 @@ export type ContactChannel = {
   icon: IconName;
   label: string;
   value: string;
-  href: string;
+  href?: string;
   external?: boolean;
+  /** Copia o valor para a área de transferência em vez de navegar. */
+  copy?: boolean;
 };
 
 export const CONTACT_CHANNELS: readonly ContactChannel[] = [
@@ -242,7 +265,7 @@ export const CONTACT_CHANNELS: readonly ContactChannel[] = [
     icon: 'mail',
     label: 'E-mail',
     value: PROFILE.email,
-    href: `mailto:${PROFILE.email}`,
+    copy: true,
   },
   {
     id: 'whatsapp',

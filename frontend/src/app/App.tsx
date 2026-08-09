@@ -6,6 +6,7 @@ import { Background } from './Background';
 import { ErrorBoundary } from './ErrorBoundary';
 import { AppRoutes } from './routes';
 import { BootContext, markPreloaderSeen, shouldSkipPreloader } from '@/features/site/shell/boot';
+import { CursorFollower } from '@/features/site/shell/CursorFollower';
 import { Preloader } from '@/features/site/shell/Preloader';
 
 const queryClient = new QueryClient({
@@ -27,9 +28,10 @@ export function App() {
   }, []);
 
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <MotionConfig reducedMotion="user">
+    <MotionConfig reducedMotion="user">
+      <CursorFollower />
+      <ErrorBoundary>
+        <QueryClientProvider client={queryClient}>
           <BootContext.Provider value={booted}>
             <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
               <Background />
@@ -39,8 +41,8 @@ export function App() {
               </AnimatePresence>
             </BrowserRouter>
           </BootContext.Provider>
-        </MotionConfig>
-      </QueryClientProvider>
-    </ErrorBoundary>
+        </QueryClientProvider>
+      </ErrorBoundary>
+    </MotionConfig>
   );
 }

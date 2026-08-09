@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { motion, useMotionValue, useReducedMotion, useSpring } from 'framer-motion';
 
 const INTERACTIVE = 'a[href], button, [role="button"], summary, label[for]';
-const DESKTOP_CURSOR = '(min-width: 1024px) and (hover: hover) and (pointer: fine)';
+const FINE_POINTER = '(hover: hover) and (pointer: fine)';
 
 /** O anel arrasta atrás do ponto. A diferença de mola é o que dá a sensação de peso. */
 const RING_SPRING = { stiffness: 380, damping: 30, mass: 0.55 } as const;
@@ -14,8 +14,8 @@ const DOT_SPRING = { stiffness: 1200, damping: 60, mass: 0.2 } as const;
  *
  * O cursor nativo só é escondido depois que este componente monta e liga
  * `data-cursor="custom"` no `<html>`. Se o script falhar, o ponteiro do sistema
- * continua no lugar. Campos de texto mantêm o cursor nativo, porque ali a barra
- * de inserção é informação.
+ * continua no lugar. Em dispositivos de toque o cursor customizado não é
+ * montado.
  */
 export function CursorFollower() {
   const reducedMotion = useReducedMotion();
@@ -29,9 +29,13 @@ export function CursorFollower() {
   const ringY = useSpring(rawY, RING_SPRING);
   const dotX = useSpring(rawX, DOT_SPRING);
   const dotY = useSpring(rawY, DOT_SPRING);
+  const cursorRingX = reducedMotion ? rawX : ringX;
+  const cursorRingY = reducedMotion ? rawY : ringY;
+  const cursorDotX = reducedMotion ? rawX : dotX;
+  const cursorDotY = reducedMotion ? rawY : dotY;
 
   useEffect(() => {
-    const media = window.matchMedia(DESKTOP_CURSOR);
+    const media = window.matchMedia(FINE_POINTER);
     let listening = false;
 
     const move = (event: PointerEvent) => {
@@ -85,7 +89,7 @@ export function CursorFollower() {
     };
 
     const sync = () => {
-      if (!reducedMotion && media.matches) enable();
+      if (media.matches) enable();
       else disable();
     };
 
@@ -96,7 +100,7 @@ export function CursorFollower() {
       media.removeEventListener('change', sync);
       disable(false);
     };
-  }, [reducedMotion, rawX, rawY]);
+  }, [rawX, rawY]);
 
   if (!enabled) return null;
 
@@ -105,14 +109,14 @@ export function CursorFollower() {
       <motion.span
         aria-hidden="true"
         className="cursor-dot"
-        style={{ x: dotX, y: dotY }}
+        style={{ x: cursorDotX, y: cursorDotY }}
         animate={{ scale: active ? 0 : pressed ? 0.6 : 1 }}
         transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
       />
       <motion.span
         aria-hidden="true"
         className="cursor-ring"
-        style={{ x: ringX, y: ringY }}
+        style={{ x: cursorRingX, y: cursorRingY }}
         animate={{
           scale: pressed ? 0.86 : active ? 1.55 : 1,
           backgroundColor: active ? 'rgb(39 101 204 / 0.16)' : 'rgb(39 101 204 / 0.06)',
